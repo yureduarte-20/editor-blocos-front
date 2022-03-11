@@ -15,6 +15,11 @@ export const CustomBlocklyWorkpace = ({ javascriptCode, onCodeChange: setJavascr
   const [xml, setXml] = useState("");
   function workspaceDidChange(workspace: WorkspaceSvg) {
     const code = JavaScript.workspaceToCode(workspace as Workspace);
+    workspace.registerButtonCallback("cu", () => { 
+      console.log("asdsadsadsadsasaddsasadfdsasad"); 
+      Blockly.Variables.createVariableButtonHandler(workspace as Workspace, null, 'cu') 
+      console.log(workspace.getAllVariableNames())
+    })
     if (code !== javascriptCode) {
       setJavascriptCode(code);
       console.log(code)

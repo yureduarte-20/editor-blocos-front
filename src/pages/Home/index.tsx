@@ -15,7 +15,7 @@ export function Home() {
             <CustomBlocklyWorkpace 
                 javascriptCode={javascriptCode}
                 onCodeChange={setJavascriptCode}
-            />
+            />  
 
             <GeneratedCodeArea
                 code={javascriptCode}
