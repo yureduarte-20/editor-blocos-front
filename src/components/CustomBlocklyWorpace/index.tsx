@@ -6,6 +6,7 @@ import * as JavaScript from 'blockly/javascript';
 import * as PtBr from "blockly/msg/pt-br";
 import { toolboxCategories } from '../toolBox';
 
+
 Blockly.setLocale(PtBr);
 
 export interface BlocklyWorkpaceProps {
