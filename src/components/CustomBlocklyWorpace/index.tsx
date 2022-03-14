@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { BlocklyWorkspace, WorkspaceSvg, Workspace } from "react-blockly";
-import * as Blockly from "blockly";
+import Blockly, { VariableModel } from "blockly";
 import * as JavaScript from 'blockly/javascript';
-
+import { uniqueId } from 'lodash'
 import * as PtBr from "blockly/msg/pt-br";
 import { toolboxCategories } from '../toolBox';
 
@@ -16,88 +16,49 @@ export interface BlocklyWorkpaceProps {
 
 
 export const CustomBlocklyWorkpace = ({ javascriptCode, onCodeChange: setJavascriptCode }: BlocklyWorkpaceProps) => {
-
   const [xml, setXml] = useState("");
-  const [list, setList] = useState<Blockly.VariableModel[]>([]);
-  const [currentToolBox, setCurrentToolBox] = useState(toolboxCategories(true, list));
+  const [variables, setVariables] = useState<VariableModel[]>([])
+
   function workspaceDidChange(workspace: WorkspaceSvg) {
-    const code = JavaScript.workspaceToCode(workspace as Workspace);
+    //Registrar o CallBack de criação de variáveis
     if (!workspace.getButtonCallback('create_variable')) {
       workspace.registerButtonCallback("create_variable", () => {
-        Blockly.Variables.createVariableButtonHandler(workspace as Workspace, undefined, 'create_variable');
-        let newVariables = workspace.getAllVariables();
-        let tmpToolBox: typeof currentToolBox = { kind: '', contents: [] };
-        Object.assign(tmpToolBox, currentToolBox);
-        if (currentToolBox.contents[5].contents.length <= 1) {
-          tmpToolBox.contents[5].contents = [
-            ...currentToolBox.contents[5].contents,
-            {
-              kind: "block",
-              "type": "variables_set",
-              "fields": {
-                "VAR": {
-                  "id": newVariables[newVariables.length - 1].getId(),
-                }
-              }
-            },
-            {
-              kind: "block",
-              "type": "math_change",
-              "fields": {
-                "VAR": {
-                  "id": newVariables[newVariables.length - 1].getId()
-                }
-              },
-              "inputs": {
-                "DELTA": {
-                  "shadow": {
-                    "type": "math_number",
-                    "fields": {
-                      "NUM": 1
-                    }
-                  }
-                }
-              }
-            },
-            {
-              kind: "block",
-              "type": "variables_get",
-              "fields": {
-                "VAR": {
-                  "id": newVariables[newVariables.length - 1].getId()
-                }
-              }
-            }
-          ]
-        } else {
-          tmpToolBox.contents[5].contents = [
-            ...currentToolBox.contents[5].contents,
-            {
-              kind: "block",
-              "type": "variables_get",
-              "fields": {
-                "VAR": {
-                  "id": newVariables[newVariables.length - 1].getId()
-                }
-              }
-            }
-          ]
-        }
-        setCurrentToolBox(tmpToolBox);
+        let newVariable = workspace.createVariable(window.prompt() || uniqueId('var-'));
+        //adiciona todas as variáveis em um state
+        setVariables([...variables, newVariable]);
       })
     }
 
+    //Registar o callback de atualização de categorias
+    if (!workspace.getToolboxCategoryCallback('VARIABLE')) {
+      workspace.registerToolboxCategoryCallback('VARIABLE', _wo => {
+        let _variables = [];
+        for (let v of variables) {
+          _variables.push(
+            {
+              kind: "block",
+              "type": "variables_get",
+              "fields": {
+                "VAR": {
+                  "id": v.getId()
+                }
+              }
+            }
+          )
+        }
+        return _variables;
+      });
+    }
+    const code = JavaScript.workspaceToCode(workspace as Workspace);
     if (code !== javascriptCode) {
       setJavascriptCode(code);
       console.log(code)
     }
 
-
   }
-  console.log(currentToolBox)
   return (
     <BlocklyWorkspace
-      toolboxConfiguration={currentToolBox}
+      toolboxConfiguration={toolboxCategories}
       className="full"
       workspaceConfiguration={{
         grid: {
@@ -105,9 +66,8 @@ export const CustomBlocklyWorkpace = ({ javascriptCode, onCodeChange: setJavascr
           length: 3,
           colour: "#ccc",
           snap: true,
-        },
+        }
       }}
-
       onWorkspaceChange={workspaceDidChange}
       onXmlChange={setXml}
     />
