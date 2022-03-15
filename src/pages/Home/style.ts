@@ -10,7 +10,12 @@ export const Container =  styled.main`
 export const WorkspaceWrap = styled.div`
     min-height: 80vh;
 `
-export const Col2 = styled.div`
+export const LogWrap = styled.div`
     grid-column: span 2;
+    display: flex;
+    background-color: #000000;
+    min-height: 15vh;
+    max-height: 20vh;
+    overflow: auto;
 `;
 

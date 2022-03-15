@@ -1,17 +1,20 @@
 import { useState } from "react";
-import { LogWrap, TextField } from "./styles";
+import { TextField } from "./styles";
 import SyntaxHighlighter from "react-syntax-highlighter";
-import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 export interface ILogProps {
     text: string;
 }
 export const Log = ({ text }: ILogProps) => {
 
     return (
-        <LogWrap>
-            <SyntaxHighlighter language="javascript" style={dark}>
-                {text}
-            </SyntaxHighlighter>
-        </LogWrap>
+        <SyntaxHighlighter customStyle={{
+            flex: 1,
+        }} language="javascript"
+          height="100%" 
+          style={a11yDark}
+          lineProps={{ onError: e => { console.log('error');  return `color:red;` } }}>
+            {text}
+        </SyntaxHighlighter>
     )
 }
