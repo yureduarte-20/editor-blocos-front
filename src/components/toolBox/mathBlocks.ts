@@ -54,7 +54,7 @@ export const mathBlocks: any = {
             "NUM": {
                 "shadow": {
                     "type": "math_number",
-                    "id": "|oumeK|Dk-S:*npG:JPa",
+                   
                     "fields": {
                         "NUM": 9
                     }

@@ -39,6 +39,26 @@ contents: [
             }
           }
         }
+      },
+      {
+        kind:"block",
+        "type": "text_prompt_ext",
+        
+        "extraState": "<mutation type=\"NUMBER\"></mutation>",
+        "fields": {
+          "TYPE": "NUMBER"
+        },
+        "inputs": {
+          "TEXT": {
+              "shadow": {
+                  "type": "math_number",
+                  "fields": {
+                      "NUM": 0
+                  }
+              }
+          }
+      }
+
       }
     
 ]
