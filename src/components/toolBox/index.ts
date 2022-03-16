@@ -7,11 +7,13 @@ import { listBlocks } from "./listBlocks";
 import { variableBlocks } from "./variableBlocks";
 import { functionBlocks } from "./functionBlocks";
 import { VariableModel } from "blockly";
+import { inputOutputBlocks } from "./inputOutputBlocks";
 
 export const toolboxCategories = {
 
   kind: "categoryToolbox",
   contents: [
+    inputOutputBlocks,
     logicBlocks,
     loopBlocks,
     mathBlocks,
