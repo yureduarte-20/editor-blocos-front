@@ -11,23 +11,24 @@ import { DivWorkspace } from './style'
 Blockly.setLocale(PtBr);
 
 export interface BlocklyWorkpaceProps {
-  javascriptCode: string;
+  code: string;
   onCodeChange(newState: string): void;
   children: any;
 }
 
 
-export const CustomBlocklyWorkpace = ({ javascriptCode, onCodeChange: setJavascriptCode, children }: BlocklyWorkpaceProps) => {
+export const CustomBlocklyWorkpace = ({ code, onCodeChange, children }: BlocklyWorkpaceProps) => {
   const [xml, setXml] = useState("");
   const [variables, setVariables] = useState<VariableModel[]>([])
   const [blocklyDiv,setBlocklyDiv] = useState(createRef())
   const { workspace } = useBlocklyWorkspace({
     toolboxConfiguration:toolboxCategories,
     ref: blocklyDiv,
-    /* onWorkspaceChange: workspaceDidChange, */
+    onWorkspaceChange: workspaceDidChange,
   });
 
   function workspaceDidChange(workspace: WorkspaceSvg) {
+    console.log('ta chamado')
     //Registrar o CallBack de criação de variáveis
     if (!workspace.getButtonCallback('create_variable')) {
       workspace.registerButtonCallback("create_variable", () => {
@@ -57,12 +58,10 @@ export const CustomBlocklyWorkpace = ({ javascriptCode, onCodeChange: setJavascr
         return _variables;
       });
     }
-    const code = JavaScript.workspaceToCode(workspace as Workspace);
-    if (code !== javascriptCode) {
-      setJavascriptCode(code);
-      console.log(code)
-    }
-
+    const _code = JavaScript.workspaceToCode(workspace as Workspace);
+    if(code !== _code)
+      onCodeChange(_code);
+    
   }
   return (
     <DivWorkspace ref={blocklyDiv}>

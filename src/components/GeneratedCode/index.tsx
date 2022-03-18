@@ -7,16 +7,16 @@ export interface IGeneratedCodeArea {
     code: string;
     style?: CSS.Properties;
 }
-export const GeneratedCodeArea = ({ code: javascriptCode, style }: IGeneratedCodeArea) => {
+export const GeneratedCodeArea = ({ code, style }: IGeneratedCodeArea) => {
     const [open, setOpen] = useState(false)
     return (
         <WrapCode open={open}>
             <Content onClick={() => setOpen(!open)}>
                 {open &&
-                    <SyntaxHighlighter customStyle={{ fontSize: 10}}
+                    <SyntaxHighlighter customStyle={style}
                         language='javascript'
                     >
-                        {javascriptCode}
+                        {code}
                     </SyntaxHighlighter>
                 }
             </Content>
