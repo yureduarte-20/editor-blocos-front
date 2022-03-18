@@ -1,20 +1,13 @@
 import { useState } from 'react'
-import { Col2, Container, LogWrap } from './style'
+import { Container, LogWrap } from './style'
 import { GeneratedCodeArea } from '../../components/GeneratedCode';
 import { CustomBlocklyWorkpace } from '../../components/CustomBlocklyWorpace';
 import { Log } from '../../components/Log';
-
-import ReactDOM from 'react-dom'
-
 
 export function Home() {
     const [xml, setXml] = useState("");
     const [javascriptCode, setJavascriptCode] = useState("");
     const [consoleLog, setConsoleLog] = useState<string>("");
-    const clearTerminal = () => {
-        setConsoleLog("");
-
-    }
     const handleExec = () => {
         try {
             eval(javascriptCode);
@@ -51,18 +44,7 @@ export function Home() {
     
     return (
         <Container>
-            <CustomBlocklyWorkpace
-                javascriptCode={javascriptCode}
-                onCodeChange={setJavascriptCode}
-            />
-            <GeneratedCodeArea
-                code={javascriptCode}
-            />
-            <LogWrap>
-                <button onClick={handleExec}>Testar</button>
-                <button onClick={clearTerminal}>Limpar</button>
-                <Log text={consoleLog} />
-            </LogWrap>
+
         </Container>
     )
 

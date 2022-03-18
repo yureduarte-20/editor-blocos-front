@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { BlocklyWorkspace, WorkspaceSvg, Workspace } from "react-blockly";
+import { createRef, useRef, useState } from "react";
+import { BlocklyWorkspace, WorkspaceSvg, Workspace, useBlocklyWorkspace } from "react-blockly";
 import Blockly, { VariableModel } from "blockly";
 import * as JavaScript from 'blockly/javascript';
 import { uniqueId } from 'lodash'
 import * as PtBr from "blockly/msg/pt-br";
 import { toolboxCategories } from '../toolBox';
+import { DivWorkspace } from './style'
 
 
 Blockly.setLocale(PtBr);
@@ -12,12 +13,19 @@ Blockly.setLocale(PtBr);
 export interface BlocklyWorkpaceProps {
   javascriptCode: string;
   onCodeChange(newState: string): void;
+  children: any;
 }
 
 
-export const CustomBlocklyWorkpace = ({ javascriptCode, onCodeChange: setJavascriptCode }: BlocklyWorkpaceProps) => {
+export const CustomBlocklyWorkpace = ({ javascriptCode, onCodeChange: setJavascriptCode, children }: BlocklyWorkpaceProps) => {
   const [xml, setXml] = useState("");
   const [variables, setVariables] = useState<VariableModel[]>([])
+  const [blocklyDiv,setBlocklyDiv] = useState(createRef())
+  const { workspace } = useBlocklyWorkspace({
+    toolboxConfiguration:toolboxCategories,
+    ref: blocklyDiv,
+    /* onWorkspaceChange: workspaceDidChange, */
+  });
 
   function workspaceDidChange(workspace: WorkspaceSvg) {
     //Registrar o CallBack de criação de variáveis
@@ -57,7 +65,12 @@ export const CustomBlocklyWorkpace = ({ javascriptCode, onCodeChange: setJavascr
 
   }
   return (
-    <BlocklyWorkspace
+    <DivWorkspace ref={blocklyDiv}>
+        {children}
+    </DivWorkspace>
+
+    /* <BlocklyWorkspace
+   {
       toolboxConfiguration={toolboxCategories}
       className="full"
       workspaceConfiguration={{
@@ -79,8 +92,7 @@ export const CustomBlocklyWorkpace = ({ javascriptCode, onCodeChange: setJavascr
       
       onWorkspaceChange={workspaceDidChange}
       onXmlChange={setXml}
-      
-    />
-
+    /> 
+    }*/
   );
 }
