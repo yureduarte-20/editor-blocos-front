@@ -2,7 +2,11 @@ import { createRef, useRef, useState } from "react";
 import { BlocklyWorkspace, WorkspaceSvg, Workspace, useBlocklyWorkspace } from "react-blockly";
 import Blockly, { VariableModel } from "blockly";
 import * as JavaScript from 'blockly/javascript';
-import { uniqueId } from 'lodash'
+import * as Python from 'blockly/python';
+import * as Lua from 'blockly/lua';
+import * as Dart from 'blockly/dart';
+import * as Php from 'blockly/php';
+import { uniqueId } from 'lodash';
 import * as PtBr from "blockly/msg/pt-br";
 import { toolboxCategories } from '../toolBox';
 import { DivWorkspace } from './style'
@@ -14,10 +18,11 @@ export interface BlocklyWorkpaceProps {
   code: string;
   onCodeChange(newState: string): void;
   children: any;
+  language:string;
 }
 
 
-export const CustomBlocklyWorkpace = ({ code, onCodeChange, children }: BlocklyWorkpaceProps) => {
+export const CustomBlocklyWorkpace = ({ code, onCodeChange, children, language }: BlocklyWorkpaceProps) => {
   const [xml, setXml] = useState("");
   const [variables, setVariables] = useState<VariableModel[]>([])
   const [blocklyDiv,setBlocklyDiv] = useState(createRef())
@@ -58,10 +63,26 @@ export const CustomBlocklyWorkpace = ({ code, onCodeChange, children }: BlocklyW
         return _variables;
       });
     }
-    const _code = JavaScript.workspaceToCode(workspace as Workspace);
+    const _code = generateCode(language, workspace as Workspace);
     if(code !== _code)
       onCodeChange(_code);
-    
+  }
+
+  function generateCode(lang : string, workspace : Workspace){
+    switch(lang){
+      case'javascript':
+        return JavaScript.workspaceToCode(workspace);
+      case 'dart': 
+        return Dart.workspaceToCode(workspace);
+      case 'php':
+        return Php.workspaceToCode(workspace);
+      case 'python':
+        return Python.workspaceToCode(workspace);
+      case 'lua':
+        return Lua.workspaceToCode(workspace);
+      default:
+        return JavaScript.workspaceToCode(workspace);
+    }
   }
   return (
     <DivWorkspace ref={blocklyDiv}>

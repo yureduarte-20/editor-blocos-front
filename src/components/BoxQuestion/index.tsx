@@ -23,7 +23,7 @@ export const BoxQuestion = ({ question, onButtonRunPressed, onGoForward, wrapper
             <ButtonWrapper>
                 {onButtonRunPressed &&
                     <ButtonPrimary onClick={onButtonRunPressed}>
-                        Volta caralho
+                        Volte!
                     </ButtonPrimary>
                 }
                 {onGoForward &&

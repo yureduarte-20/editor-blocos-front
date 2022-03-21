@@ -34,6 +34,7 @@ export const ButtonWrapper = styled.div`
 export const ButtonPrimary = styled.button`
     background-color: #555353;
     color: white;
+    width: 100%;
     padding: 10px 14px;
     border: none;
     border-radius: 4px;
@@ -47,6 +48,7 @@ export const ButtonSecondary = styled.button`
     background-color: #1E1B1B;
     padding: 10px 14px;
     border: none;
+    width: 100%;
     border-radius: 4px;
     color: white;
     cursor: pointer;
