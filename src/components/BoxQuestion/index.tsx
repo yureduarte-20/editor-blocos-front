@@ -8,9 +8,10 @@ export interface IQuestionProps {
     }
     onButtonRunPressed?(): void;
     onGoForward?(): void;
-    wrapperStyle?: CSS.Properties
+    wrapperStyle?: CSS.Properties;
+    test?(): void;
 }
-export const BoxQuestion = ({ question, onButtonRunPressed, onGoForward, wrapperStyle }: IQuestionProps) => {
+export const BoxQuestion = ({ question, onButtonRunPressed, onGoForward, wrapperStyle, test }: IQuestionProps) => {
     return (
         <QuestionWraper style={wrapperStyle || {}}>
             <ImgWrapper>
@@ -30,6 +31,9 @@ export const BoxQuestion = ({ question, onButtonRunPressed, onGoForward, wrapper
                     <ButtonSecondary onClick={onGoForward}>
                         Vai pra frente
                     </ButtonSecondary>
+                }
+                {test &&
+                    <ButtonSecondary onClick={test}>Testar</ButtonSecondary>
                 }
             </ButtonWrapper>
         </QuestionWraper>

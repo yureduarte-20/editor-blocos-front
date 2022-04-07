@@ -2,7 +2,7 @@ import styled from "styled-components";
 import brand from '../../../assets/brand-opacity.svg';
 
 export const Container = styled.main`
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
     display: grid;
     align-items: center;
