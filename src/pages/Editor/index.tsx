@@ -1,21 +1,76 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ChangeEvent } from 'react'
 import { CustomBlocklyWorkpace } from "../../components/CustomBlocklyWorpace"
 import { GeneratedCodeArea } from "../../components/GeneratedCode"
 import { BoxQuestion } from "../../components/BoxQuestion"
+import { useAuthenticateApi } from "../../utils/useApi";
+import { useSnackbar } from 'react-simple-snackbar'
 const Editor = () => {
     const [code, setCode] = useState('');
+    const authApi = useAuthenticateApi()
     const [language, setLanguage] = useState('javascript');
+    const [isLoading, setLoading] = useState(false);
+    const [openSnackBarFailed, closeSnackBarFailed] = useSnackbar({
+        position: "top-center", 
+        style:{
+            backgroundColor: '#d32f2f',
+            color:'white'
+        }
+    })
+    const [openWarning, closeWarning] = useSnackbar({
+        position: "top-center", 
+        style:{
+            backgroundColor: '#ed6c02',
+            color:'white'
+        }
+    })
+    const [openSuccess , closeSuccess] = useSnackbar({
+        position: "top-center", 
+        style:{
+            backgroundColor: '#2e7d32',
+            color:'white'
+        }
+    })
     const handleLanguageChange = (e: ChangeEvent<HTMLSelectElement>) => {
         e.preventDefault();
         setLanguage(e.target.value)
         console.log(e.target.value)
+    }
+    useEffect(() => {
+        (async () => {
+            try {
+                let response = await authApi.get('/profile');
+                console.log(response.data)
+            } catch (e: any) {
+
+            }
+        })()
+    }, [])
+    
+    const submit = async () =>{
+        try{
+            setLoading(true)
+            let response = await authApi.post("/submission", { code: code })
+            if(response.data.status === "ok"){
+                openSuccess("Aceito 😀")
+            } 
+        } catch(e : any){
+             if(e.response.data.error.name =="presentation_error"){
+                openWarning(e.response.data.error.message)
+            }
+            else if(e.response.data.error.name =="compilation_error"){
+                openSnackBarFailed(e.response.data.error.message)
+            }
+        } finally{
+            setLoading(false)
+        }
     }
 
     const handleExec = () => {
         try {
             eval(code);
         } catch (error: any) {
+            console.log(error)
             //erro quando algo não for inicializado
             //esse regex analisa a expressão inteira, no lugar desse undefeined poderia ter outro regex (outro caso seria null) mas o blokly protege entao fds
             //o regex captura a função que deu ruim
@@ -45,12 +100,14 @@ const Editor = () => {
     return (
         <>
             <BoxQuestion
-                question={{ title: 'Aquii', description: 'Por favor funcione.' }}
-                onButtonRunPressed={() => { }}
+                question={{ title: 'Olá mundo !', description: 'Imprima na tela o famoso "olá mundo!"' }}
+                onButtonRunPressed={submit}
                 test={handleExec}
+                isSubmitting={isLoading}
                 onGoForward={() => { }} />
             <CustomBlocklyWorkpace code={code} language={language} onCodeChange={setCode}>
                 <GeneratedCodeArea
+                    language={language}
                     code={code}
                     style={{ background: 'transparent' }}
                     onLanguageChange={handleLanguageChange} />

@@ -6,14 +6,15 @@ import { Content, WrapCode, SelectLanguage } from './styles';
 export interface IGeneratedCodeArea {
     code: string;
     style?: CSS.Properties;
+    language: string;
     onLanguageChange(e: ChangeEvent<HTMLSelectElement>): void;
 }
-export const GeneratedCodeArea = ({ code, style, onLanguageChange }: IGeneratedCodeArea) => {
-    const [open, setOpen] = useState(false)
+export const GeneratedCodeArea = ({ code, style, onLanguageChange, language }: IGeneratedCodeArea) => {
+    const [open, setOpen] = useState(false);
     return (
         <WrapCode open={open}>
             { open &&
-                <SelectLanguage onChange={onLanguageChange}>
+                <SelectLanguage value={language} onChange={onLanguageChange}>
                     <option value="javascript">Javascript</option>
                     <option value="python">Python</option>
                     <option value="dart">Dart</option>

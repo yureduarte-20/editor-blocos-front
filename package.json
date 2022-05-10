@@ -10,6 +10,7 @@
   "dependencies": {
     "@types/react-syntax-highlighter": "^13.5.2",
     "add": "^2.0.6",
+    "axios": "^0.27.2",
     "js-cookie": "^3.0.1",
     "lodash": "^4.17.21",
     "prop-types": "^15.8.1",

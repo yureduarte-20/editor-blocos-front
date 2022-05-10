@@ -4,9 +4,9 @@ import user from '../../assets/user.svg'
 import { useAuth } from "../../store/authContext";
 
 const Navbar = (props: any) => {
-    const { removeToken, token } = useAuth();
+    const { removeToken } = useAuth();
     const logout = (e: any) => {
-        removeToken()
+        removeToken();
     }
     return (
         <>

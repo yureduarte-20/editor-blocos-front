@@ -1,6 +1,7 @@
 import { ImgWrapper, QuestionWraper, ButtonWrapper, ButtonPrimary, ButtonSecondary, Question } from "./styled"
 import CSS from 'csstype'
 import judge from '../../assets/judge.svg'
+import Spinner from "../Spinner";
 export interface IQuestionProps {
     question: {
         title: string;
@@ -10,8 +11,9 @@ export interface IQuestionProps {
     onGoForward?(): void;
     wrapperStyle?: CSS.Properties;
     test?(): void;
+    isSubmitting: boolean
 }
-export const BoxQuestion = ({ question, onButtonRunPressed, onGoForward, wrapperStyle, test }: IQuestionProps) => {
+export const BoxQuestion = ({ question, onButtonRunPressed, onGoForward, wrapperStyle, test, isSubmitting }: IQuestionProps) => {
     return (
         <QuestionWraper style={wrapperStyle || {}}>
             <ImgWrapper>
@@ -22,9 +24,17 @@ export const BoxQuestion = ({ question, onButtonRunPressed, onGoForward, wrapper
                 <p>{question.description}</p>
             </Question>
             <ButtonWrapper>
-                {onButtonRunPressed &&
+                {onButtonRunPressed && !isSubmitting &&
                     <ButtonPrimary onClick={onButtonRunPressed}>
-                        Volte!
+                        Enviar!
+                    </ButtonPrimary>
+                }
+                {isSubmitting &&
+                    <ButtonPrimary style={{
+                        display: 'flex',
+                        justifyContent:'center'
+                    }}>
+                        <Spinner />
                     </ButtonPrimary>
                 }
                 {onGoForward &&

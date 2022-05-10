@@ -1,16 +1,14 @@
 import { useState } from 'react'
 import { Container, LogWrap } from './style'
-import { GeneratedCodeArea } from '../../components/GeneratedCode';
-import { CustomBlocklyWorkpace } from '../../components/CustomBlocklyWorpace';
-import { Log } from '../../components/Log';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import {  Link, useLocation } from 'react-router-dom';
 
 export function Home(props: any) {
     const location = useLocation()
-    console.log(location.state?.params?.userId ) 
     return (
         <Container>
-                    <p>Bemvindo a página inicial</p>
+                    <h4>Bem vindo a página inicial</h4>
+                    <Link to="/editor"><p>Vamos ao editor?</p></Link>
+
         </Container>
     )
 
