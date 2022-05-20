@@ -12,7 +12,7 @@ export const WrapCode = styled.div<StyleProps>`
     z-index: 999999;
     right: 20px;
     /* transform: ${props => props.open ? 'translateX(0)' : 'translateX(400px)'} ; */
-    min-width: ${props => props.open ? '400px' : '0.1px'};
+    min-width: ${props => props.open ? '400px' : '0px'};
     transition: min-width 0.3s, width 0.3s ;
     top: 30px;
     

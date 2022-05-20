@@ -17,6 +17,7 @@ export const useAuthenticateApi = () => {
         }
     }, 3000)
     const { token, removeToken } = useAuth();
+    // colocar o cabeçalho padrão autenticação JWT
     api.interceptors.request.use((config: any) => {
         config.headers.Authorization = `Bearer ${token}`;
         return config;

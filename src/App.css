@@ -1,3 +1,15 @@
 .full{
-  height: 80vh;
+  height: 75vh;
+    width: 100%;
+    position: relative;
+}
+*{
+  margin:0;
+  padding: 0;
+}
+a {
+  text-decoration: none;
+}
+ul,li {
+  list-style: none;
 }

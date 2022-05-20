@@ -6,7 +6,9 @@ import * as Python from 'blockly/python';
 import * as Lua from 'blockly/lua';
 import * as Dart from 'blockly/dart';
 import * as Php from 'blockly/php';
+import * as BlocklyCore from 'blockly/core';
 import { uniqueId } from 'lodash';
+
 import * as PtBr from "blockly/msg/pt-br";
 import { toolboxCategories } from '../toolBox';
 import { DivWorkspace } from './style'
@@ -19,21 +21,20 @@ export interface BlocklyWorkpaceProps {
   onCodeChange(newState: string): void;
   children: any;
   language:string;
+  onXmlChange? (xml : (string )) : void
 }
 
 
-export const CustomBlocklyWorkpace = ({ code, onCodeChange, children, language }: BlocklyWorkpaceProps) => {
-  const [xml, setXml] = useState("");
+export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange ,children, language }: BlocklyWorkpaceProps) => {
   const [variables, setVariables] = useState<VariableModel[]>([])
   const [blocklyDiv,setBlocklyDiv] = useState(createRef())
-  const { workspace } = useBlocklyWorkspace({
+  const { workspace, xml } = useBlocklyWorkspace({
     toolboxConfiguration:toolboxCategories,
     ref: blocklyDiv,
     onWorkspaceChange: workspaceDidChange,
+  
   });
-
   function workspaceDidChange(workspace: WorkspaceSvg) {
-    console.log('ta chamado')
     //Registrar o CallBack de criação de variáveis
     if (!workspace.getButtonCallback('create_variable')) {
       workspace.registerButtonCallback("create_variable", () => {
@@ -42,6 +43,8 @@ export const CustomBlocklyWorkpace = ({ code, onCodeChange, children, language }
         setVariables([...variables, newVariable]);
       })
     }
+
+    onXmlChange && onXmlChange(xml ?? '' )
 
     //Registar o callback de atualização de categorias
     if (!workspace.getToolboxCategoryCallback('VARIABLE')) {

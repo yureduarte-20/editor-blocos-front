@@ -5,11 +5,16 @@ import { GeneratedCodeArea } from "../../components/GeneratedCode"
 import { BoxQuestion } from "../../components/BoxQuestion"
 import { useAuthenticateApi } from "../../utils/useApi";
 import { useSnackbar } from 'react-simple-snackbar'
+import { useMatch, useParams } from "react-router-dom"
 const Editor = () => {
     const [code, setCode] = useState('');
+    const [issue, setIssue] = useState<any>(null)
     const authApi = useAuthenticateApi()
+    const [xml, setXml] = useState('');
     const [language, setLanguage] = useState('javascript');
+    const params = useParams()
     const [isLoading, setLoading] = useState(false);
+    console.log(xml)
     const [openSnackBarFailed, closeSnackBarFailed] = useSnackbar({
         position: "top-center", 
         style:{
@@ -39,8 +44,8 @@ const Editor = () => {
     useEffect(() => {
         (async () => {
             try {
-                let response = await authApi.get('/profile');
-                console.log(response.data)
+                let response = await authApi.get(`/admin-issues/${params.id}`);
+                setIssue(response.data);
             } catch (e: any) {
 
             }
@@ -50,7 +55,8 @@ const Editor = () => {
     const submit = async () =>{
         try{
             setLoading(true)
-            let response = await authApi.post("/submission", { code: code })
+            console.log(params.id)
+            let response = await authApi.post(`/submission/${params.id}`, { code: code, languageId:'1', blocksXml: xml})
             if(response.data.status === "ok"){
                 openSuccess("Aceito 😀")
             } 
@@ -58,7 +64,10 @@ const Editor = () => {
              if(e.response.data.error.name =="presentation_error"){
                 openWarning(e.response.data.error.message)
             }
-            else if(e.response.data.error.name =="compilation_error"){
+            if(e.response.data.error.name =="compilation_error"){
+                openSnackBarFailed(e.response.data.error.message)
+            }
+            if(e.response.status === 422){
                 openSnackBarFailed(e.response.data.error.message)
             }
         } finally{
@@ -100,12 +109,12 @@ const Editor = () => {
     return (
         <>
             <BoxQuestion
-                question={{ title: 'Olá mundo !', description: 'Imprima na tela o famoso "olá mundo!"' }}
+                question={{ title: issue?.title ?? 'Olá mundo !', description: issue?.description ?? 'Imprima na tela o famoso "olá mundo!"' }}
                 onButtonRunPressed={submit}
                 test={handleExec}
                 isSubmitting={isLoading}
-                onGoForward={() => { }} />
-            <CustomBlocklyWorkpace code={code} language={language} onCodeChange={setCode}>
+                />
+            <CustomBlocklyWorkpace onXmlChange={(nxml) =>setXml(nxml)} code={code} language={language} onCodeChange={setCode}>
                 <GeneratedCodeArea
                     language={language}
                     code={code}

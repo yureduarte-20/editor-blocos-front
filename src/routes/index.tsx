@@ -33,7 +33,7 @@ export function AppRoutes() {
                         <Home />
                     </RequireAuth>
                 } />
-                <Route path="/editor" element={
+                <Route path="/editor/:id" element={
                     <RequireAuth>
                         <Editor />
                     </RequireAuth>
