@@ -26,9 +26,11 @@ export function AppRoutes() {
 
     return (
         <>
+
             <Navbar />
+
             <Routes >
-                <Route  path='/' element={
+                <Route path='/' element={
                     <RequireAuth>
                         <Home />
                     </RequireAuth>
@@ -39,6 +41,7 @@ export function AppRoutes() {
                     </RequireAuth>
                 } />
                 <Route path='/login' element={<Login />} />
+                <Route path="*" element={ <div><p>Not FOund</p></div> }  />
             </Routes>
         </>
     )

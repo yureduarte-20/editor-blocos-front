@@ -1,21 +1,21 @@
 import { useAuth } from "../store/authContext";
-import { useSnackbar }  from 'react-simple-snackbar'
 import axios from "axios";
+import { Store } from "react-notifications-component";
 
 const api = axios.create({
-    baseURL: 'http://localhost:3001',
-    timeout:1000000000000000
+    baseURL: 'http://[::1]:3000',
+
 })
 
 
 export const useAuthenticateApi = () => {
-    const [open, close] = useSnackbar({
+ /*    const [open, close] = useSnackbar({
         position: "top-center",
         style: {
             backgroundColor: '#d32f2f',
             color: 'white'
         }
-    }, 3000)
+    }, 3000) */
     const { token, removeToken } = useAuth();
     // colocar o cabeçalho padrão autenticação JWT
     api.interceptors.request.use((config: any) => {
@@ -30,11 +30,22 @@ export const useAuthenticateApi = () => {
             if (e.response.status === 401) {
                 if(token)
                 removeToken()
-                open("Sua sessão expirou.")
+                //open("Sua sessão expirou.")
             }
             console.log(e)
             if (e.code == 'ERR_NETWORK')
-                open("Sem conexão com a Internet")
+                Store.addNotification({
+                    container:'top-center',
+                    title:'Sem conexão com a Internet',
+                    message:'p',
+                    insert:'top',
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss:{
+                        duration: 5000,
+                        onScreen: true
+                    }
+                })
             throw e
         }
     }
@@ -46,10 +57,21 @@ export const useAuthenticateApi = () => {
             if (e.response.status === 401) {
                 if(token)
                 removeToken()
-                open("Sua sessão expirou.")
+                //open("Sua sessão expirou.")
             }
             if (e.code == 'ERR_NETWORK')
-                open("Sem conexão com a Internet")
+                Store.addNotification({
+                    container:'top-center',
+                    title:'Sem conexão com a Internet',
+                    insert:'top',
+                    type:'danger',
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss:{
+                        duration: 5000,
+                        onScreen: true
+                    }
+                })
             throw e
         }
     }
@@ -61,10 +83,21 @@ export const useAuthenticateApi = () => {
             if (e.response.status === 401) {
                 if(token)
                 removeToken()
-                open("Sua sessão expirou.")
+                //open("Sua sessão expirou.")
             }
             if (e.code == 'ERR_NETWORK')
-                open("Sem conexão com a Internet")
+                Store.addNotification({
+                    container:'top-center',
+                    title:'Sem conexão com a Internet',
+                    insert:'top',
+                    type:'danger',
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss:{
+                        duration: 5000,
+                        onScreen: true
+                    }
+                })
             throw e
         }
     }
@@ -76,10 +109,21 @@ export const useAuthenticateApi = () => {
             if (e.response.status === 401) {
                 if(token)
                 removeToken()
-                open("Sua sessão expirou.")
+                //open("Sua sessão expirou.")
             }
             if (e.code == 'ERR_NETWORK')
-                open("Sem conexão com a Internet")
+                Store.addNotification({
+                    container:'top-center',
+                    title:'Sem conexão com a Internet',
+                    insert:'top',
+                    type:'danger',
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss:{
+                        duration: 5000,
+                        onScreen: true
+                    }
+                })
             throw e
         }
     }
@@ -91,10 +135,21 @@ export const useAuthenticateApi = () => {
             if (e.response.status === 401) {
                 if(token)
                 removeToken()
-                open("Sua sessão expirou.")
+                //open("Sua sessão expirou.")
             }
             if (e.code == 'ERR_NETWORK')
-                open("Sem conexão com a Internet")
+                Store.addNotification({
+                    container:'top-center',
+                    title:'Sem conexão com a Internet',
+                    insert:'top',
+                    type:'danger',
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss:{
+                        duration: 5000,
+                        onScreen: true
+                    }
+                })
             throw e
         }
     }
@@ -102,20 +157,31 @@ export const useAuthenticateApi = () => {
 }
 
 export function useApi (){
-    const [open, close] = useSnackbar({
+/*     const [//open, close] = useSnackbar({
         position: "top-center",
         style: {
             backgroundColor: '#d32f2f',
             color: 'white'
         }
-    }, 3000)
+    }, 3000) */
     const post = async (url: string, data: any) => {
         try {
             let response = await api.post(url, data);
             return response
         } catch (e: any) {
             if (e.code == 'ERR_NETWORK')
-                open("Sem conexão com a Internet")
+                Store.addNotification({
+                    container:'top-center',
+                    title:'Sem conexão com a Internet',
+                    insert:'top',
+                    type:'danger',
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss:{
+                        duration: 5000,
+                        onScreen: true
+                    }
+                })
             throw e
         }
     }
@@ -125,7 +191,19 @@ export function useApi (){
             return response
         } catch (e: any) {
             if (e.code == 'ERR_NETWORK')
-                open("Sem conexão com a Internet")
+                Store.addNotification({
+                    container:'top-center',
+                    title:'Sem conexão com a Internet',
+                    insert:'top',
+                    type:'danger',
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss:{
+                        duration: 5000,
+                        onScreen: true
+                    }
+                })
+            throw e
         }
     }
     const put = async (url: string, data: any) => {
@@ -134,7 +212,18 @@ export function useApi (){
             return response
         } catch (e: any) {
             if (e.code == 'ERR_NETWORK')
-                open("Sem conexão com a Internet")
+                Store.addNotification({
+                    container:'top-center',
+                    title:'Sem conexão com a Internet',
+                    insert:'top',
+                    type:'danger',
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss:{
+                        duration: 5000,
+                        onScreen: true
+                    }
+                })
             throw e
         }
     }
@@ -144,7 +233,18 @@ export function useApi (){
             return response
         } catch (e: any) {
             if (e.code == 'ERR_NETWORK')
-                open("Sem conexão com a Internet")
+                Store.addNotification({
+                    container:'top-center',
+                    title:'Sem conexão com a Internet',
+                    insert:'top',
+                    type:'danger',
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss:{
+                        duration: 5000,
+                        onScreen: true
+                    }
+                })
             throw e
         }
     }
@@ -154,7 +254,18 @@ export function useApi (){
             return response
         } catch (e: any) {
             if (e.code == 'ERR_NETWORK')
-                open("Sem conexão com a Internet")
+                Store.addNotification({
+                    container:'top-center',
+                    title:'Sem conexão com a Internet',
+                    insert:'top',
+                    type:'danger',
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss:{
+                        duration: 5000,
+                        onScreen: true
+                    }
+                })
             throw e
         }
     }

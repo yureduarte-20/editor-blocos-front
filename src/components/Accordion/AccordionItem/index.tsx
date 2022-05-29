@@ -14,7 +14,7 @@ const AccordionItem = ({ active, item, onClick } :  IAccordionItem) => {
 
     return(
         <AccordionItemContainer active={active ?? false}>
-            <h2 onClick={(e) => onClick && onClick()} >{item.title}</h2>
+            <h2 className="font-poppins" onClick={(e) => onClick && onClick()} >{item.title}</h2>
             <div className="body"> 
                 { item.questions.map( (item) => {
                     return (

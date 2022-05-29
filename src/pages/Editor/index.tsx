@@ -4,7 +4,6 @@ import { CustomBlocklyWorkpace } from "../../components/CustomBlocklyWorpace"
 import { GeneratedCodeArea } from "../../components/GeneratedCode"
 import { BoxQuestion } from "../../components/BoxQuestion"
 import { useAuthenticateApi } from "../../utils/useApi";
-import { useSnackbar } from 'react-simple-snackbar'
 import { useMatch, useParams } from "react-router-dom"
 const Editor = () => {
     const [code, setCode] = useState('');
@@ -15,7 +14,7 @@ const Editor = () => {
     const params = useParams()
     const [isLoading, setLoading] = useState(false);
     console.log(xml)
-    const [openSnackBarFailed, closeSnackBarFailed] = useSnackbar({
+/*     const [openSnackBarFailed, closeSnackBarFailed] = useSnackbar({
         position: "top-center", 
         style:{
             backgroundColor: '#d32f2f',
@@ -35,7 +34,7 @@ const Editor = () => {
             backgroundColor: '#2e7d32',
             color:'white'
         }
-    })
+    }) */
     const handleLanguageChange = (e: ChangeEvent<HTMLSelectElement>) => {
         e.preventDefault();
         setLanguage(e.target.value)
@@ -44,7 +43,7 @@ const Editor = () => {
     useEffect(() => {
         (async () => {
             try {
-                let response = await authApi.get(`/admin-issues/${params.id}`);
+                let response = await authApi.get(`/issues/${params.id}`);
                 setIssue(response.data);
             } catch (e: any) {
 
@@ -56,20 +55,21 @@ const Editor = () => {
         try{
             setLoading(true)
             console.log(params.id)
-            let response = await authApi.post(`/submission/${params.id}`, { code: code, languageId:'1', blocksXml: xml})
-            if(response.data.status === "ok"){
-                openSuccess("Aceito 😀")
-            } 
+            let response = await authApi.post(`/submission`, { blocksXml: xml, issueId: Number(params.id)})
+            
+                //openSuccess("Enviado 😀")
+             
         } catch(e : any){
-             if(e.response.data.error.name =="presentation_error"){
-                openWarning(e.response.data.error.message)
+            //openWarning(e.response.data.error.message)
+            console.log(e.response)
+             /* if(e.response.data.error.name =="presentation_error"){
             }
             if(e.response.data.error.name =="compilation_error"){
                 openSnackBarFailed(e.response.data.error.message)
             }
             if(e.response.status === 422){
                 openSnackBarFailed(e.response.data.error.message)
-            }
+            } */
         } finally{
             setLoading(false)
         }

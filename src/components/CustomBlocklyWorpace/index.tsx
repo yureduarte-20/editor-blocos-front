@@ -70,7 +70,7 @@ export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange ,childre
     if(code !== _code)
       onCodeChange(_code);
   }
-
+  
   function generateCode(lang : string, workspace : Workspace){
     switch(lang){
       case'javascript':

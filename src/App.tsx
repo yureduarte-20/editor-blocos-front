@@ -2,15 +2,20 @@ import { BrowserRouter } from "react-router-dom";
 import "./App.css";
 import { AppRoutes } from "./routes";
 import { AuthProvider } from "./store/authContext";
-import SnackbarProvider from 'react-simple-snackbar';
+import GlobalStylesSet from "./styles/global";
+import { ReactNotifications } from 'react-notifications-component';
+import 'react-notifications-component/dist/theme.css'
+
 export default function App() {
   return (
     <AuthProvider>
-      <SnackbarProvider>
+      
         <BrowserRouter>
+          <GlobalStylesSet />
+          <ReactNotifications />
           <AppRoutes />
         </BrowserRouter>
-      </SnackbarProvider>
+      
     </AuthProvider>
   )
 }

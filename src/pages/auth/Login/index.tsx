@@ -2,9 +2,9 @@ import { FormEvent, useEffect, useState } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../../store/authContext'
 import { Container, Wrapper } from './styled';
-import { useSnackbar  } from 'react-simple-snackbar';
 import Spinner from '../../../components/Spinner';
 import { useApi } from '../../../utils/useApi';
+import Button from '../../../components/Button';
 export const getTokenFromFakeApi = ({ email, password } : { email:string, password:string })  =>{
     return new Promise<{ status:number,  data:any } >( (res, rej) =>{
         
@@ -31,12 +31,6 @@ const Login = () => {
     const [isLoading, setIsloading] = useState(false);
     const api = useApi()
     const location = useLocation();
-    const [openSnackbar, closeSnackbar] = useSnackbar({ 
-        position: "top-center", 
-        style:{
-            backgroundColor: '#d32f2f',
-            color:'white'
-        } }, 3000)
     const navigate = useNavigate()
     const onSubmit = async (e : any) => {
         e.preventDefault()
@@ -50,8 +44,9 @@ const Login = () => {
           navigate('/',{  });
         } catch(e : any){
             console.log(e)
-            if(e.response.status)
-                openSnackbar(e.response.data.error.message)
+            console.log(e.response)
+            /* if(e.response.status)
+                openSnackbar(e.response.data.error.message) */
         } finally{
             setIsloading(false)
         }
@@ -61,14 +56,14 @@ const Login = () => {
     return (
         <Container>
             <Wrapper>
-                <h2>LOGIN</h2>
+                <h2 className='font-1-xl font-light blue'>Login</h2>
                 <form onSubmit={onSubmit}>
-                    <input type={'email'} />
-                    <input type={'password'} />
+                    <input className='font-1-m' type={'email'} />
+                    <input className='font-1-m' type={'password'} />
                     { isLoading ?
                         <Spinner />
                         :
-                        <button type='submit'>Enviar</button>
+                        <Button className='font-1-s' type='submit' margin='10px 0 0 0'>Enviar</Button>
                     }
                 </form>
             </Wrapper>

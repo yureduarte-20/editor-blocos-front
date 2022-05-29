@@ -17,7 +17,7 @@ export function Home(props: any) {
     useEffect(() =>{
         (async() =>{
             try{
-                const response = await api.get('/admin-issues');
+                const response = await api.get('/issues');
                 setQuesions(response.data);
             } catch(e){
 
@@ -33,7 +33,7 @@ export function Home(props: any) {
                 </IDEContainer>
                 { question.length &&
                 <AccordionWrap>
-                    <h1 style={{ textAlign: 'center' }}>Exercícios</h1>
+                    <h1 className='font-2-l' style={{ textAlign: 'center' }}>Exercícios</h1>
                     <Accordion items={[ { title:'Fácil', questions:question.filter(item => item.dificultyLevel =='Fácil' ? item : undefined) },
                                         { title:'Intermediário', questions:question.filter(item => item.dificultyLevel =='Intermediário' ? item : undefined) },   
                                         { title:'Difícil', questions:question.filter(item => item.dificultyLevel =='Difícil' ? item : undefined) }   
