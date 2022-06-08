@@ -15,14 +15,16 @@ const Navbar = (props: any) => {
             <Header>
                 <Brand>
                     <img src={brand} width="50px" />
-                    <span className="font-2-m white">
+                    <span className="font-2-s white">
                         JOAO - JUDGE ONLINE AUTOMATIC ORIENTATION
                     </span>
                 </Brand>
-                <div style={{ display:'flex', flexDirection:'row', gap:20 }}>
+                <div style={{ display:'flex', flexDirection:'row', gap:20, padding: '10px 20px' }}>
                     { token ?
                     <>
-                        <Link to="/perfil" onClick={logout} className="font-2-m white">Perfil</Link>
+                        <Link to="/submissoes" onClick={logout} className="font-2-s white">Submissões</Link>
+                        <Link to="/exercicios"  className="font-2-s white">Exercícios</Link>
+                        <Link to="/perfil" onClick={logout} className="font-2-s white">Perfil</Link>
                     </>
                     : 
                     <>

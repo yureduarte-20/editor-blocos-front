@@ -7,6 +7,7 @@ import Editor from '../pages/Editor';
 import Login from '../pages/auth/Login';
 import { useAuth } from '../store/authContext';
 import Signup from '../pages/auth/Signup';
+import LevelSelect from '../pages/exercise/LevelSelect';
 
 
 function RequireAuth({ children }: { children: JSX.Element }) {
@@ -41,13 +42,15 @@ export function AppRoutes() {
                         <Editor />
                     </RequireAuth>
                 } />
-                <Route path='/signup' element={
-                    
-                        <Signup/>
-                    
+                <Route path='/signup' element={<Signup />} />
+                <Route path='/exercicios' element={
+                    <RequireAuth>
+                        <LevelSelect />
+                    </RequireAuth>
                 } />
+                <Route path='/exercicios/:dificultyLevel' />
                 <Route path='/login' element={<Login />} />
-                <Route path="*" element={ <div><p>Not FOund</p></div> }  />
+                <Route path="*" element={<div><p>Not FOund</p></div>} />
             </Routes>
         </>
     )
