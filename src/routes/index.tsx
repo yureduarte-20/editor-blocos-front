@@ -8,6 +8,7 @@ import Login from '../pages/auth/Login';
 import { useAuth } from '../store/authContext';
 import Signup from '../pages/auth/Signup';
 import LevelSelect from '../pages/exercise/LevelSelect';
+import { Presentation } from '../pages/presentation';
 
 
 function RequireAuth({ children }: { children: JSX.Element }) {
@@ -19,7 +20,7 @@ function RequireAuth({ children }: { children: JSX.Element }) {
         // trying to go to when they were redirected. This allows us to send them
         // along to that page after they login, which is a nicer user experience
         // than dropping them off on the home page.
-        return <Navigate to="/login" state={{ from: location }} replace />;
+        return <Navigate to="/presentation" state={{ from: location }} replace />;
     }
 
     return children;
@@ -50,6 +51,7 @@ export function AppRoutes() {
                 } />
                 <Route path='/exercicios/:dificultyLevel' />
                 <Route path='/login' element={<Login />} />
+                <Route path='/presentation' element={<Presentation />} />
                 <Route path="*" element={<div><p>Not FOund</p></div>} />
             </Routes>
         </>

@@ -12,7 +12,7 @@ const Navbar = (props: any) => {
     }
     return (
         <>
-            <Header>
+            <Header style ={{marginBottom: '0px'}}>
                 <Brand>
                     <img src={brand} width="50px" />
                     <span className="font-2-s white">

@@ -1,7 +1,7 @@
 import { useAuth } from "../store/authContext";
 import axios from "axios";
 import { Store } from "react-notifications-component";
-const BASE_URL = 'http://[::1]:3000'
+const BASE_URL = 'http://192.168.0.108:3000/'
 
 
 export const useAuthenticateApi = () => {

@@ -9,13 +9,13 @@ import 'react-notifications-component/dist/theme.css'
 export default function App() {
   return (
     <AuthProvider>
-      
-        <BrowserRouter>
-          <GlobalStylesSet />
-          <ReactNotifications />
-          <AppRoutes />
-        </BrowserRouter>
-      
+
+      <BrowserRouter>
+        <GlobalStylesSet />
+        <ReactNotifications />
+        <AppRoutes />
+      </BrowserRouter>
+
     </AuthProvider>
   )
 }
