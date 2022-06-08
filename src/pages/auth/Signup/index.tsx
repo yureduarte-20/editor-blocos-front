@@ -79,15 +79,15 @@ const Signup = () => {
     return (
         <Container>
             <Wrapper>
-                <h2 className='font-1-xl font-light blue'>Cadastra-se</h2>
+                <h2 className='font-1-xl font-light blue'>Cadastrar-se</h2>
                 <Form onSubmit={onSubmit}>
                     <label htmlFor='font-2-l' >Nome Completo</label>
                     <Input name='name' className='font-2-m font-light' type={'text'} />
-                    <label htmlFor='font-2-l' >Email</label>
+                    <label htmlFor='font-2-l' >E-mail</label>
                     <Input name='email' className='font-2-m font-light' type={'email'} />
                     <label htmlFor='font-2-l' >Senha</label>
                     <Input name="password" className='font-2-m font-light' type={'password'} />
-                    <label htmlFor='font-2-l' >Confirme sua Senha</label>
+                    <label htmlFor='font-2-l' >Confirme sua senha</label>
                     <Input name="password_confirm" className='font-2-m font-light' type={'password'} />
                     {isLoading ?
                         <Spinner />

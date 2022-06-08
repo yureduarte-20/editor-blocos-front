@@ -83,8 +83,8 @@ const Login = () => {
                         <Button className='font-1-s' type='submit' margin='10px 0 0 0'>Enviar</Button>
                     }
                 </Form>
-                <p className='font-1-s black font-light'> Ainda não possui uma conta?
-                    <Link style={{ display: 'inline-block' }} className="orange" to={'/signup'} >Clique Aqui</Link>
+                <p className='font-1-s black font-light'> Ainda não possui uma conta? 
+                    <Link style={{ display: 'inline-block', marginLeft: '5px' }} className="orange" to={'/signup'} > Clique Aqui</Link>
                  </p>
             </Wrapper>
         </Container>
