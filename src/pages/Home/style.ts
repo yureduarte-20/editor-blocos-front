@@ -1,42 +1,80 @@
 import styled from 'styled-components';
+import colors from '../../styles/colors';
+export interface IThProps {
+    width?: string;
+    textAlign: string;
+}
+export interface ITable {
+    width?: string;
+}
 
 export const Container = styled.main`
     max-width: 1400px;
     margin: 0 auto;
     justify-content: center;
-    height: 80vh;
     display: flex;
     padding-top: 20px;
 `;
 
-export const IDEContainer = styled.article`
-    padding: 20px;
-    display: flex;
-    background-color: #c4c4c4;
-    max-width: max-content;
-    align-self: flex-start;
-    border-radius: 8px;
-    & > a {
-        text-decoration: none;
-        color: white;
-        display: inline-block;
-        padding: 10px 20px;
-        cursor: pointer;
-        background-color: #383838;
-        align-items: end;
-        max-width: max-content;
-        border-radius: 8px;
-    }
-`
 export const AccordionWrap = styled.section`
     grid-column: 2;
     align-self: center;
 `
 
-export const HomeContainer = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    justify-content: center;
+export const HomeContainer = styled.section`
+    display: flex;
     width: 100%;
-    height: 100%;
+    flex-direction: column;
+    padding: 10px 20px;
+    gap: 10px;
+`
+
+export const Header = styled.div`
+    display: flex;
+    background-color: ${colors.primary};
+    border-radius: 4px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    padding: 10px 20px;
+    flex-direction: column;
+
+`
+export const TableWrap = styled.div`
+    background-color: ${colors.primary};
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    padding: 10px 20px;
+`
+
+export const Table = styled.table<ITable>`
+    width:100%;
+    padding: 10px;
+    border-collapse: collapse;
+`
+export const Thead = styled.thead `
+    background-color: ${colors.secundary};
+    padding: 10px 20px;
+    `
+export const Tr = styled.tr `
+    border-bottom: 1px solid  ${colors.primary_input_background};
+    &:nth-child(even){
+        background-color: ${colors.primary_input_background};
+    }
+`
+export const Th = styled.th<IThProps>`
+    width: ${props => props.width };
+    margin-left: 0;
+    margin-right: 0;
+    text-align: ${props => props.textAlign};
+    padding: 10px 20px;
+`
+
+export const TBody = styled.tbody`
+    
+`
+export const Td = styled.td`
+    padding:10px 20px;
 `

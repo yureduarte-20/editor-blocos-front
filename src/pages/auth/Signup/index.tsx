@@ -6,29 +6,8 @@ import Spinner from '../../../components/Spinner';
 import { useApi } from '../../../utils/useApi';
 import Button from '../../../components/Button';
 import { Store } from 'react-notifications-component'
-import { Typograph } from '../../../styles/Typographic.';
-export const getTokenFromFakeApi = ({ email, password }: { email: string, password: string }) => {
-    return new Promise<{ status: number, data: any }>((res, rej) => {
 
-        setTimeout(() => (email === "yure@gmail.com" && password === "12345678") ?
-            res({
-                status: 200,
-                data: {
-                    token: "um_token_aleatorio"
-                }
-            }) :
-            rej({
-                status: 401,
-                response: {
-                    message: "usuário e senha incorretos"
-                }
-            }),
-            3000);
-
-    })
-}
-
-const Login = () => {
+const Signup = () => {
     const { setToken } = useAuth();
     const [isLoading, setIsloading] = useState(false);
     const api = useApi()
@@ -36,13 +15,42 @@ const Login = () => {
     const navigate = useNavigate()
     const onSubmit = async (e: any) => {
         e.preventDefault()
+        let name = e.target[0].value as string;
+        let email = e.target[1].value as string;
+        let password = e.target[2].value as string;
+        let password_confirm = e.target[3].value as string;
+        if (password != password_confirm) return Store.addNotification({
+            container: 'top-center',
+            insert: 'top',
+            title: 'Atenção',
+            type: 'warning',
+            message: 'A senhas não coincidem.',
+            dismiss: {
+                duration: 3000,
+                onScreen: true
+            },
+            /* animationIn: ["animate__animated", "animate__fadeIn"],
+            animationOut: ["animate__animated", "animate__fadeOut"], */
+        })
         setIsloading(true);
-        let email = e.target[0].value as string
-        let password = e.target[1].value as string
         try {
-            let response = await api.post("/login", { email, password })
+            let response = await api.post("/signup", { email, password, name })
             setToken(response.data.token);
             setIsloading(false);
+            Store.addNotification({
+                container: 'top-center',
+                insert: 'top',
+                title: 'Ok',
+                type: 'success',
+                message: 'Sua conta foi criada com sucesso!',
+                dismiss: {
+                    duration: 3000,
+                    onScreen: true
+                },
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+
+            })
             navigate('/', {});
         } catch (e: any) {
             console.log(e)
@@ -52,7 +60,7 @@ const Login = () => {
                     container: 'top-center',
                     insert: 'top',
                     title: 'Erro',
-                    type: 'warning',
+                    type: 'danger',
                     message: e.response.data.error.message,
                     dismiss: {
                         duration: 3000,
@@ -71,24 +79,26 @@ const Login = () => {
     return (
         <Container>
             <Wrapper>
-                <h2 className='font-1-xl font-light blue'>Login</h2>
+                <h2 className='font-1-xl font-light blue'>Cadastra-se</h2>
                 <Form onSubmit={onSubmit}>
+                    <label htmlFor='font-2-l' >Nome Completo</label>
+                    <Input name='name' className='font-2-m font-light' type={'text'} />
                     <label htmlFor='font-2-l' >Email</label>
                     <Input name='email' className='font-2-m font-light' type={'email'} />
                     <label htmlFor='font-2-l' >Senha</label>
                     <Input name="password" className='font-2-m font-light' type={'password'} />
+                    <label htmlFor='font-2-l' >Confirme sua Senha</label>
+                    <Input name="password_confirm" className='font-2-m font-light' type={'password'} />
                     {isLoading ?
                         <Spinner />
                         :
                         <Button className='font-1-s' type='submit' margin='10px 0 0 0'>Enviar</Button>
                     }
                 </Form>
-                <p className='font-1-s black font-light'> Ainda não possui uma conta?
-                    <Link style={{ display: 'inline-block' }} className="orange" to={'/signup'} >Clique Aqui</Link>
-                 </p>
+                <Link to={'/signup'} />
             </Wrapper>
         </Container>
     );
 }
 
-export default Login;
+export default Signup;

@@ -1,6 +1,6 @@
 import { createRef, useRef, useState } from "react";
-import { BlocklyWorkspace, WorkspaceSvg, Workspace, useBlocklyWorkspace } from "react-blockly";
-import Blockly, { VariableModel } from "blockly";
+import { BlocklyWorkspace, WorkspaceSvg, Workspace } from "react-blockly";
+import Blockly, { VariableModel, setLocale } from "blockly";
 import * as JavaScript from 'blockly/javascript';
 import * as Python from 'blockly/python';
 import * as Lua from 'blockly/lua';
@@ -9,9 +9,10 @@ import * as Php from 'blockly/php';
 import * as BlocklyCore from 'blockly/core';
 import { uniqueId } from 'lodash';
 
-import * as PtBr from "blockly/msg/pt-br";
+import PtBr from "blockly/msg/pt-br";
 import { toolboxCategories } from '../toolBox';
 import { DivWorkspace } from './style'
+import colors from "../../styles/colors";
 
 
 Blockly.setLocale(PtBr);
@@ -20,20 +21,21 @@ export interface BlocklyWorkpaceProps {
   code: string;
   onCodeChange(newState: string): void;
   children: any;
-  language:string;
-  onXmlChange? (xml : (string )) : void
+  language: string;
+  onXmlChange?(xml: (string)): void
+  initialXml?:string;
 }
 
 
-export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange ,children, language }: BlocklyWorkpaceProps) => {
+export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange, children, language, initialXml }: BlocklyWorkpaceProps) => {
   const [variables, setVariables] = useState<VariableModel[]>([])
-  const [blocklyDiv,setBlocklyDiv] = useState(createRef())
-  const { workspace, xml } = useBlocklyWorkspace({
-    toolboxConfiguration:toolboxCategories,
-    ref: blocklyDiv,
-    onWorkspaceChange: workspaceDidChange,
-  
-  });
+  /*   const blocklyDiv = createRef();
+    const { workspace, xml } = useBlocklyWorkspace({
+      ref: blocklyDiv.current,
+      toolboxConfiguration:toolboxCategories,
+      onWorkspaceChange: workspaceDidChange,
+    
+    }); */
   function workspaceDidChange(workspace: WorkspaceSvg) {
     //Registrar o CallBack de criação de variáveis
     if (!workspace.getButtonCallback('create_variable')) {
@@ -43,9 +45,6 @@ export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange ,childre
         setVariables([...variables, newVariable]);
       })
     }
-
-    onXmlChange && onXmlChange(xml ?? '' )
-
     //Registar o callback de atualização de categorias
     if (!workspace.getToolboxCategoryCallback('VARIABLE')) {
       workspace.registerToolboxCategoryCallback('VARIABLE', _wo => {
@@ -67,15 +66,15 @@ export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange ,childre
       });
     }
     const _code = generateCode(language, workspace as Workspace);
-    if(code !== _code)
+    if (code !== _code)
       onCodeChange(_code);
   }
-  
-  function generateCode(lang : string, workspace : Workspace){
-    switch(lang){
-      case'javascript':
+
+  function generateCode(lang: string, workspace: Workspace) {
+    switch (lang) {
+      case 'javascript':
         return JavaScript.workspaceToCode(workspace);
-      case 'dart': 
+      case 'dart':
         return Dart.workspaceToCode(workspace);
       case 'php':
         return Php.workspaceToCode(workspace);
@@ -88,34 +87,34 @@ export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange ,childre
     }
   }
   return (
-    <DivWorkspace ref={blocklyDiv}>
-        {children}
-    </DivWorkspace>
+    <>
+      <BlocklyWorkspace
+        toolboxConfiguration={toolboxCategories}
+        className="full"
+        workspaceConfiguration={{
+          grid: {
+            spacing: 20,
+            length: 3,
+            colour: "#ccc",
+            snap: true,
+          },
+          zoom:{
+            controls: true,
+            wheel: true,
+            startScale: 1.0,
+            maxScale: 3,
+            minScale: 0.3,
+            scaleSpeed: 1.2,
+            pinch: true
+          },
+        }}
 
-    /* <BlocklyWorkspace
-   {
-      toolboxConfiguration={toolboxCategories}
-      className="full"
-      workspaceConfiguration={{
-        grid: {
-          spacing: 20,
-          length: 3,
-          colour: "#ccc",
-          snap: true,
-        },
-        zoom:
-         {controls: true,
-          wheel: true,
-          startScale: 1.0,
-          maxScale: 3,
-          minScale: 0.3,
-          scaleSpeed: 1.2,
-          pinch: true}
-      }}
-      
-      onWorkspaceChange={workspaceDidChange}
-      onXmlChange={setXml}
-    /> 
-    }*/
+        onWorkspaceChange={workspaceDidChange}
+        onXmlChange={onXmlChange}
+        initialXml={initialXml}
+      />
+      {children}
+
+    </>
   );
 }

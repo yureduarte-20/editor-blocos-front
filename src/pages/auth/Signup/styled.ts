@@ -22,16 +22,12 @@ export const Wrapper = styled.div`
         margin-bottom: 30px;
         text-align: center;
     }
-    & > p {
-        text-align: center;
-    }
 `
 export const Form = styled.form `
     display: flex;
     flex-direction: column;
     gap:20px;
     min-width: 600px;
-    margin-bottom: 20px;
 `
 
 export const Input = styled.input`

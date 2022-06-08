@@ -9,12 +9,12 @@ export const WrapCode = styled.div<StyleProps>`
     min-height: 45vh;
     background-color: #DFDFDF;
     position: absolute;
-    z-index: 999999;
+    z-index: 9;
     right: 20px;
     /* transform: ${props => props.open ? 'translateX(0)' : 'translateX(400px)'} ; */
     min-width: ${props => props.open ? '400px' : '0px'};
     transition: min-width 0.3s, width 0.3s ;
-    top: 30px;
+    top: calc( 100vh / 4.5 );
     
     display: flex;
     flex-direction: column;

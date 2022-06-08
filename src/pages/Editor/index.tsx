@@ -4,41 +4,19 @@ import { CustomBlocklyWorkpace } from "../../components/CustomBlocklyWorpace"
 import { GeneratedCodeArea } from "../../components/GeneratedCode"
 import { BoxQuestion } from "../../components/BoxQuestion"
 import { useAuthenticateApi } from "../../utils/useApi";
-import { useMatch, useParams } from "react-router-dom"
+import { useLocation, useMatch, useParams } from "react-router-dom"
 const Editor = () => {
     const [code, setCode] = useState('');
     const [issue, setIssue] = useState<any>(null)
     const authApi = useAuthenticateApi()
     const [xml, setXml] = useState('');
     const [language, setLanguage] = useState('javascript');
-    const params = useParams()
+    const params = useParams();
+    const location : any = useLocation();
     const [isLoading, setLoading] = useState(false);
-    console.log(xml)
-/*     const [openSnackBarFailed, closeSnackBarFailed] = useSnackbar({
-        position: "top-center", 
-        style:{
-            backgroundColor: '#d32f2f',
-            color:'white'
-        }
-    })
-    const [openWarning, closeWarning] = useSnackbar({
-        position: "top-center", 
-        style:{
-            backgroundColor: '#ed6c02',
-            color:'white'
-        }
-    })
-    const [openSuccess , closeSuccess] = useSnackbar({
-        position: "top-center", 
-        style:{
-            backgroundColor: '#2e7d32',
-            color:'white'
-        }
-    }) */
     const handleLanguageChange = (e: ChangeEvent<HTMLSelectElement>) => {
         e.preventDefault();
         setLanguage(e.target.value)
-        console.log(e.target.value)
     }
     useEffect(() => {
         (async () => {
@@ -114,7 +92,8 @@ const Editor = () => {
                 test={handleExec}
                 isSubmitting={isLoading}
                 />
-            <CustomBlocklyWorkpace onXmlChange={(nxml) =>setXml(nxml)} code={code} language={language} onCodeChange={setCode}>
+            <CustomBlocklyWorkpace onXmlChange={(nxml) =>setXml(nxml)} code={code} language={language}
+             initialXml={location.state.params.blocksXml ?? ''} onCodeChange={setCode}>
                 <GeneratedCodeArea
                     language={language}
                     code={code}

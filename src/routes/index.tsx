@@ -6,6 +6,7 @@ import { GeneratedCodeArea } from '../components/GeneratedCode';
 import Editor from '../pages/Editor';
 import Login from '../pages/auth/Login';
 import { useAuth } from '../store/authContext';
+import Signup from '../pages/auth/Signup';
 
 
 function RequireAuth({ children }: { children: JSX.Element }) {
@@ -39,6 +40,11 @@ export function AppRoutes() {
                     <RequireAuth>
                         <Editor />
                     </RequireAuth>
+                } />
+                <Route path='/signup' element={
+                    
+                        <Signup/>
+                    
                 } />
                 <Route path='/login' element={<Login />} />
                 <Route path="*" element={ <div><p>Not FOund</p></div> }  />
