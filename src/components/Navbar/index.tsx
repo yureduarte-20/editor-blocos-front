@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 
 const Navbar = (props: any) => {
     const { removeToken, token } = useAuth();
-    console.log(token)
     const logout = (e: any) => {
         removeToken();
     }
@@ -22,7 +21,7 @@ const Navbar = (props: any) => {
                 <div style={{ display:'flex', flexDirection:'row', gap:20, padding: '10px 20px' }}>
                     { token ?
                     <>
-                        <Link to="/submissoes" onClick={logout} className="font-2-s white">Submissões</Link>
+                        <Link to="/" className="font-2-s white">Submissões</Link>
                         <Link to="/exercicios"  className="font-2-s white">Exercícios</Link>
                         <Link to="/perfil" onClick={logout} className="font-2-s white">Perfil</Link>
                     </>

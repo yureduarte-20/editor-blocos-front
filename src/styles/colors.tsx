@@ -6,7 +6,8 @@ export default {
     secundary:'#004180',
     accent:'#F5850F',
     success:'#5CB660',
-    failure:'#D32F2F'
+    failure:'#D32F2F',
+    textGray: '#737373;'
 }
 
 export const Cores = createGlobalStyle`

@@ -37,7 +37,6 @@ export const Container = styled.div`
     max-width: 1200px;
     margin: 0 auto;
 
-
     .d-flex {
         display: flex;
     }
@@ -52,7 +51,6 @@ export const Card = styled.div<ICardStyleProps>`
     background-color: ${colors.primary};
     border-radius: 4px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
-    width: 100%;
     padding: ${ props => props.padding ? props.padding : '10px 20px'} ;
 `
 
