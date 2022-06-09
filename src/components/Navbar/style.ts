@@ -2,12 +2,8 @@ import styled from "styled-components";
 import colors from "../../styles/colors";
 
 export const Header = styled.header`
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 10px 20px;
     box-sizing: border-box;
-    margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;

@@ -1,4 +1,5 @@
 import styled, { keyframes } from "styled-components";
+import colors from "../../styles/colors";
 
 const rotate360 = keyframes`
   from {
@@ -13,13 +14,13 @@ const Spinner = styled.div`
   animation: ${rotate360} 1s linear infinite;
   transform: translateZ(0);
   align-self: center;
-  border-top: 2px solid grey;
-  border-right: 2px solid grey;
-  border-bottom: 2px solid grey;
-  border-left: 4px solid black;
+  border: 6px solid #f3f3f3; /* Light grey */
+  border-bottom: 4px solid #f3f3f3; /* Light grey */
+  border-left: 4px solid #f3f3f3; /* Light grey */
+  border-top: 4px solid ${colors.accent}; /* Blue */
+  width: 20px;
+  height: 20px;
   background: transparent;
-  width: 24px;
-  height: 24px;
   border-radius: 50%;
 `;
 

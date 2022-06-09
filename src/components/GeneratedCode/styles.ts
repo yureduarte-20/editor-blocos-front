@@ -40,4 +40,5 @@ export const SelectLanguage = styled.select`
     padding: 10px 20px;
     background-color: #C4C4C4;
     border-radius:8px;
+
 `
