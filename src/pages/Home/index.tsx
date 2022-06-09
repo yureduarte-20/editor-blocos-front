@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
-import { AccordionWrap, Container, Header, HomeContainer, TableWrap, TBody, Table, Th, Thead, Tr, Td } from './style'
+import { AccordionWrap, Header, HomeContainer, TableWrap, TBody, Table, Th, Thead, Tr, Td } from './style'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Accordion from '../../components/Accordion';
 import { useAuthenticateApi } from '../../utils/useApi'
 import colors from '../../styles/colors';
 import Spinner from '../../components/Spinner';
-
+import { Container } from '../../styles/global';
+import Title from '../../components/Title';
 interface IResponse {
     id: string;
     blocksXml:string;
@@ -43,11 +44,7 @@ export function Home(props: any) {
     return (
         <Container>
             <HomeContainer>
-                <Header>
-                    <h1 className='font-1-xl blue'>Submissões</h1>
-                    <p className='font-2-m font-light'>Abaixo estão todas as submissões que realizou até agora.</p>
-                </Header>
-
+                <Title title='Submissões' subtitle='Abaixo estão todas as submissões que realizou até agora.' />
                 <TableWrap>
                     {
                         submissions.length == 0 &&
@@ -88,7 +85,7 @@ export function Home(props: any) {
                                                     {submission.issue.dificultyLevel}
                                                 </span>
                                             </Td>
-                                            <Td onClick={ e => navigate(`/submissoes/${submission.id}`) }>
+                                            <Td onClick={ e => navigate(`/submissoes/${submission.id}`) } >
                                                 <span className={`${submission.status == SubmissionStatus.ACCEPTED ?  'green' : 'red' }`} 
                                                 style={{ display: 'flex', alignItems: 'center', textTransform:'capitalize' }}>
                                                     { ((status : SubmissionStatus) => {
@@ -108,7 +105,7 @@ export function Home(props: any) {
                                             <Td>
                                                 <span style={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
                                                     <p>{submission.issue.title}</p>
-                                                    <a className='orange' style={{ padding:'5px' }} onClick={e => navigate(`/editor/${submission.issue.id}`, { state:{ params:{ blocksXml: submission.blocksXml  } } })}>Refazer</a>
+                                                    <a className='orange' style={{ display: 'inline-block' ,padding:'5px' }} onClick={e => navigate(`/editor/${submission.issue.id}`, { state:{ params:{ blocksXml: submission.blocksXml  } } })}>Refazer</a>
                                                 </span>
                                             </Td>
                                         </Tr>

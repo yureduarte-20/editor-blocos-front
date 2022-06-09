@@ -16,6 +16,7 @@ export const GlobalStyle = createGlobalStyle`
         margin: 0;
         padding: 0;
         outline: 0;
+        box-sizing: border-box;
         //font-family: 'Roboto', sans-serif;
     }
     body {
@@ -36,6 +37,7 @@ export default () =>{
 export const Container = styled.div`
     max-width: 1200px;
     margin: 0 auto;
+    
 
     .d-flex {
         display: flex;

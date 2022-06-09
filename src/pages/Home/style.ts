@@ -8,24 +8,16 @@ export interface ITable {
     width?: string;
 }
 
-export const Container = styled.main`
-    max-width: 1200px;
-    margin: 0 auto;
-    justify-content: center;
-    display: flex;
-    padding-top: 20px;
-`;
-
 export const AccordionWrap = styled.section`
     grid-column: 2;
     align-self: center;
 `
 
-export const HomeContainer = styled.section`
+export const HomeContainer = styled.main`
     display: flex;
     width: 100%;
     flex-direction: column;
-    padding: 10px 20px;
+    padding: 10px 0px;
     gap: 10px;
 `
 

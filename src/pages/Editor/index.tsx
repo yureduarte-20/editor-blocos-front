@@ -4,10 +4,12 @@ import { CustomBlocklyWorkpace } from "../../components/CustomBlocklyWorpace"
 import { GeneratedCodeArea } from "../../components/GeneratedCode"
 import { BoxQuestion } from "../../components/BoxQuestion"
 import { useAuthenticateApi } from "../../utils/useApi";
-import { useLocation, useMatch, useParams } from "react-router-dom"
+import { Navigate, useLocation, useMatch, useNavigate, useParams } from "react-router-dom"
+import { Store } from "react-notifications-component"
 const Editor = () => {
     const [code, setCode] = useState('');
     const [issue, setIssue] = useState<any>(null)
+    const navigate = useNavigate()
     const authApi = useAuthenticateApi()
     const [xml, setXml] = useState('');
     const [language, setLanguage] = useState('javascript');
@@ -35,7 +37,16 @@ const Editor = () => {
             setLoading(true)
             console.log(params.id)
             let response = await authApi.post(`/submission`, { blocksXml: xml, issueId: Number(params.id)})
-            
+            Store.addNotification({
+                title:'Enviado',
+                message:'Seu código foi submetido com sucesso',
+                type:'success',
+                container:'top-center',
+                dismiss:{
+                    duration:300
+                }
+            })
+            navigate(`/submissoes/${response.data.id}`)
                 //openSuccess("Enviado 😀")
              
         } catch(e : any){
