@@ -59,6 +59,7 @@ export const Thead = styled.thead `
     padding: 10px 20px;
     `
 export const Tr = styled.tr `
+    cursor: pointer;
     border-bottom: 1px solid  ${colors.primary_input_background};
     &:nth-child(even){
         background-color: ${colors.primary_input_background};

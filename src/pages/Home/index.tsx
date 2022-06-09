@@ -77,18 +77,18 @@ export function Home(props: any) {
                             <TBody>
                                 {submissions.map( submission =>
                                     
-                                        <Tr className='font-2-xs' key={submission.id}>
-                                            <Td>
+                                        <Tr  className='font-2-xs' key={submission.id}>
+                                            <Td onClick={ e => navigate(`/submissoes/${submission.id}`) }>
                                                 <span style={{ display: 'flex', alignItems: 'center' }}>
                                                     {submission.id}
                                                 </span>
                                             </Td>
-                                            <Td>
+                                            <Td onClick={ e => navigate(`/submissoes/${submission.id}`) }>
                                                 <span style={{ display: 'flex', alignItems: 'center' }}>
                                                     {submission.issue.dificultyLevel}
                                                 </span>
                                             </Td>
-                                            <Td>
+                                            <Td onClick={ e => navigate(`/submissoes/${submission.id}`) }>
                                                 <span className={`${submission.status == SubmissionStatus.ACCEPTED ?  'green' : 'red' }`} 
                                                 style={{ display: 'flex', alignItems: 'center', textTransform:'capitalize' }}>
                                                     { ((status : SubmissionStatus) => {
@@ -108,7 +108,7 @@ export function Home(props: any) {
                                             <Td>
                                                 <span style={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
                                                     <p>{submission.issue.title}</p>
-                                                    <a className='orange' onClick={e => navigate(`/editor/${submission.issue.id}`, { state:{ params:{ blocksXml: submission.blocksXml  } } })}>Refazer</a>
+                                                    <a className='orange' style={{ padding:'5px' }} onClick={e => navigate(`/editor/${submission.issue.id}`, { state:{ params:{ blocksXml: submission.blocksXml  } } })}>Refazer</a>
                                                 </span>
                                             </Td>
                                         </Tr>
