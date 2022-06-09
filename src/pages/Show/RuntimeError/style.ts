@@ -1,17 +1,16 @@
 import styled from "styled-components";
-import icon from '../../../assets/ErrorX.svg' 
+import icon from '../../../assets/deadEmoticon.svg' 
 export const StatusSVG = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    margin-bottom: 20px;
     &::before {
         content: '';
-        width: 51px;
+        width: 50px;
         background-repeat: no-repeat ;
         background-size: contain;
-        height: 51px;
+        height: 50px;
         background: url(${icon}) no-repeat;
     }
 `
