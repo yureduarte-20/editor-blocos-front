@@ -1,7 +1,7 @@
 import { useAuth } from "../store/authContext";
 import axios from "axios";
 import { Store } from "react-notifications-component";
-const BASE_URL = 'http://[::1]:3000'
+const BASE_URL = 'http://[::1]:3000/'
 
 
 export const useAuthenticateApi = () => {
@@ -25,7 +25,8 @@ export const useAuthenticateApi = () => {
                     Store.addNotification({
                         container: 'top-center',
                         title: 'Sua sessão expirou',
-                        message: 'Logue-se novamente para acessar o aplicação.',
+                        type:'danger',
+                        message: 'Logue-se novamente para acessar a aplicação.',
                         insert: 'top',
                         animationIn: ["animate__animated", "animate__fadeIn"],
                         animationOut: ["animate__animated", "animate__fadeOut"],
@@ -40,8 +41,8 @@ export const useAuthenticateApi = () => {
             if (e.code == 'ERR_NETWORK')
                 Store.addNotification({
                     container: 'top-center',
-                    title: 'Sua sessão expirou',
-                    message: 'Logue-se novamente para acessar o aplicação.',
+                    title: 'Sem conexão com a intenet',
+                    message: 'Tente navamente mais tarde',
                     insert: 'top',
                     animationIn: ["animate__animated", "animate__fadeIn"],
                     animationOut: ["animate__animated", "animate__fadeOut"],
@@ -64,7 +65,8 @@ export const useAuthenticateApi = () => {
                     Store.addNotification({
                         container: 'top-center',
                         title: 'Sua sessão expirou',
-                        message: 'Logue-se novamente para acessar o aplicação.',
+                        type:'danger',
+                        message: 'Logue-se novamente para acessar a aplicação.',
                         insert: 'top',
                         animationIn: ["animate__animated", "animate__fadeIn"],
                         animationOut: ["animate__animated", "animate__fadeOut"],
@@ -78,7 +80,9 @@ export const useAuthenticateApi = () => {
             if (e.code == 'ERR_NETWORK')
                 Store.addNotification({
                     container: 'top-center',
-                    title: 'Sua sessão expirou',
+                    title: 'Sem conexão com a internet.',
+                    message:'',
+                    
                     insert: 'top',
                     type: 'danger',
                     animationIn: ["animate__animated", "animate__fadeIn"],
@@ -102,7 +106,8 @@ export const useAuthenticateApi = () => {
                     Store.addNotification({
                         container: 'top-center',
                         title: 'Sua sessão expirou',
-                        message: 'Logue-se novamente para acessar o aplicação.',
+                        type:'danger',
+                        message: 'Logue-se novamente para acessar a aplicação.',
                         insert: 'top',
                         animationIn: ["animate__animated", "animate__fadeIn"],
                         animationOut: ["animate__animated", "animate__fadeOut"],
@@ -116,7 +121,8 @@ export const useAuthenticateApi = () => {
             if (e.code == 'ERR_NETWORK')
                 Store.addNotification({
                     container: 'top-center',
-                    title: 'Sua sessão expirou',
+                    title: 'Sem conexão com a internet.',
+                    message:'',
                     insert: 'top',
                     type: 'danger',
                     animationIn: ["animate__animated", "animate__fadeIn"],
@@ -140,21 +146,24 @@ export const useAuthenticateApi = () => {
                     Store.addNotification({
                         container: 'top-center',
                         title: 'Sua sessão expirou',
-                        message: 'Logue-se novamente para acessar o aplicação.',
+                        type:'danger',
+                        message: 'Logue-se novamente para acessar a aplicação.',
                         insert: 'top',
                         animationIn: ["animate__animated", "animate__fadeIn"],
                         animationOut: ["animate__animated", "animate__fadeOut"],
                         dismiss: {
                             duration: 5000,
                             onScreen: true
-                        }
+                        },
                     })
                 }
             }
             if (e.code == 'ERR_NETWORK')
                 Store.addNotification({
                     container: 'top-center',
-                    title: 'Sua sessão expirou',
+                    title: 'Sem conexão com a internet.',
+                    message:'',
+                    
                     insert: 'top',
                     type: 'danger',
                     animationIn: ["animate__animated", "animate__fadeIn"],
@@ -178,7 +187,8 @@ export const useAuthenticateApi = () => {
                     Store.addNotification({
                         container: 'top-center',
                         title: 'Sua sessão expirou',
-                        message: 'Logue-se novamente para acessar o aplicação.',
+                        type:'danger',
+                        message: 'Logue-se novamente para acessar a aplicação.',
                         insert: 'top',
                         animationIn: ["animate__animated", "animate__fadeIn"],
                         animationOut: ["animate__animated", "animate__fadeOut"],
@@ -192,7 +202,9 @@ export const useAuthenticateApi = () => {
             if (e.code == 'ERR_NETWORK')
                 Store.addNotification({
                     container: 'top-center',
-                    title: 'Sua sessão expirou',
+                    title: 'Sem conexão com a internet.',
+                    message:'',
+                    
                     insert: 'top',
                     type: 'danger',
                     animationIn: ["animate__animated", "animate__fadeIn"],
@@ -227,7 +239,9 @@ export function useApi() {
             if (e.code == 'ERR_NETWORK')
                 Store.addNotification({
                     container: 'top-center',
-                    title: 'Sua sessão expirou',
+                    title: 'Sem conexão com a internet.',
+                    message:'',
+                    
                     insert: 'top',
                     type: 'danger',
                     animationIn: ["animate__animated", "animate__fadeIn"],
@@ -248,7 +262,9 @@ export function useApi() {
             if (e.code == 'ERR_NETWORK')
                 Store.addNotification({
                     container: 'top-center',
-                    title: 'Sua sessão expirou',
+                    title: 'Sem conexão com a internet.',
+                    message:'',
+                    
                     insert: 'top',
                     type: 'danger',
                     animationIn: ["animate__animated", "animate__fadeIn"],
@@ -269,7 +285,9 @@ export function useApi() {
             if (e.code == 'ERR_NETWORK')
                 Store.addNotification({
                     container: 'top-center',
-                    title: 'Sua sessão expirou',
+                    title: 'Sem conexão com a internet.',
+                    message:'',
+                    
                     insert: 'top',
                     type: 'danger',
                     animationIn: ["animate__animated", "animate__fadeIn"],
@@ -290,7 +308,9 @@ export function useApi() {
             if (e.code == 'ERR_NETWORK')
                 Store.addNotification({
                     container: 'top-center',
-                    title: 'Sua sessão expirou',
+                    title: 'Sem conexão com a internet.',
+                    message:'',
+                    
                     insert: 'top',
                     type: 'danger',
                     animationIn: ["animate__animated", "animate__fadeIn"],
@@ -311,7 +331,9 @@ export function useApi() {
             if (e.code == 'ERR_NETWORK')
                 Store.addNotification({
                     container: 'top-center',
-                    title: 'Sua sessão expirou',
+                    title: 'Sem conexão com a internet.',
+                    message:'',
+                    
                     insert: 'top',
                     type: 'danger',
                     animationIn: ["animate__animated", "animate__fadeIn"],

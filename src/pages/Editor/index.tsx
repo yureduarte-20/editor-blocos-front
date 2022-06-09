@@ -18,6 +18,7 @@ const Editor = () => {
         e.preventDefault();
         setLanguage(e.target.value)
     }
+    console.log(params)
     useEffect(() => {
         (async () => {
             try {
@@ -93,7 +94,7 @@ const Editor = () => {
                 isSubmitting={isLoading}
                 />
             <CustomBlocklyWorkpace onXmlChange={(nxml) =>setXml(nxml)} code={code} language={language}
-             initialXml={location.state.params.blocksXml ?? ''} onCodeChange={setCode}>
+             initialXml={location.state?.params?.blocksXml ?? ''} onCodeChange={setCode}>
                 <GeneratedCodeArea
                     language={language}
                     code={code}
