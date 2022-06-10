@@ -35,7 +35,6 @@ const Editor = () => {
     const submit = async () =>{
         try{
             setLoading(true)
-            console.log(params.id)
             let response = await authApi.post(`/submission`, { blocksXml: xml, issueId: Number(params.id)})
             Store.addNotification({
                 title:'Enviado',
@@ -43,7 +42,7 @@ const Editor = () => {
                 type:'success',
                 container:'top-center',
                 dismiss:{
-                    duration:300
+                    duration:3000
                 }
             })
             navigate(`/submissoes/${response.data.id}`)

@@ -9,9 +9,10 @@ import { Container } from '../../styles/global';
 import Title from '../../components/Title';
 interface IResponse {
     id: string;
-    blocksXml:string;
+    blocksXml: string;
     status: SubmissionStatus;
-    issue: { title: string, dificultyLevel:string,id:string | number }
+    
+    issue: { title: string, dificultyLevel: string, id: string | number }
 }
 export const enum SubmissionStatus {
     ACCEPTED = 'ACCEPTED',
@@ -20,7 +21,7 @@ export const enum SubmissionStatus {
     PENDING = 'PENDING',
     RUNTIME_ERROR = 'RUNTIME_ERROR',
     COMPILATION_ERROR = 'COMPILATION_ERROR'
-}  
+}
 export function Home(props: any) {
     const location = useLocation()
     const api = useAuthenticateApi();
@@ -31,12 +32,12 @@ export function Home(props: any) {
         (async () => {
             try {
                 setLoading(true)
-                const response = await api.get(`/submissions?filter=${JSON.stringify({ include: ["issue"], order:'' })}`);
+                const response = await api.get(`/submissions?filter=${JSON.stringify({ include: ["issue"], order: '' })}`);
                 setSubmissions(response.data.reverse());
                 console.log(response)
             } catch (e) {
-                
-            } finally{
+
+            } finally {
                 setLoading(false)
             }
         })()
@@ -48,20 +49,20 @@ export function Home(props: any) {
                 <TableWrap>
                     {
                         submissions.length == 0 &&
-                        <div style={{ 
-                            display:'flex', 
-                            width:'100%',
-                            justifyContent:'center'
-                            }}>
-                                { (!loading) && 
-                                    <h2 className='font-1-l'>Não há submissões</h2>
-                                }
-                                { loading &&
-                                    <Spinner /> 
-                                }
+                        <div style={{
+                            display: 'flex',
+                            width: '100%',
+                            justifyContent: 'center'
+                        }}>
+                            {(!loading) &&
+                                <h2 className='font-1-l'>Não há submissões</h2>
+                            }
+                            {loading &&
+                                <Spinner />
+                            }
                         </div>
                     }
-                    { (!loading) && submissions.length != 0 &&
+                    {(!loading) && submissions.length != 0 &&
                         <Table width='100%'>
                             <Thead>
                                 <Tr>
@@ -72,44 +73,54 @@ export function Home(props: any) {
                                 </Tr>
                             </Thead>
                             <TBody>
-                                {submissions.map( submission =>
-                                    
-                                        <Tr  className='font-2-xs' key={submission.id}>
-                                            <Td onClick={ e => navigate(`/submissoes/${submission.id}`) }>
+                                {submissions.map(submission =>
+
+                                    <Tr className='font-2-xs' key={submission.id}>
+
+                                        <Td>
+                                            <Link style={{ display: 'inline-block' }} to={`/submissoes/${submission.id}`}>
                                                 <span style={{ display: 'flex', alignItems: 'center' }}>
                                                     {submission.id}
                                                 </span>
-                                            </Td>
-                                            <Td onClick={ e => navigate(`/submissoes/${submission.id}`) }>
+                                            </Link>
+                                        </Td>
+                                        <Td >
+                                            <Link style={{ display: 'inline-block' }} to={`/submissoes/${submission.id}`}>
                                                 <span style={{ display: 'flex', alignItems: 'center' }}>
                                                     {submission.issue.dificultyLevel}
                                                 </span>
-                                            </Td>
-                                            <Td onClick={ e => navigate(`/submissoes/${submission.id}`) } >
-                                                <span className={`${submission.status == SubmissionStatus.ACCEPTED ?  'green' : 'red' }`} 
-                                                style={{ display: 'flex', alignItems: 'center', textTransform:'capitalize' }}>
-                                                    { ((status : SubmissionStatus) => {
-                                                        switch(status){
-                                                            case SubmissionStatus.ACCEPTED : return 'Aceito';
-                                                            case SubmissionStatus.PRESENTATION_ERROR : return 'Erro de Apresentação';
-                                                            case SubmissionStatus.PENDING : return 'Pendente';
-                                                            case SubmissionStatus.RUNTIME_ERROR : return 'Erro de Execução';
-                                                            case SubmissionStatus.TIME_LIMIT_EXCEEDED : return 'Execedeu o tempo limite';
-                                                            case SubmissionStatus.COMPILATION_ERROR : return 'Erro de Compilação';
+                                            </Link>
+                                        </Td>
+                                        <Td  >
+                                            <Link style={{ display: 'inline-block' }} to={`/submissoes/${submission.id}`}>
+                                                <span className={`${submission.status == SubmissionStatus.ACCEPTED ? 'green' : 'red'}`}
+                                                    style={{ display: 'flex', alignItems: 'center', textTransform: 'capitalize' }}>
+                                                    {((status: SubmissionStatus) => {
+                                                        switch (status) {
+                                                            case SubmissionStatus.ACCEPTED: return 'Aceito';
+                                                            case SubmissionStatus.PRESENTATION_ERROR: return 'Erro de Apresentação';
+                                                            case SubmissionStatus.PENDING: return 'Pendente';
+                                                            case SubmissionStatus.RUNTIME_ERROR: return 'Erro de Execução';
+                                                            case SubmissionStatus.TIME_LIMIT_EXCEEDED: return 'Execedeu o tempo limite';
+                                                            case SubmissionStatus.COMPILATION_ERROR: return 'Erro de Compilação';
                                                             default: return status;
                                                         }
-                                                        
-                                                    })(submission.status) }
+
+                                                    })(submission.status)}
                                                 </span>
-                                            </Td>
-                                            <Td>
-                                                <span style={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
-                                                    <p>{submission.issue.title}</p>
-                                                    <a className='orange' style={{ display: 'inline-block' ,padding:'5px' }} onClick={e => navigate(`/editor/${submission.issue.id}`, { state:{ params:{ blocksXml: submission.blocksXml  } } })}>Refazer</a>
-                                                </span>
-                                            </Td>
-                                        </Tr>
-                                    
+                                            </Link>
+                                        </Td>
+                                        <Td>
+                                            <span style={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems:'center' }}>
+                                                 <Link style={{ display:'inline-block', padding:5 }} className='test-gray' to={`/submissoes/${submission.id}`}>
+                                                    {submission.issue.title}
+                                                 </Link>
+                                            
+                                                <a className='orange' style={{ display: 'inline-block', padding: '5px' }} onClick={e => navigate(`/editor/${submission.issue.id}`, { state: { params: { blocksXml: submission.blocksXml } } })}>Refazer</a>
+                                            </span>
+                                        </Td>
+                                    </Tr>
+
 
                                 )}
                             </TBody>

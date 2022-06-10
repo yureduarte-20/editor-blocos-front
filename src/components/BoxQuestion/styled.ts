@@ -10,7 +10,7 @@ export const QuestionWraper = styled.section`
     background: #dfdfdf;
     margin:10px 20px;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 4px;
 `
 export const Question = styled.div`
     padding-left: 20px;
