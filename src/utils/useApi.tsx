@@ -1,11 +1,12 @@
 import { useAuth } from "../store/authContext";
 import axios from "axios";
 import { Store } from "react-notifications-component";
-const BASE_URL = 'http://[::1]:3000/'
-
+const BASE_URL = 'https://block-judge.herokuapp.com/'
+import { useUser } from '../store/userContext'
 
 export const useAuthenticateApi = () => {
     const { token, removeToken } = useAuth();
+    const { removeUser } = useUser()
     const api = axios.create({
         baseURL: BASE_URL,
     })
@@ -21,6 +22,7 @@ export const useAuthenticateApi = () => {
         } catch (e: any) {
             if (e.response.status === 401) {
                 if (token) {
+                    removeUser()
                     removeToken()
                     Store.addNotification({
                         container: 'top-center',
@@ -61,6 +63,7 @@ export const useAuthenticateApi = () => {
         } catch (e: any) {
             if (e.response.status === 401) {
                 if (token) {
+                    removeUser()
                     removeToken()
                     Store.addNotification({
                         container: 'top-center',
@@ -102,6 +105,7 @@ export const useAuthenticateApi = () => {
         } catch (e: any) {
             if (e.response.status === 401) {
                 if (token) {
+                    removeUser()
                     removeToken()
                     Store.addNotification({
                         container: 'top-center',
@@ -142,6 +146,7 @@ export const useAuthenticateApi = () => {
         } catch (e: any) {
             if (e.response.status === 401) {
                 if (token) {
+                    removeUser()
                     removeToken()
                     Store.addNotification({
                         container: 'top-center',
@@ -183,6 +188,7 @@ export const useAuthenticateApi = () => {
         } catch (e: any) {
             if (e.response.status === 401) {
                 if (token) {
+                    removeUser()
                     removeToken()
                     Store.addNotification({
                         container: 'top-center',
@@ -254,9 +260,10 @@ export function useApi() {
             throw e
         }
     }
-    const get = async (url: string) => {
+    const get = async (url: string, config? : any ) => {
         try {
-            let response = await api.get(url);
+            console.log(config)
+            let response = await api.get(url, config );
             return response
         } catch (e: any) {
             if (e.code == 'ERR_NETWORK')
@@ -347,5 +354,9 @@ export function useApi() {
         }
     }
     return { get, post, del, put, patch }
+}
+
+function AxiosRequestConfig<T>(arg0: number): any {
+    throw new Error("Function not implemented.");
 }
 

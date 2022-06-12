@@ -3,9 +3,11 @@ import brand from '../../assets/brand.svg';
 import user from '../../assets/user.svg'
 import { useAuth } from "../../store/authContext";
 import { Link } from "react-router-dom";
+import { useUser } from "../../store/userContext";
 
 const Navbar = (props: any) => {
     const { removeToken, token } = useAuth();
+    const { name } = useUser()
     const logout = (e: any) => {
         removeToken();
     }
@@ -24,7 +26,8 @@ const Navbar = (props: any) => {
                             <>
                                 <Link style={{ display:'inline-block' }} to="/" className="font-2-s white">Submissões</Link>
                                 <Link style={{ display:'inline-block' }} to="/exercicios" className="font-2-s white">Exercícios</Link>
-                                <Link style={{ display:'inline-block' }} to="/perfil" onClick={logout} className="font-2-s white">Perfil</Link>
+                                <Link style={{ display:'inline-block' }} to="/perfil" className="font-2-s white">Perfil</Link>
+                                <Link to="/login" onClick={logout}>Sair</Link>
                             </>
                             :
                             <>

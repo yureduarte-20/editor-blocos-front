@@ -5,8 +5,9 @@ import Accordion from '../../components/Accordion';
 import { useAuthenticateApi } from '../../utils/useApi'
 import colors from '../../styles/colors';
 import Spinner from '../../components/Spinner';
-import { Container } from '../../styles/global';
+import { Card, Container } from '../../styles/global';
 import Title from '../../components/Title';
+import { useUser } from '../../store/userContext';
 interface IResponse {
     id: string;
     blocksXml: string;
@@ -28,12 +29,13 @@ export function Home(props: any) {
     const [submissions, setSubmissions] = useState<IResponse[]>([]);
     const navigate = useNavigate()
     const [loading, setLoading] = useState<boolean>(false);
+    const { name } = useUser()
     useEffect(() => {
         (async () => {
             try {
                 setLoading(true)
-                const response = await api.get(`/submissions?filter=${JSON.stringify({ include: ["issue"], order: '' })}`);
-                setSubmissions(response.data.reverse());
+                const response = await api.get(`/submissions?filter=${JSON.stringify({ include: ["issue"], order: 'createdAt DESC' })}`);
+                setSubmissions(response.data);
                 console.log(response)
             } catch (e) {
 
@@ -45,6 +47,9 @@ export function Home(props: any) {
     return (
         <Container>
             <HomeContainer>
+                <Card>
+                    <span>Olá, seja bem vindo {name}</span>
+                </Card>
                 <Title title='Submissões' subtitle='Abaixo estão todas as submissões que realizou até agora.' />
                 <TableWrap>
                     {
@@ -94,14 +99,14 @@ export function Home(props: any) {
                                         <Td  >
                                             <Link style={{ display: 'inline-block' }} to={`/submissoes/${submission.id}`}>
                                                 <span className={`${submission.status == SubmissionStatus.ACCEPTED ? 'green' : 'red'}`}
-                                                    style={{ display: 'flex', alignItems: 'center', textTransform: 'capitalize' }}>
+                                                    style={{ display: 'flex', alignItems: 'center', }}>
                                                     {((status: SubmissionStatus) => {
                                                         switch (status) {
                                                             case SubmissionStatus.ACCEPTED: return 'Aceito';
                                                             case SubmissionStatus.PRESENTATION_ERROR: return 'Erro de Apresentação';
                                                             case SubmissionStatus.PENDING: return 'Pendente';
                                                             case SubmissionStatus.RUNTIME_ERROR: return 'Erro de Execução';
-                                                            case SubmissionStatus.TIME_LIMIT_EXCEEDED: return 'Execedeu o tempo limite';
+                                                            case SubmissionStatus.TIME_LIMIT_EXCEEDED: return 'Tempo limite excedido';
                                                             case SubmissionStatus.COMPILATION_ERROR: return 'Erro de Compilação';
                                                             default: return status;
                                                         }
@@ -125,6 +130,7 @@ export function Home(props: any) {
                                 )}
                             </TBody>
                         </Table>}
+                        
                 </TableWrap>
             </HomeContainer>
         </Container>

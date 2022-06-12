@@ -48,7 +48,7 @@ export default ({ errorLog }: { errorLog: string }) => {
                 }}>
                     <pre>
                         <code style={{ fontSize:'12px' }}>
-                            {`${e.message}\n${e.stack}` ?? ''}
+                            {`${e.message}\n` ?? ''}
                         </code>
                     </pre>
                 </div>

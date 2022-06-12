@@ -10,6 +10,7 @@ import Signup from '../pages/auth/Signup';
 import LevelSelect from '../pages/exercise/LevelSelect';
 import Exercises from '../pages/exercise/Exercises';
 import Show from '../pages/Show';
+import Profile from '../pages/Profile';
 
 
 function RequireAuth({ children }: { children: JSX.Element }) {
@@ -58,6 +59,11 @@ export function AppRoutes() {
                 <Route path='/exercicios/:dificultyLevel' element={ 
                     <RequireAuth>
                         <Exercises />
+                    </RequireAuth>
+                 }/>
+                <Route path='/perfil' element={ 
+                    <RequireAuth>
+                        <Profile />
                     </RequireAuth>
                  }/>
                 <Route path='/login' element={<Login />} />

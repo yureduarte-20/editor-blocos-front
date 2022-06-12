@@ -3,10 +3,11 @@ import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../../store/authContext'
 import { Container, Form, Input, Wrapper } from './styled';
 import Spinner from '../../../components/Spinner';
-import { useApi } from '../../../utils/useApi';
+import { useApi, useAuthenticateApi } from '../../../utils/useApi';
 import Button from '../../../components/Button';
 import { Store } from 'react-notifications-component'
 import { Typograph } from '../../../styles/Typographic.';
+import { User, useUser } from '../../../store/userContext';
 export const getTokenFromFakeApi = ({ email, password }: { email: string, password: string }) => {
     return new Promise<{ status: number, data: any }>((res, rej) => {
 
@@ -30,8 +31,10 @@ export const getTokenFromFakeApi = ({ email, password }: { email: string, passwo
 
 const Login = () => {
     const { setToken } = useAuth();
+    const { setUser } = useUser();
     const [isLoading, setIsloading] = useState(false);
     const api = useApi()
+    const authApi = useAuthenticateApi();
     const location = useLocation();
     const navigate = useNavigate()
     const onSubmit = async (e: any) => {
@@ -40,8 +43,14 @@ const Login = () => {
         let email = e.target[0].value as string
         let password = e.target[1].value as string
         try {
-            let response = await api.post("/login", { email, password })
+            const response = await api.post("/login", { email, password })
+            const profile: User = (await api.get('/profile', {
+                headers: {
+                    Authorization: `Bearer ${response.data.token}`
+                }
+            })).data;
             setToken(response.data.token);
+            setUser(profile);
             setIsloading(false);
             navigate('/', {});
         } catch (e: any) {
@@ -85,7 +94,7 @@ const Login = () => {
                 </Form>
                 <p className='font-1-s black font-light'> Ainda não possui uma conta?
                     <Link style={{ display: 'inline-block' }} className="orange" to={'/signup'} >Clique Aqui</Link>
-                 </p>
+                </p>
             </Wrapper>
         </Container>
     );
