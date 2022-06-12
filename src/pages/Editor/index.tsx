@@ -35,7 +35,7 @@ const Editor = () => {
     const submit = async () =>{
         try{
             setLoading(true)
-            let response = await authApi.post(`/submission`, { blocksXml: xml, issueId: Number(params.id)})
+            let response = await authApi.post(`/submission`, { blocksXml: xml, issueId: params.id})
             Store.addNotification({
                 title:'Enviado',
                 message:'Seu código foi submetido com sucesso',
@@ -49,16 +49,17 @@ const Editor = () => {
                 //openSuccess("Enviado 😀")
              
         } catch(e : any){
-            //openWarning(e.response.data.error.message)
-            console.log(e.response)
-             /* if(e.response.data.error.name =="presentation_error"){
-            }
-            if(e.response.data.error.name =="compilation_error"){
-                openSnackBarFailed(e.response.data.error.message)
-            }
-            if(e.response.status === 422){
-                openSnackBarFailed(e.response.data.error.message)
-            } */
+            Store.addNotification({
+                title:'Enviado',
+                message:e.response.data.error.message,
+                type:'danger',
+                container:'top-center',
+                dismiss:{
+                    duration:3000
+                }
+            })
+            console.log(e.response.data.error.message)
+      
         } finally{
             setLoading(false)
         }
