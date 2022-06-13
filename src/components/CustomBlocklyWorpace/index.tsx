@@ -1,6 +1,6 @@
 import { createRef, useRef, useState } from "react";
-import { BlocklyWorkspace, WorkspaceSvg, Workspace } from "react-blockly";
-import Blockly, { VariableModel, setLocale } from "blockly";
+import { BlocklyWorkspace, WorkspaceSvg, Workspace,  } from "react-blockly";
+import Blockly from "blockly";
 import * as JavaScript from 'blockly/javascript';
 import * as Python from 'blockly/python';
 import * as Lua from 'blockly/lua';
@@ -8,14 +8,10 @@ import * as Dart from 'blockly/dart';
 import * as Php from 'blockly/php';
 import * as BlocklyCore from 'blockly/core';
 import { uniqueId } from 'lodash';
-
 import PtBr from "blockly/msg/pt-br";
 import { toolboxCategories } from '../toolBox';
 import { DivWorkspace } from './style'
 import colors from "../../styles/colors";
-
-
-Blockly.setLocale(PtBr);
 
 export interface BlocklyWorkpaceProps {
   code: string;
@@ -28,7 +24,7 @@ export interface BlocklyWorkpaceProps {
 
 
 export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange, children, language, initialXml }: BlocklyWorkpaceProps) => {
-  const [variables, setVariables] = useState<VariableModel[]>([])
+  const [variables, setVariables] = useState<BlocklyCore.VariableModel[]>([])
   /*   const blocklyDiv = createRef();
     const { workspace, xml } = useBlocklyWorkspace({
       ref: blocklyDiv.current,
@@ -47,7 +43,7 @@ export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange, childre
     }
     //Registar o callback de atualização de categorias
     if (!workspace.getToolboxCategoryCallback('VARIABLE')) {
-      workspace.registerToolboxCategoryCallback('VARIABLE', _wo => {
+      workspace.registerToolboxCategoryCallback('VARIABLE', (_wo : BlocklyCore.WorkspaceSvg) => {
         let _variables = [];
         for (let v of variables) {
           _variables.push(
