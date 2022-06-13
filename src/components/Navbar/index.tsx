@@ -7,7 +7,7 @@ import { useUser } from "../../store/userContext";
 
 const Navbar = (props: any) => {
     const { removeToken, token } = useAuth();
-    const { name } = useUser()
+    
     const logout = (e: any) => {
         removeToken();
     }
