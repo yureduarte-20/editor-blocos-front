@@ -11,6 +11,9 @@ export interface ITable {
 export interface ICardStyleProps {
     padding?: string;
 }
+export interface IContainerProps{
+    full?: boolean;
+}
 export const GlobalStyle = createGlobalStyle`
     * {
         margin: 0;
@@ -34,11 +37,11 @@ export default () =>{
     )
 }
 
-export const Container = styled.div`
-    max-width: 1200px;
+export const Container = styled.div<IContainerProps>`
+    max-width: ${props => props.full ? 'initial' : '1200px'};
     margin: 0 auto;
-    
-
+    padding-left: ${props => props.full ? '20px' : 'initial' };
+    padding-right: ${props => props.full ? '20px' : 'initial' };
     .d-flex {
         display: flex;
     }

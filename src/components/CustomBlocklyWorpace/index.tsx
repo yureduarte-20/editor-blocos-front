@@ -1,6 +1,6 @@
-import { createRef, useRef, useState } from "react";
-import { BlocklyWorkspace, WorkspaceSvg, Workspace,  } from "react-blockly";
-import Blockly from "blockly";
+import { useState } from "react";
+import { BlocklyWorkspace, WorkspaceSvg, Workspace  } from "react-blockly";
+
 import * as JavaScript from 'blockly/javascript';
 import * as Python from 'blockly/python';
 import * as Lua from 'blockly/lua';
@@ -8,10 +8,12 @@ import * as Dart from 'blockly/dart';
 import * as Php from 'blockly/php';
 import * as BlocklyCore from 'blockly/core';
 import { uniqueId } from 'lodash';
-import PtBr from "blockly/msg/pt-br";
+import Blockly from "blockly";
 import { toolboxCategories } from '../toolBox';
 import { DivWorkspace } from './style'
 import colors from "../../styles/colors";
+import * as PtBr from "blockly/msg/pt-br";
+
 
 export interface BlocklyWorkpaceProps {
   code: string;
@@ -22,8 +24,8 @@ export interface BlocklyWorkpaceProps {
   initialXml?:string;
 }
 
-
 export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange, children, language, initialXml }: BlocklyWorkpaceProps) => {
+  Blockly.setLocale(PtBr)
   const [variables, setVariables] = useState<BlocklyCore.VariableModel[]>([])
   /*   const blocklyDiv = createRef();
     const { workspace, xml } = useBlocklyWorkspace({
@@ -34,8 +36,10 @@ export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange, childre
     }); */
   function workspaceDidChange(workspace: WorkspaceSvg) {
     //Registrar o CallBack de criação de variáveis
+
     if (!workspace.getButtonCallback('create_variable')) {
       workspace.registerButtonCallback("create_variable", () => {
+
         let newVariable = workspace.createVariable(window.prompt() || uniqueId('var-'));
         //adiciona todas as variáveis em um state
         setVariables([...variables, newVariable]);

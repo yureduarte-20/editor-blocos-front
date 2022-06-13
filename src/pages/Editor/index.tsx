@@ -7,17 +7,20 @@ import { useAuthenticateApi } from "../../utils/useApi";
 import { Navigate, useLocation, useMatch, useNavigate, useParams } from "react-router-dom";
 import Modal from 'react-modal'
 import { Store } from "react-notifications-component"
+import colors from "../../styles/colors"
+import Button from "../../components/Button"
 const customStyles = {
     content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-      maxWidth:'1200px'
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        maxWidth: '1200px',
+        
     },
-  };
+};
 const Editor = () => {
     const [code, setCode] = useState('');
     const [issue, setIssue] = useState<any>(null)
@@ -29,7 +32,7 @@ const Editor = () => {
     const location: any = useLocation();
     const [isLoading, setLoading] = useState(false);
     const [modalIsOpen, setIsOpen] = useState(false);
-    
+
     function openModal() {
         setIsOpen(true);
     }
@@ -76,7 +79,7 @@ const Editor = () => {
                 message: e.response.data.error.message,
                 type: 'danger',
                 container: 'top-center',
-                
+
                 dismiss: {
                     duration: 3000
                 }
@@ -127,7 +130,7 @@ const Editor = () => {
             <BoxQuestion
                 question={{ title: issue?.title ?? 'Olá mundo !', description: issue?.description ?? 'Imprima na tela o famoso "olá mundo!"' }}
                 onButtonRunPressed={submit}
-                
+
                 test={handleExec}
                 isSubmitting={isLoading}
             />
@@ -142,13 +145,52 @@ const Editor = () => {
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
-                style={customStyles}
+                style={{...customStyles, overlay:{
+                    background: colors.primary_background+ 'AC',
+                    zIndex:5555
+                } }}
+
                 contentLabel="Example Modal"
             >
-                <h2 ref={(_subtitle) => (subtitle = _subtitle)}>{issue?.title ?? ''}</h2>
-                <p >{issue?.description} sadddddddddddddddddddddddaFSDFSDFASDFSDFssssssssssssssssssssssssssssssssssssssssssf</p>
-                <button onClick={closeModal}>close</button>
-              
+
+                <h2 className="font-1-xl font-light blue" style={{ textAlign: 'center' }} ref={(_subtitle) => (subtitle = _subtitle)}>{issue?.title ?? ''}</h2>
+                <p className="font-2-m" style={{ fontFamily: "'Neuton', serif", fontWeight: 300, marginBottom: 30 }}>{issue?.description}</p>
+                <h3 className="font-1-m gray-3" style={{ textAlign: 'center', marginBottom: 10 }}>Demonstrações</h3>
+                <div style={{
+                    display: 'grid',
+                    justifyContent: 'center',
+                    width: '100%',
+                    gridTemplateColumns: '1fr 1fr',
+                    alignItems: 'center',
+                    gap: '20px'
+                }}>
+                    <span className="gray-3" style={{ justifySelf: 'end', }}>Entradas</span>
+                    <span className="gray-3">Saídas</span>
+
+                    {
+                        <div style={{ gridColumn: '1', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap:'10px' }}>
+                            {issue?.demonstrationInputs.map((item: any) =>
+                                <span className="gray-3" style={{
+                                    minWidth: '200px',
+                                    textAlign: 'end',
+                                    backgroundColor: colors.primary_input_background,
+                                    padding: '10px',
+                                }}>{item}</span>)}
+                        </div>
+                    }
+                    {
+                        <div style={{ gridColumn: '2', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap:'10px' }}>
+                            {issue?.demonstrationOutputs.map((item: any) => <span className="gray-3" style={{
+                                    minWidth: '200px',
+                                    textAlign: 'start',
+                                    backgroundColor: colors.primary_input_background,
+                                    padding: '10px', }}>{item} </span>)}
+                        </div>
+                    }
+                </div>
+
+                <Button onClick={closeModal}>Fechar</Button>
+
             </Modal>
         </>
     )
