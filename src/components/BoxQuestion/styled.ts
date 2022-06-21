@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import colors from "../../styles/colors";
 
 export const QuestionWraper = styled.section`
     display: grid;
@@ -7,7 +8,7 @@ export const QuestionWraper = styled.section`
     min-height: 80px;
     align-content:center;
     justify-content: center;
-    background: #dfdfdf;
+    background: ${colors.primary};
     margin:10px 20px;
     padding: 20px;
     border-radius: 4px;
@@ -32,20 +33,18 @@ export const ButtonWrapper = styled.div`
     }
 `
 export const ButtonPrimary = styled.button`
-    background-color: #555353;
+    background-color: ${colors.accent};
     color: white;
     width: 100%;
     padding: 10px 14px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    &:hover {
-        background-color: #4A4949;
-    }
+    
 `
 
 export const ButtonSecondary = styled.button`
-    background-color: #1E1B1B;
+    background-color: ${colors.secundary};
     padding: 10px 14px;
     border: none;
     width: 100%;
@@ -53,6 +52,6 @@ export const ButtonSecondary = styled.button`
     color: white;
     cursor: pointer;
     &:hover{
-        background-color: #353030;
+        
     }
 `

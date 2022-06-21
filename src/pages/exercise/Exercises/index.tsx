@@ -36,7 +36,7 @@ const Exercises = () => {
     }, []);
     return (
         <Container>
-            <Title margin="0 0 10px 0" title={`${params?.dificultyLevel}`} subtitle="Escolha um dos exercícios abaixo para resolver" />
+            <Title margin="0 10px 10px 0" title={`${params?.dificultyLevel}`} subtitle="Escolha um dos exercícios abaixo para resolver" />
             <Card>
 
                 {loading ?
@@ -57,7 +57,7 @@ const Exercises = () => {
                             {issues.map(issue =>
 
                                 <Tr className='font-2-xs' key={issue.id}>
-                                    <Td>
+                                    <Td style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
                                         <SolvedIssue status={issue.submissions && issue.submissions.some((value, index, array) =>{
                                             console.log(value)
                                             if(value.status == SubmissionStatus.ACCEPTED)

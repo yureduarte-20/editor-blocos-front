@@ -107,6 +107,7 @@ export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange, childre
             scaleSpeed: 1.2,
             pinch: true
           },
+          
         }}
 
         onWorkspaceChange={workspaceDidChange}

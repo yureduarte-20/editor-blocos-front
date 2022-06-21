@@ -51,7 +51,7 @@ contents: [
         "inputs": {
           "TEXT": {
               "shadow": {
-                  "type": "math_number",
+                  "type": "text",
                   "fields": {
                       "NUM": 0
                   }
