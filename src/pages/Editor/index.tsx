@@ -32,14 +32,12 @@ const Editor = () => {
     const location: any = useLocation();
     const [isLoading, setLoading] = useState(false);
     const [modalIsOpen, setIsOpen] = useState(false);
-
     function openModal() {
         setIsOpen(true);
     }
     function closeModal() {
         setIsOpen(false);
     }
-
     const handleLanguageChange = (e: ChangeEvent<HTMLSelectElement>) => {
         e.preventDefault();
         setLanguage(e.target.value)

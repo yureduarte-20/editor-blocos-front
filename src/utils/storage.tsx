@@ -6,9 +6,6 @@ export interface IStorage {
     remove(key : string) : any
 }
 const storage : IStorage = { set:() =>{}, get:()=>{}, remove:()=>{}};
-
-// Safari in incognito has local storage, but size 0
-// This system falls back to cookies in that situation
 try {
   if (!window.localStorage) {
     throw Error('no local storage');
