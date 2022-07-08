@@ -14,7 +14,7 @@ export const GeneratedCodeArea = ({ code, style, onLanguageChange, language }: I
     return (
         <WrapCode open={open} onClick={() => setOpen(!open)}>
 
-            <SelectLanguage open={open} value={language} onChange={onLanguageChange}>
+            <SelectLanguage  open={open} value={language} onChange={onLanguageChange}>
                 <option value="javascript">Javascript</option>
                 <option value="python">Python</option>
                 <option value="dart">Dart</option>

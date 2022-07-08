@@ -1,14 +1,16 @@
 import styled from "styled-components";
 import leftArrow from '../../assets/sideArrow.svg';
+import colors from "../../styles/colors";
 export type StyleProps  = {
     open:boolean
 }
 export const WrapCode = styled.div<StyleProps>`
-    border-radius: 8px;
-    padding: 20px;
+    border-radius: 4px;
+    padding: 0 20px;
     min-height: 45vh;
     max-height: 45vh;
-    background-color: #DFDFDF;
+    border: solid 1px ${colors.secundary};
+    background-color: ${colors.primary};
     position: absolute;
     z-index: 9;
     right: 20px;
@@ -23,7 +25,9 @@ export const WrapCode = styled.div<StyleProps>`
         content: '';
         top: ${props => props.open ? '17vh' : '17vh'} ;
         width: 20px;
-        background: url(${leftArrow}) no-repeat center, #c4c4c4;
+        background: url(${leftArrow}) no-repeat center, ${colors.primary};
+        border: solid 1px ${colors.secundary};
+        border-radius:4px;
         height: 80px;
         left: -10px;
         transform: ${props => props.open ? 'none' : 'rotate(180deg)'};
@@ -37,14 +41,18 @@ export const WrapCode = styled.div<StyleProps>`
 export const Content = styled.div<StyleProps>`
     display: flex;
     position: relative;
+    margin-top: 20px;
     width: ${ props => props.open ? 'initial' : '0px'  };
     opacity: ${ props => props.open ? '1' : '0'  };
 `;
 
 export const SelectLanguage = styled.select<{ open: boolean }>`
     padding: 10px 20px;
-    background-color: #C4C4C4;
-    border-radius:8px;
-    width: ${ props => props.open ? 'initial' : '0px'  };
+    background-color: ${colors.secundary};
+    border-radius:4px;
+    text-align: center;
+    align-self: center;
+    color: ${colors.primary};
+    width: ${ props => props.open ? '60%' : '0px'  };
     opacity: ${ props => props.open ? '1' : '0'  };
 `

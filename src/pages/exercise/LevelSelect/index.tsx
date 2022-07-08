@@ -6,11 +6,11 @@ const LevelSelect = () => {
     const navigate = useNavigate()
     return (
         <Container>
-              <Header>
+              <Header >
                     <h1 className='font-1-xl blue'>Exercícios</h1>
                     <p className='font-2-m font-light'>Abaixo, selecione um dos níveis de dificuldade para continuar</p>
                 </Header>
-            <LevelWrap>
+            <LevelWrap >
                 <Level onClick={e => navigate('/exercicios/Fácil')}>
                     <h2 className="font-1-l white" >Fácil</h2>
                 </Level>

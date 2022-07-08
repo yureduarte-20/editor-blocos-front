@@ -16,6 +16,7 @@ export const LevelWrap = styled.section`
 `
 export const Level = styled.div`
     padding: 60px 60px;
+    height: 300px;
     display: flex;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
     border-radius: 4px;

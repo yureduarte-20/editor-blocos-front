@@ -21,7 +21,7 @@ const Navbar = (props: any) => {
                         <Brand>
                             <img src={brand} width="50px" />
                             <span className="font-2-s white">
-                                JOAO - JUDGE ONLINE AUTOMATIC ORIENTATION
+                                JOAO - JUIZ ONLINE DE AVALIAÇÃO COM ORIENTAÇÃO
                             </span>
                         </Brand>
                         <div style={{ display: 'flex', flexDirection: 'row', gap: 20, }}>

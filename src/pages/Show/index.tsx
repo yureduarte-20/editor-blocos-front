@@ -10,6 +10,7 @@ import { SubmissionStatus } from "../Home";
 import PresentationError from "./PresentationError";
 import { Store } from "react-notifications-component";
 import RuntimeError from "./RuntimeError";
+import Spinner from "../../components/Spinner";
 export interface ISubmission {
     id: number | string;
     userId: number,
@@ -31,9 +32,12 @@ const Show = () => {
     const api = useAuthenticateApi();
     const navigate = useNavigate()
     const [submission, setSubmission] = useState<ISubmissionResponse>();
+    const [loading, setLoading] = useState(true);
     // ao desmontar o componente, limpe o interval
     useEffect(() => {
-        getData();
+        (async () => {
+            getData()
+        })()
         return clearTimeout()
     }, [])
     const sleep = (ms: number) => {
@@ -81,9 +85,22 @@ const Show = () => {
                 console.log(e);
                 tryAgain = false
                 clearTimeout();
+            } finally {
+                if (loading)
+                    setLoading(false)
             }
         }
     }
+    if (loading)
+        return (
+            <Background>
+                <Container >
+                    <Card className="d-flex j-center " padding="10px 20px 40px 20px">
+                        <Spinner width="40px" height="40px" />
+                    </Card>
+                </Container>
+            </Background>
+        )
     return (
         <Background>
             <Container >
