@@ -21,7 +21,8 @@ export const enum SubmissionStatus {
     PRESENTATION_ERROR = 'PRESENTATION_ERROR',
     PENDING = 'PENDING',
     RUNTIME_ERROR = 'RUNTIME_ERROR',
-    COMPILATION_ERROR = 'COMPILATION_ERROR'
+    COMPILATION_ERROR = 'COMPILATION_ERROR',
+    WRONG_ANSWER = 'WRONG_ANSWER'
 }
 export function Home(props: any) {
     const location = useLocation()
@@ -108,6 +109,7 @@ export function Home(props: any) {
                                                             case SubmissionStatus.RUNTIME_ERROR: return 'Erro de Execução';
                                                             case SubmissionStatus.TIME_LIMIT_EXCEEDED: return 'Tempo limite excedido';
                                                             case SubmissionStatus.COMPILATION_ERROR: return 'Erro de Compilação';
+                                                            case SubmissionStatus.WRONG_ANSWER: return 'Resposta Incorreta'
                                                             default: return status;
                                                         }
 

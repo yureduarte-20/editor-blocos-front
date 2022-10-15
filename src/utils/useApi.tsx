@@ -1,8 +1,65 @@
 import { useAuth } from "../store/authContext";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { Store } from "react-notifications-component";
-const BASE_URL = 'https://block-judge.herokuapp.com/'
+const BASE_URL = 'http://172.17.0.1:3001'
 import { useUser } from '../store/userContext'
+
+export class API{
+    private static api? : API
+    private BASE_URL_API : string = BASE_URL;
+    private token? : string;
+    public static getInstance() : API{
+        if(!this.api){
+            this.api = new API();
+            return this.api;
+        }
+        return this.api;
+    }
+
+    public setToken(token : string){
+        this.token = token;
+    }
+
+    public async getAutenticated(subPath: string) : Promise<AxiosResponse<any, any>>{
+        return axios.get(this.BASE_URL_API + subPath, { 
+            headers:{
+                Authorization : `Bearer ${this.token}`
+            }
+         });
+    }
+    public async postAutenticated(subPath : string, data : any) : Promise<AxiosResponse<any, any>>{
+        return axios.post(this.BASE_URL_API + subPath, data, {
+            headers:{
+                Authorization : `Bearer ${this.token}`
+            }
+        });
+    }
+    
+    public async putAutenticated(subPath : string, data : any){
+        return axios.put(this.BASE_URL_API + subPath, data, {
+            headers:{
+                Authorization : `Bearer ${this.token}`
+            }
+        });
+    }
+    
+    public async patchAutenticated(subPath : string, data : any){
+        return axios.patch(this.BASE_URL_API + subPath, data, {
+            headers:{
+                Authorization : `Bearer ${this.token}`
+            }
+        });
+    }
+
+    public async delAutenticated(subPath: string) : Promise<AxiosResponse<any, any>>{
+        return axios.delete(this.BASE_URL_API + subPath, { 
+            headers:{
+                Authorization : `Bearer ${this.token}`
+            }
+         });
+    }
+
+}
 
 export const useAuthenticateApi = () => {
     const { token, removeToken } = useAuth();

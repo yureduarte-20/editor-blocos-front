@@ -11,6 +11,7 @@ import PresentationError from "./PresentationError";
 import { Store } from "react-notifications-component";
 import RuntimeError from "./RuntimeError";
 import Spinner from "../../components/Spinner";
+import WrongAnswer from "./WrongAnswer";
 export interface ISubmission {
     id: number | string;
     userId: number,
@@ -20,6 +21,7 @@ export interface ISubmission {
     languageId: number,
     blocksXml: string,
     error: string,
+    successfulRate: number
 }
 interface ISubmissionResponse extends ISubmission {
     issue: {
@@ -43,6 +45,7 @@ const Show = () => {
     const sleep = (ms: number) => {
         return new Promise((resolve, reject) => setTimeout(resolve, ms));
     };
+    
     const getData = async () => {
         let tryAgain = true;
         while (tryAgain) {
@@ -112,9 +115,11 @@ const Show = () => {
                             <Success />
                             : submission.status == SubmissionStatus.PRESENTATION_ERROR ?
                                 <PresentationError />
-                                : SubmissionStatus.RUNTIME_ERROR ?
+                                : submission.status == SubmissionStatus.RUNTIME_ERROR ?
                                     <RuntimeError errorLog={submission.error} />
-                                    : <></>
+                                    : submission.status == SubmissionStatus.WRONG_ANSWER ? 
+                                        <WrongAnswer successfulRate={submission.successfulRate}/> :
+                                    <></>
 
                     }
                 </Card>
