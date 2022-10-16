@@ -4,6 +4,20 @@ import colors from "../../styles/colors";
 export type StyleProps  = {
     open:boolean
 }
+export const Arrow = styled.span<{ open: boolean }>`
+position: absolute;
+        content: '';
+        top: ${props => props.open ? '17vh' : '17vh'} ;
+        width: 20px;
+        background: url(${leftArrow}) no-repeat center, ${colors.primary};
+        border: solid 1px ${colors.secundary};
+        border-radius:4px;
+        height: 80px;
+        left: -10px;
+        transform: ${props => props.open ? 'none' : 'rotate(180deg)'};
+        cursor: pointer;
+
+`
 export const WrapCode = styled.div<StyleProps>`
     border-radius: 4px;
     padding: 0 20px;
@@ -20,19 +34,6 @@ export const WrapCode = styled.div<StyleProps>`
     top: calc( 100vh / 4.5 );
     display: flex;
     flex-direction: column;
-    &::before{
-        position: absolute;
-        content: '';
-        top: ${props => props.open ? '17vh' : '17vh'} ;
-        width: 20px;
-        background: url(${leftArrow}) no-repeat center, ${colors.primary};
-        border: solid 1px ${colors.secundary};
-        border-radius:4px;
-        height: 80px;
-        left: -10px;
-        transform: ${props => props.open ? 'none' : 'rotate(180deg)'};
-        cursor: pointer;
-    }
     @media (max-width: 1280px) {
         min-height: 35vh;
         top: calc( 100vh / 3 );
@@ -42,6 +43,7 @@ export const Content = styled.div<StyleProps>`
     display: flex;
     position: relative;
     margin-top: 20px;
+    max-height:35vh;
     width: ${ props => props.open ? 'initial' : '0px'  };
     opacity: ${ props => props.open ? '1' : '0'  };
 `;

@@ -140,7 +140,7 @@ const Editor = () => {
                 <GeneratedCodeArea
                     language={language}
                     code={code}
-                    style={{ background: 'transparent' }}
+                    style={{ background:'transparent', overflowY:'auto' }}
                     onLanguageChange={handleLanguageChange} />
             </CustomBlocklyWorkpace>
             <Modal
