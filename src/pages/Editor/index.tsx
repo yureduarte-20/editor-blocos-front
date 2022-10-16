@@ -9,6 +9,7 @@ import Modal from 'react-modal'
 import { Store } from "react-notifications-component"
 import colors from "../../styles/colors"
 import Button from "../../components/Button"
+import { IDemonstrations } from "../admin/IssuesList"
 const customStyles = {
     content: {
         top: '50%',
@@ -18,7 +19,7 @@ const customStyles = {
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
         maxWidth: '1200px',
-        
+
     },
 };
 const Editor = () => {
@@ -32,6 +33,7 @@ const Editor = () => {
     const location: any = useLocation();
     const [isLoading, setLoading] = useState(false);
     const [modalIsOpen, setIsOpen] = useState(false);
+
     function openModal() {
         setIsOpen(true);
     }
@@ -48,6 +50,7 @@ const Editor = () => {
             try {
                 let response = await authApi.get(`/issues/${params.id}`);
                 setIssue(response.data);
+                console.log(response.data.demonstrations)
                 openModal()
             } catch (e: any) {
 
@@ -143,16 +146,18 @@ const Editor = () => {
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
-                style={{...customStyles, overlay:{
-                    background: colors.primary_background+ 'AC',
-                    zIndex:5555
-                } }}
+                style={{
+                    ...customStyles, overlay: {
+                        background: colors.primary_background + 'AC',
+                        zIndex: 5555
+                    }
+                }}
 
                 contentLabel="Example Modal"
             >
 
                 <h2 className="font-1-xl font-light blue" style={{ textAlign: 'center' }} ref={(_subtitle) => (subtitle = _subtitle)}>{issue?.title ?? ''}</h2>
-                <p className="font-2-m" style={{ fontFamily: "'Neuton', serif", fontWeight: 300, marginBottom: 30 }}>{issue?.description}</p>
+                <div className="font-2-m" style={{ fontFamily: "'Neuton', serif", fontWeight: 300, marginBottom: 30 }} dangerouslySetInnerHTML={{ __html: issue?.description }}></div>
                 <h3 className="font-1-m gray-3" style={{ textAlign: 'center', marginBottom: 10 }}>Demonstrações</h3>
                 <div style={{
                     display: 'grid',
@@ -164,29 +169,31 @@ const Editor = () => {
                 }}>
                     <span className="gray-3" style={{ justifySelf: 'end', }}>Entradas</span>
                     <span className="gray-3">Saídas</span>
+                    {
+                        issue?.demonstrations.map((demonstration: IDemonstrations) =>(
+                            <>
+                                <div style={{ gridColumn: '1', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '10px' }}>
+                                    {demonstration.demonstrationInputs && <span className="gray-3" style={{
+                                        minWidth: '200px',
+                                        textAlign: 'end',
+                                        backgroundColor: colors.primary_input_background,
+                                        padding: '10px',
+                                    }}>{demonstration.demonstrationInputs.join(' ')}</span>
+                                    }
+                                </div>
 
-                    {
-                        <div style={{ gridColumn: '1', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap:'10px' }}>
-                            {issue?.demonstrationInputs.map((item: any) =>
-                                <span className="gray-3" style={{
-                                    minWidth: '200px',
-                                    textAlign: 'end',
-                                    backgroundColor: colors.primary_input_background,
-                                    padding: '10px',
-                                }}>{item}</span>)}
-                        </div>
-                    }
-                    {
-                        <div style={{ gridColumn: '2', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap:'10px' }}>
-                            {issue?.demonstrationOutputs.map((item: any) => <span className="gray-3" style={{
-                                    minWidth: '200px',
-                                    textAlign: 'start',
-                                    backgroundColor: colors.primary_input_background,
-                                    padding: '10px', }}>{item} </span>)}
-                        </div>
+                                <div style={{ gridColumn: '2', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '10px' }}>
+                                    {<span className="gray-3" style={{
+                                        minWidth: '200px',
+                                        textAlign: 'start',
+                                        backgroundColor: colors.primary_input_background,
+                                        padding: '10px',
+                                    }}> {demonstration.demonstrationOutput} </span>
+                                    }
+                                </div>
+                            </>))
                     }
                 </div>
-
                 <Button onClick={closeModal}>Fechar</Button>
 
             </Modal>

@@ -3,12 +3,13 @@ import brand from '../../assets/brand.svg';
 import user from '../../assets/user.svg'
 import { useAuth } from "../../store/authContext";
 import { Link, useLocation } from "react-router-dom";
-import { useUser } from "../../store/userContext";
+import { Roles, useUser } from "../../store/userContext";
 import { Container } from "../../styles/global";
 
 const Navbar = (props: any) => {
     const { removeToken, token } = useAuth();
     const location = useLocation()
+    const user = useUser()
     const logout = (e: any) => {
         removeToken();
     }
@@ -27,6 +28,10 @@ const Navbar = (props: any) => {
                         <div style={{ display: 'flex', flexDirection: 'row', gap: 20, }}>
                             {token ?
                                 <>
+                                    {
+                                        user.role == Roles.ADMIN && <Link style={{ display: 'inline-block' }} to="/admin/issues"
+                                         className="font-2-s white">Gerenciar problemas</Link>
+                                    }
                                     <Link style={{ display: 'inline-block' }} to="/" className="font-2-s white">Submissões</Link>
                                     <Link style={{ display: 'inline-block' }} to="/exercicios" className="font-2-s white">Exercícios</Link>
                                     <Link style={{ display: 'inline-block' }} to="/perfil" className="font-2-s white">Perfil</Link>

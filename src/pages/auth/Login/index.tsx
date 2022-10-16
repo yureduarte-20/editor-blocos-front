@@ -8,27 +8,6 @@ import Button from '../../../components/Button';
 import { Store } from 'react-notifications-component'
 import { Typograph } from '../../../styles/Typographic.';
 import { User, useUser } from '../../../store/userContext';
-export const getTokenFromFakeApi = ({ email, password }: { email: string, password: string }) => {
-    return new Promise<{ status: number, data: any }>((res, rej) => {
-
-        setTimeout(() => (email === "yure@gmail.com" && password === "12345678") ?
-            res({
-                status: 200,
-                data: {
-                    token: "um_token_aleatorio"
-                }
-            }) :
-            rej({
-                status: 401,
-                response: {
-                    message: "usuário e senha incorretos"
-                }
-            }),
-            3000);
-
-    })
-}
-
 const Login = () => {
     const { setToken } = useAuth();
     const { setUser } = useUser();
@@ -52,7 +31,7 @@ const Login = () => {
             setToken(response.data.token);
             setUser(profile);
             setIsloading(false);
-            navigate('/', {});
+            navigate('/', { });
         } catch (e: any) {
             console.log(e)
             console.log(e.response)

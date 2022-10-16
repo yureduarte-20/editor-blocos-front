@@ -11,6 +11,11 @@ import LevelSelect from '../pages/exercise/LevelSelect';
 import Exercises from '../pages/exercise/Exercises';
 import Show from '../pages/Show';
 import Profile from '../pages/Profile';
+import { Roles, useUser } from '../store/userContext';
+import IssuesList from '../pages/admin/IssuesList';
+import IssueEdit from '../pages/admin/IssueEdit';
+import IssueCreate from '../pages/admin/IssueCreate';
+
 
 
 function RequireAuth({ children }: { children: JSX.Element }) {
@@ -27,6 +32,15 @@ function RequireAuth({ children }: { children: JSX.Element }) {
 
     return children;
 }
+
+function RequireAdmin({ children }: { children: JSX.Element }) {
+    const user = useUser();
+    let location = useLocation();
+    if (user.role != Roles.ADMIN) {
+        return <Navigate to="/" state={{ from: location }} replace />;
+    }
+    return children
+}
 export function AppRoutes() {
 
     return (
@@ -35,6 +49,28 @@ export function AppRoutes() {
             <Navbar />
 
             <Routes >
+                <Route path="/admin/issues" element={
+                    <RequireAuth >
+                        <RequireAdmin>
+                            <IssuesList />
+                        </RequireAdmin>
+                    </RequireAuth>
+                } />
+                <Route path="/admin/issue/:issueId" element={
+                    <RequireAuth >
+                        <RequireAdmin>
+                            <IssueEdit />
+                        </RequireAdmin>
+                    </RequireAuth>
+                } />
+                <Route path="/admin/issue/create" element={
+                    <RequireAuth >
+                        <RequireAdmin>
+                            <IssueCreate />
+                        </RequireAdmin>
+                    </RequireAuth>
+                } />
+
                 <Route path='/' element={
                     <RequireAuth>
                         <Home />
@@ -56,16 +92,16 @@ export function AppRoutes() {
                         <Show />
                     </RequireAuth>
                 } />
-                <Route path='/exercicios/:dificultyLevel' element={ 
+                <Route path='/exercicios/:dificultyLevel' element={
                     <RequireAuth>
                         <Exercises />
                     </RequireAuth>
-                 }/>
-                <Route path='/perfil' element={ 
+                } />
+                <Route path='/perfil' element={
                     <RequireAuth>
                         <Profile />
                     </RequireAuth>
-                 }/>
+                } />
                 <Route path='/login' element={<Login />} />
                 <Route path="*" element={<div><p>Not FOund</p></div>} />
             </Routes>

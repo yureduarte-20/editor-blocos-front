@@ -29,7 +29,7 @@ export function Home(props: any) {
     const api = useAuthenticateApi();
     const [submissions, setSubmissions] = useState<IResponse[]>([]);
     const navigate = useNavigate()
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
     const { name } = useUser()
     useEffect(() => {
         (async () => {
