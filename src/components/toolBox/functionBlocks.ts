@@ -2,6 +2,7 @@ export const functionBlocks: any = {
     kind: "category",
     name: "Funções",
     colour: "#995ba5",
+    custom:'PROCEDURE',
     contents: [
         {
             kind: "block",

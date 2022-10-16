@@ -4,7 +4,10 @@ import Title from "../../../components/Title";
 import { Card, Container, Table, TBody, Td, Th, Thead, Tr } from "../../../styles/global";
 import { useAuthenticateApi } from "../../../utils/useApi";
 import { Store } from "react-notifications-component";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Button from "../../../components/Button";
+import { ButtonSecondary } from "../../../components/BoxQuestion/styled";
+import { AddButton } from "./style";
 export interface ITestCase {
     inputs?: string[],
     outputs: string,
@@ -21,11 +24,11 @@ export interface IIssue {
 export interface IDemonstrations {
     demonstrationInputs?: string[];
     demonstrationOutput: string;
-  }
+}
 export default () => {
 
     const [loading, setLoading] = useState(false)
-    const [issues, setIssues] = useState< Omit<IIssue, 'description' |'testCases' | 'demonstrationInputs' | 'demonstrationOutputs' >[] >([])
+    const [issues, setIssues] = useState<Omit<IIssue, 'description' | 'testCases' | 'demonstrationInputs' | 'demonstrationOutputs'>[]>([])
     const api = useAuthenticateApi();
     const navigate = useNavigate()
     useEffect(() => {
@@ -34,7 +37,7 @@ export default () => {
     const getIssues = async () => {
         try {
             setLoading(true);
-            const response = await api.get(`/admin/issues?filter=${JSON.stringify({ fields:{ id: true, title:true, dificultyLevel:true } })}`);
+            const response = await api.get(`/admin/issues?filter=${JSON.stringify({ fields: { id: true, title: true, dificultyLevel: true } })}`);
             setIssues(response.data)
         } catch (e) {
 
@@ -42,13 +45,13 @@ export default () => {
             setLoading(false)
         }
     }
-    const deleteIssue = useCallback(async (id:string) =>{
-        try{
+    const deleteIssue = useCallback(async (id: string) => {
+        try {
             await api.del(`/admin/issues/${id}`)
             Store.addNotification({
                 container: 'top-center',
                 title: 'Deletado com sucesso!',
-                type:'success',
+                type: 'success',
                 //message: 'Logue-se novamente para acessar a aplicação.',
                 insert: 'top',
                 animationIn: ["animate__animated", "animate__fadeIn"],
@@ -59,11 +62,11 @@ export default () => {
                 }
             })
             await getIssues()
-        } catch(e){
+        } catch (e) {
             Store.addNotification({
                 container: 'top-center',
                 title: 'Erro ao deletar',
-                type:'danger',
+                type: 'danger',
                 message: 'Tente novamente ou recarregue a página.',
                 insert: 'top',
                 animationIn: ["animate__animated", "animate__fadeIn"],
@@ -77,8 +80,14 @@ export default () => {
     }, [issues])
     return (
         <Container >
-            <Title margin="0 10px 10px 0" title={`Problemas`} subtitle="Aqui está todos os problemas " />
             <Card>
+
+                <Title margin="0 10px 10px 0" title={`Problemas`} subtitle="Aqui está todos os problemas " />
+                <div style={{ display:'flex', justifyContent:'end', marginBottom:20 }}>
+                    <AddButton onClick={e => navigate("/admin/issue/create")}>
+                        Adicionar
+                    </AddButton>
+                </div>
 
                 {loading ?
                     <span className="d-flex j-center">
@@ -95,6 +104,7 @@ export default () => {
                                 <Th className='font-1-m white' width='70%' textAlign='start'>Ações</Th>
                             </Tr>
                         </Thead>
+
                         <TBody>
                             {issues.map(issue =>
 
@@ -114,8 +124,8 @@ export default () => {
                                     </Td>
                                     <Td>
                                         <span style={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
-                                            <a className="orange" style={{ cursor: 'pointer', display:'block', padding: 5 }} onClick={() =>navigate(`/admin/issue/${issue.id}`)}>Editar</a>
-                                            <a className='red' style={{ cursor: 'pointer', display:'block', padding: 5 }} onClick={e =>deleteIssue(issue.id)}>deletar</a>
+                                            <a className="orange" style={{ cursor: 'pointer', display: 'block', padding: 5 }} onClick={() => navigate(`/admin/issue/${issue.id}`)}>Editar</a>
+                                            <a className='red' style={{ cursor: 'pointer', display: 'block', padding: 5 }} onClick={e => deleteIssue(issue.id)}>deletar</a>
                                         </span>
                                     </Td>
                                 </Tr>

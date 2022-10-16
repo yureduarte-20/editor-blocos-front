@@ -51,6 +51,7 @@ export const ButtonSecondary = styled.button`
     border-radius: 4px;
     color: white;
     cursor: pointer;
+    display: block;
     &:hover{
         
     }

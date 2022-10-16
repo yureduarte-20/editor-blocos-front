@@ -129,11 +129,11 @@ const Editor = () => {
         <>
 
             <BoxQuestion
-                question={{ title: issue?.title ?? 'Olá mundo !', description: issue?.description ?? 'Imprima na tela o famoso "olá mundo!"' }}
+                question={{ title: issue?.title ?? 'Olá mundo !' }}
                 onButtonRunPressed={submit}
-
                 test={handleExec}
                 isSubmitting={isLoading}
+                onDetailsClick={ () => setIsOpen(true) }
             />
             <CustomBlocklyWorkpace onXmlChange={(nxml) => setXml(nxml)} code={code} language={language}
                 initialXml={location.state?.params?.blocksXml ?? ''} onCodeChange={setCode}>

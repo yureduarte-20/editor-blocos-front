@@ -5,15 +5,16 @@ import Spinner from "../Spinner";
 export interface IQuestionProps {
     question: {
         title: string;
-        description: string;
+        description?: string;
     }
     onButtonRunPressed?(): void;
     onGoForward?(): void;
     wrapperStyle?: CSS.Properties;
     test?(): void;
     isSubmitting: boolean
+    onDetailsClick?() : void
 }
-export const BoxQuestion = ({ question, onButtonRunPressed, onGoForward, wrapperStyle, test, isSubmitting }: IQuestionProps) => {
+export const BoxQuestion = ({ question, onButtonRunPressed, onGoForward, wrapperStyle, test, isSubmitting, onDetailsClick }: IQuestionProps) => {
     return (
         <QuestionWraper style={wrapperStyle || {}}>
             <ImgWrapper>
@@ -21,7 +22,9 @@ export const BoxQuestion = ({ question, onButtonRunPressed, onGoForward, wrapper
             </ImgWrapper>
             <Question>
                 <h2><strong>{question.title}</strong></h2>
-                <p>{question.description}</p>
+                <a style={{ display:'block', cursor:'pointer' }} 
+                    className="font-1-md orange"
+                    onClick={e => onDetailsClick && onDetailsClick()}>Detalhes</a>
             </Question>
             <ButtonWrapper>
                 {onButtonRunPressed && !isSubmitting &&

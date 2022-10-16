@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BlocklyWorkspace, WorkspaceSvg, Workspace  } from "react-blockly";
+import { BlocklyWorkspace, WorkspaceSvg, Workspace } from "react-blockly";
 
 import * as JavaScript from 'blockly/javascript';
 import * as Python from 'blockly/python';
@@ -21,12 +21,13 @@ export interface BlocklyWorkpaceProps {
   children: any;
   language: string;
   onXmlChange?(xml: (string)): void
-  initialXml?:string;
+  initialXml?: string;
 }
 
 export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange, children, language, initialXml }: BlocklyWorkpaceProps) => {
   Blockly.setLocale(PtBr)
   const [variables, setVariables] = useState<BlocklyCore.VariableModel[]>([])
+  const [functions, setFunctions] = useState<any>([])
   /*   const blocklyDiv = createRef();
     const { workspace, xml } = useBlocklyWorkspace({
       ref: blocklyDiv.current,
@@ -41,13 +42,14 @@ export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange, childre
       workspace.registerButtonCallback("create_variable", () => {
 
         let newVariable = workspace.createVariable(window.prompt() || uniqueId('var-'));
+        workspace.
         //adiciona todas as variáveis em um state
         setVariables([...variables, newVariable]);
       })
     }
     //Registar o callback de atualização de categorias
     if (!workspace.getToolboxCategoryCallback('VARIABLE')) {
-      workspace.registerToolboxCategoryCallback('VARIABLE', (_wo : BlocklyCore.WorkspaceSvg) => {
+      workspace.registerToolboxCategoryCallback('VARIABLE', (_wo: BlocklyCore.WorkspaceSvg) => {
         let _variables = [];
         for (let v of variables) {
           _variables.push(
@@ -64,6 +66,44 @@ export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange, childre
         }
         return _variables;
       });
+    }
+    
+    if (!workspace.getToolboxCategoryCallback('PROCEDURE')) {
+      workspace.registerToolboxCategoryCallback('PROCEDURE', (_wo: BlocklyCore.WorkspaceSvg) => {
+        let _functions = [];
+        for (let v of functions) {
+          _functions.push(
+            {
+              kind: "block",
+              "type": "procedures_ifreturn",
+             
+           
+              "extraState": "<mutation value=\"1\"></mutation>"
+            }
+          )
+          _functions.push(
+
+            {
+              kind: "block",
+              "type": "procedures_callnoreturn",
+             
+              "extraState": {
+                "name": "faça algo"
+              }
+            }
+          )
+          _functions.push(
+            {
+              kind: "block",
+              "type": "procedures_callreturn",
+              
+              "extraState": {
+                "name": "faça algo"
+              }
+            })
+        }
+        setFunctions([functions, ..._functions])
+      })
     }
     const _code = generateCode(language, workspace as Workspace);
     if (code !== _code)
@@ -98,7 +138,7 @@ export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange, childre
             colour: "#ccc",
             snap: true,
           },
-          zoom:{
+          zoom: {
             controls: true,
             wheel: true,
             startScale: 1.0,
@@ -107,7 +147,7 @@ export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange, childre
             scaleSpeed: 1.2,
             pinch: true
           },
-          
+
         }}
 
         onWorkspaceChange={workspaceDidChange}
