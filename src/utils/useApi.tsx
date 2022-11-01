@@ -1,7 +1,7 @@
 import { useAuth } from "../store/authContext";
 import axios, { AxiosResponse } from "axios";
 import { Store } from "react-notifications-component";
-const BASE_URL = 'http://172.17.0.1:3001'
+const BASE_URL = 'https://block-judge.herokuapp.com/'
 import { useUser } from '../store/userContext'
 
 export class API{
