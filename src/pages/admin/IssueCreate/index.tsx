@@ -19,16 +19,16 @@ export default (props: any) => {
     const api = useAuthenticateApi();
     const [testCase, setTestCase] = useState<{ inputs?: string[], outputs: string, validationOutputRegex?: string }[]>([]);
     const [demonstration, setDemonstration] = useState<IDemonstrations[]>([])
-    const tempInputTestCase = useRef();
-    const tempOutputTestCase = useRef();
-    const tempOutputRegex = useRef();
-    const demonstrationInputRef = useRef()
-    const demonstrationOutputRef = useRef()
-    const title = useRef();
-    const dificultyLevel = useRef<React.RefObject<HTMLSelectElement>>()
+    const tempInputTestCase = useRef<any>();
+    const tempOutputTestCase = useRef<any>();
+    const tempOutputRegex = useRef<any>();
+    const demonstrationInputRef = useRef<any>()
+    const demonstrationOutputRef = useRef<any>()
+    const title = useRef<any>();
+    const dificultyLevel = useRef<any>()
     const [value, setValue] = useState('');
     const navigate = useNavigate()
-    const t = useRef()
+    const t = useRef<any>()
     /*  
     useEffect(() => {
         getIssues()
@@ -50,11 +50,11 @@ export default (props: any) => {
     const create = async () => {
         try {
             const _issue: IIssue = {
-                id: issueId,
-                demonstrations: demonstration ?? issue?.demonstrations,
+                id: issueId as string,
+                demonstrations: demonstration,
                 description: value,
                 testCases: testCase,
-                title: title.current?.value ?? issue?.title, dificultyLevel: dificultyLevel.current?.value ?? issue?.dificultyLevel
+                title: title.current?.value, dificultyLevel: dificultyLevel.current?.value
             }
             await api.post(`/admin/issues`, { ..._issue })
             Store.addNotification({
