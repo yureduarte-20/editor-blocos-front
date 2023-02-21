@@ -1,7 +1,7 @@
 import { Card, Container } from "../../../styles/global"
 import { Input } from "../../auth/Login/styled"
 import { Form, InputGroup, Select } from './style'
-import { IDemonstrations, IIssue } from "../IssuesList"
+import { IDemonstrations, IProblem } from "../ProblemsList"
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useRef, useState } from "react"
 import Spinner from "../../../components/Spinner"
@@ -12,10 +12,10 @@ import Button from "../../../components/Button"
 import { Store } from "react-notifications-component"
 import { ButtonSecondary } from "../../../components/BoxQuestion/styled"
 export default (props: any) => {
-    const { issueId } = useParams();
+    const { problemId } = useParams();
     
     const [loading, setLoading] = useState(true);
-    const [issue, setIssue] = useState<IIssue>()
+    const [problem, setProblem] = useState<IProblem>()
     const api = useAuthenticateApi();
     const [testCase, setTestCase] = useState<{ inputs?: string[], outputs: string, validationOutputRegex?: string }[]>([]);
     const [demonstration, setDemonstration] = useState<IDemonstrations[]>([])
@@ -30,13 +30,13 @@ export default (props: any) => {
     const navigate = useNavigate()
     const t = useRef<any>()
     useEffect(() => {
-        getIssues()
+        getProblems()
     }, [])
-    const getIssues = async () => {
+    const getProblems = async () => {
         try {
             setLoading(true);
-            const response = await api.get(`/admin/issues/${issueId}`);
-            setIssue(response.data)
+            const response = await api.get(`/admin/problems/${problemId}`);
+            setProblem(response.data)
             setValue(state => response.data.description ?? state)
             setTestCase(response.data.testCases ?? [])
             setDemonstration(response.data.demonstrations ?? [])
@@ -48,14 +48,14 @@ export default (props: any) => {
     }
     const update = async () => {
         try {
-            const _issue: IIssue = {
-                id: issueId as string,
-                demonstrations: demonstration ?? issue?.demonstrations,
+            const _problem: IProblem = {
+                id: problemId as string,
+                demonstrations: demonstration ?? problem?.demonstrations,
                 description: value,
                 testCases: testCase,
-                title: title.current?.value ?? issue?.title, dificultyLevel: dificultyLevel.current?.value ?? issue?.dificultyLevel
+                title: title.current?.value ?? problem?.title, dificultyLevel: dificultyLevel.current?.value ?? problem?.dificultyLevel
             }
-            await api.patch(`/admin/issues/${issueId}`, { ..._issue })
+            await api.patch(`/admin/problems/${problemId}`, { ..._problem })
             Store.addNotification({
                 container: 'top-center',
                 title: 'Altração realizada com sucesso!',
@@ -70,7 +70,7 @@ export default (props: any) => {
                 }
 
             })
-            return navigate('/admin/issues')
+            return navigate('/admin/problems')
         } catch (e) {
             Store.addNotification({
                 container: 'top-center',
@@ -155,7 +155,7 @@ export default (props: any) => {
             </Container>
         )
     }
-    if (!issue)
+    if (!problem)
         return (
             <Container >
                 <h6>Não foi possíve carregar o problema</h6>
@@ -167,14 +167,14 @@ export default (props: any) => {
                 <Form onSubmit={e => { e.preventDefault();update()}}>
                     <InputGroup gridColumn="span 3">
                         <label htmlFor="title">Título</label>
-                        <Input ref={title} name="title" aria-label="Título do Problema" defaultValue={issue.title} />
+                        <Input ref={title} name="title" aria-label="Título do Problema" defaultValue={problem.title} />
                     </InputGroup>
                     <InputGroup>
                         <label htmlFor="title" >Dificuldade</label>
                         <Select ref={dificultyLevel} onChange={e => { console.log(e.currentTarget.value) }}
                             name="dificultyLevel"
                             defaultChecked={true}
-                            defaultValue={issue.dificultyLevel}>
+                            defaultValue={problem.dificultyLevel}>
                             <option value={"Fácil"}>Fácil</option>
                             <option value={"Intermediário"}>Intermediário</option>
                             <option value={"Difícil"}>Difícil</option>
@@ -262,7 +262,7 @@ export default (props: any) => {
                     </InputGroup>
                     <InputGroup gridColumn="span 4">
                         <Button type="submit">Salvar</Button>
-                        <ButtonSecondary onClick={e => { e.preventDefault(); navigate('/admin/issues', { replace:true }) }}>Cancelar</ButtonSecondary>
+                        <ButtonSecondary onClick={e => { e.preventDefault(); navigate('/admin/problems', { replace:true }) }}>Cancelar</ButtonSecondary>
                     </InputGroup>
                 </Form>
             </Card>

@@ -11,10 +11,12 @@ import LevelSelect from '../pages/exercise/LevelSelect';
 import Exercises from '../pages/exercise/Exercises';
 import Show from '../pages/Show';
 import Profile from '../pages/Profile';
-import { Roles, useUser } from '../store/userContext';
-import IssuesList from '../pages/admin/IssuesList';
-import IssueEdit from '../pages/admin/IssueEdit';
-import IssueCreate from '../pages/admin/IssueCreate';
+import { Roles, Services, useUser } from '../store/userContext';
+import ProblemsList from '../pages/admin/ProblemsList';
+import ProblemEdit from '../pages/admin/ProblemEdit';
+import ProblemCreate from '../pages/admin/ProblemCreate';
+import Chat from '../pages/advisor/Chat';
+import Doubts from '../pages/advisor/Doubts';
 
 
 
@@ -32,11 +34,19 @@ function RequireAuth({ children }: { children: JSX.Element }) {
 
     return children;
 }
+function RequireAdvisor({ children, service }: { children: JSX.Element, service: Services }) {
+    let user = useUser()
+    let location = useLocation();
+    if (user.responsibilities?.some(el => el.role == Roles.ADVISOR && el.service == service)) {
+        return children
+    }
+    return <Navigate to="/" state={{ from: location }} replace />;
 
+}
 function RequireAdmin({ children }: { children: JSX.Element }) {
     const user = useUser();
     let location = useLocation();
-    if (user.role != Roles.ADMIN) {
+    if (user.responsibilities?.some(resp => resp.role != Roles.ADMIN)) {
         return <Navigate to="/" state={{ from: location }} replace />;
     }
     return children
@@ -47,26 +57,25 @@ export function AppRoutes() {
         <>
 
             <Navbar />
-
             <Routes >
-                <Route path="/admin/issues" element={
+                <Route path="/admin/problems" element={
                     <RequireAuth >
                         <RequireAdmin>
-                            <IssuesList />
+                            <ProblemsList />
                         </RequireAdmin>
                     </RequireAuth>
                 } />
-                <Route path="/admin/issue/:issueId" element={
+                <Route path="/admin/problem/:problemId" element={
                     <RequireAuth >
                         <RequireAdmin>
-                            <IssueEdit />
+                            <ProblemEdit />
                         </RequireAdmin>
                     </RequireAuth>
                 } />
-                <Route path="/admin/issue/create" element={
+                <Route path="/admin/problem/create" element={
                     <RequireAuth >
                         <RequireAdmin>
-                            <IssueCreate />
+                            <ProblemCreate />
                         </RequireAdmin>
                     </RequireAuth>
                 } />
@@ -97,13 +106,32 @@ export function AppRoutes() {
                         <Exercises />
                     </RequireAuth>
                 } />
+                <Route path='/advisor/chat'
+                    element={
+                        <RequireAuth>
+                            <RequireAdvisor service={Services.CHAT_SERVICE}>
+                                <Chat />
+                            </RequireAdvisor>
+                        </RequireAuth>
+                    }
+                />
+                <Route path='/advisor/doubts'
+                    element={
+                        <RequireAuth>
+                            <RequireAdvisor service={Services.CHAT_SERVICE}>
+                                <Doubts />
+                            </RequireAdvisor>
+                        </RequireAuth>
+                    }
+                />
                 <Route path='/perfil' element={
                     <RequireAuth>
                         <Profile />
                     </RequireAuth>
                 } />
                 <Route path='/login' element={<Login />} />
-                <Route path="*" element={<div><p>Not FOund</p></div>} />
+                <Route path="*" element={<div style={{ display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center' }} ><p>Not Found</p></div>} />
+                <Route path="*" element={<div style={{ display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center' }} ><p>Not Found</p></div>} />
             </Routes>
         </>
     )

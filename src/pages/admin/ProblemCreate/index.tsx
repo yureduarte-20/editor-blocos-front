@@ -1,7 +1,7 @@
 import { Card, Container } from "../../../styles/global"
 import { Input } from "../../auth/Login/styled"
 import { Form, InputGroup, Select } from './style'
-import { IDemonstrations, IIssue } from "../IssuesList"
+import { IDemonstrations, IProblem } from "../ProblemsList"
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useRef, useState } from "react"
 import Spinner from "../../../components/Spinner"
@@ -12,10 +12,10 @@ import Button from "../../../components/Button"
 import { Store } from "react-notifications-component"
 import { ButtonSecondary } from "../../../components/BoxQuestion/styled"
 export default (props: any) => {
-    const { issueId } = useParams();
+    const { problemId } = useParams();
     
     const [loading, setLoading] = useState(false);
-   // const [issue, setIssue] = useState<IIssue>()
+   // const [problem, setProblem] = useState<IProblem>()
     const api = useAuthenticateApi();
     const [testCase, setTestCase] = useState<{ inputs?: string[], outputs: string, validationOutputRegex?: string }[]>([]);
     const [demonstration, setDemonstration] = useState<IDemonstrations[]>([])
@@ -31,13 +31,13 @@ export default (props: any) => {
     const t = useRef<any>()
     /*  
     useEffect(() => {
-        getIssues()
+        getProblems()
     }, [])
-   const getIssues = async () => {
+   const getProblems = async () => {
         try {
             setLoading(true);
-            const response = await api.get(`/admin/issues/${issueId}`);
-            setIssue(response.data)
+            const response = await api.get(`/admin/problems/${problemId}`);
+            setProblem(response.data)
             setValue(state => response.data.description ?? state)
             setTestCase(response.data.testCases ?? [])
             setDemonstration(response.data.demonstrations ?? [])
@@ -49,14 +49,14 @@ export default (props: any) => {
     } */
     const create = async () => {
         try {
-            const _issue: IIssue = {
-                id: issueId as string,
+            const _problem: IProblem = {
+                id: problemId as string,
                 demonstrations: demonstration,
                 description: value,
                 testCases: testCase,
                 title: title.current?.value, dificultyLevel: dificultyLevel.current?.value
             }
-            await api.post(`/admin/issues`, { ..._issue })
+            await api.post(`/admin/problems`, { ..._problem })
             Store.addNotification({
                 container: 'top-center',
                 title: 'Criado com sucesso!',
@@ -71,7 +71,7 @@ export default (props: any) => {
                 }
 
             })
-            return navigate('/admin/issues')
+            return navigate('/admin/problems')
         } catch (e) {
             Store.addNotification({
                 container: 'top-center',
@@ -129,7 +129,7 @@ export default (props: any) => {
         setTestCase([...testCase, temp]);
     }
     function removeCaseTest(index: number) {
-        setTestCase(state => state.filter((item, _index) => index != _index))
+        setTestCase(state => state.filter((item, _index) => index !== _index))
     }
     const addDemonstration = () => {
         let temp: { demonstrationInputs?: string[], demonstrationOutput: string } = { demonstrationOutput: '' };
@@ -249,7 +249,7 @@ export default (props: any) => {
                     </InputGroup>
                     <InputGroup gridColumn="span 4">
                         <Button type="submit">Salvar</Button>
-                        <ButtonSecondary onClick={e => { e.preventDefault(); navigate('/admin/issues', { replace:true }) }}>Cancelar</ButtonSecondary>
+                        <ButtonSecondary onClick={e => { e.preventDefault(); navigate('/admin/problems', { replace:true }) }}>Cancelar</ButtonSecondary>
                     </InputGroup>
                 </Form>
             </Card>

@@ -13,7 +13,7 @@ export interface ITestCase {
     outputs: string,
     validationOutputRegex?: string
 }
-export interface IIssue {
+export interface IProblem {
     id: string;
     title: string
     description: string,
@@ -28,26 +28,26 @@ export interface IDemonstrations {
 export default () => {
 
     const [loading, setLoading] = useState(false)
-    const [issues, setIssues] = useState<Omit<IIssue, 'description' | 'testCases' | 'demonstrationInputs' | 'demonstrationOutputs'>[]>([])
+    const [problems, setProblems] = useState<Omit<IProblem, 'description' | 'testCases' | 'demonstrationInputs' | 'demonstrationOutputs'>[]>([])
     const api = useAuthenticateApi();
     const navigate = useNavigate()
     useEffect(() => {
-        getIssues()
+        getProblems()
     }, [])
-    const getIssues = async () => {
+    const getProblems = async () => {
         try {
             setLoading(true);
-            const response = await api.get(`/admin/issues?filter=${JSON.stringify({ fields: { id: true, title: true, dificultyLevel: true } })}`);
-            setIssues(response.data)
+            const response = await api.get(`/admin/problems?filter=${JSON.stringify({ fields: { id: true, title: true, dificultyLevel: true } })}`);
+            setProblems(response.data)
         } catch (e) {
 
         } finally {
             setLoading(false)
         }
     }
-    const deleteIssue = useCallback(async (id: string) => {
+    const deleteProblem = useCallback(async (id: string) => {
         try {
-            await api.del(`/admin/issues/${id}`)
+            await api.del(`/admin/problems/${id}`)
             Store.addNotification({
                 container: 'top-center',
                 title: 'Deletado com sucesso!',
@@ -61,7 +61,7 @@ export default () => {
                     onScreen: true
                 }
             })
-            await getIssues()
+            await getProblems()
         } catch (e) {
             Store.addNotification({
                 container: 'top-center',
@@ -77,14 +77,14 @@ export default () => {
                 }
             })
         }
-    }, [issues])
+    }, [problems])
     return (
         <Container >
             <Card>
 
                 <Title margin="0 10px 10px 0" title={`Problemas`} subtitle="Aqui está todos os problemas " />
                 <div style={{ display:'flex', justifyContent:'end', marginBottom:20 }}>
-                    <AddButton onClick={e => navigate("/admin/issue/create")}>
+                    <AddButton onClick={e => navigate("/admin/problem/create")}>
                         Adicionar
                     </AddButton>
                 </div>
@@ -106,26 +106,26 @@ export default () => {
                         </Thead>
 
                         <TBody>
-                            {issues.map(issue =>
+                            {problems.map(problem =>
 
-                                <Tr className='font-2-xs' key={issue.id}>
+                                <Tr className='font-2-xs' key={problem.id}>
                                     <Td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        {issue.id}
+                                        {problem.id}
                                     </Td>
                                     <Td>
                                         <span style={{ display: 'flex', alignItems: 'center' }}>
-                                            {issue.dificultyLevel}
+                                            {problem.dificultyLevel}
                                         </span>
                                     </Td>
                                     <Td>
                                         <span style={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
-                                            <p>{issue.title}</p>
+                                            <p>{problem.title}</p>
                                         </span>
                                     </Td>
                                     <Td>
                                         <span style={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
-                                            <a className="orange" style={{ cursor: 'pointer', display: 'block', padding: 5 }} onClick={() => navigate(`/admin/issue/${issue.id}`)}>Editar</a>
-                                            <a className='red' style={{ cursor: 'pointer', display: 'block', padding: 5 }} onClick={e => deleteIssue(issue.id)}>deletar</a>
+                                            <a className="orange" style={{ cursor: 'pointer', display: 'block', padding: 5 }} onClick={() => navigate(`/admin/problem/${problem.id}`)}>Editar</a>
+                                            <a className='red' style={{ cursor: 'pointer', display: 'block', padding: 5 }} onClick={e => deleteProblem(problem.id)}>deletar</a>
                                         </span>
                                     </Td>
                                 </Tr>

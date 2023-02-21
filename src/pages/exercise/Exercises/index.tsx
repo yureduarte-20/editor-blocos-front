@@ -5,9 +5,9 @@ import Title from "../../../components/Title";
 import { Card, Container, Table, TBody, Td, Th, Thead, Tr } from "../../../styles/global";
 import { useAuthenticateApi } from "../../../utils/useApi";
 import { SubmissionStatus } from "../../Home";
-import { SolvedIssue } from "./style";
+import { SolvedProblem } from "./style";
 
-export interface IIssueResponse {
+export interface IProblemResponse {
     id: string | number;
     title: string;
     description: string;
@@ -18,15 +18,15 @@ const Exercises = () => {
     const params = useParams();
     const navigate = useNavigate();
     const api = useAuthenticateApi();
-    const [issues, setIssues] = useState<IIssueResponse[]>([]);
+    const [problems, setProblems] = useState<IProblemResponse[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         (async () => {
             try {
                 setLoading(true);
-                const response = await api.get(`issues?filter=${JSON.stringify({ where: { dificultyLevel: params?.dificultyLevel } })}&withSubmissions=true`);
-                setIssues(response.data)
+                const response = await api.get(`problems?filter=${JSON.stringify({ where: { dificultyLevel: params?.dificultyLevel } })}&withSubmissions=true`);
+                setProblems(response.data)
             } catch (e) {
 
             } finally {
@@ -54,29 +54,29 @@ const Exercises = () => {
                             </Tr>
                         </Thead>
                         <TBody>
-                            {issues.map(issue =>
+                            {problems.map(problem =>
 
-                                <Tr className='font-2-xs' key={issue.id}>
+                                <Tr className='font-2-xs' key={problem.id}>
                                     <Td style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                                        <SolvedIssue status={issue.submissions && issue.submissions.some((value, index, array) =>{
+                                        <SolvedProblem status={problem.submissions && problem.submissions.some((value, index, array) =>{
                                             console.log(value)
                                             if(value.status == SubmissionStatus.ACCEPTED)
                                                 return true;
                                         }) ? SubmissionStatus.ACCEPTED : undefined
                                     }
                                             >
-                                            {issue.id}
-                                        </SolvedIssue>
+                                            {problem.id}
+                                        </SolvedProblem>
                                     </Td>
                                     <Td>
                                         <span style={{ display: 'flex', alignItems: 'center' }}>
-                                            {issue.dificultyLevel}
+                                            {problem.dificultyLevel}
                                         </span>
                                     </Td>
                                     <Td>
                                         <span style={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
-                                            <p>{issue.title}</p>
-                                            <a className='orange' style={{ cursor: 'pointer' }} onClick={e => navigate(`/editor/${issue.id}`)}>Fazer</a>
+                                            <p>{problem.title}</p>
+                                            <a className='orange' style={{ cursor: 'pointer' }} onClick={e => navigate(`/editor/${problem.id}`)}>Fazer</a>
                                         </span>
                                     </Td>
                                 </Tr>

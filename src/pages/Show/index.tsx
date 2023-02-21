@@ -15,7 +15,7 @@ import WrongAnswer from "./WrongAnswer";
 export interface ISubmission {
     id: number | string;
     userId: number,
-    issueId: number,
+    problemId: number,
     code: string | null,
     status: string,
     languageId: number,
@@ -24,7 +24,7 @@ export interface ISubmission {
     successfulRate: number
 }
 interface ISubmissionResponse extends ISubmission {
-    issue: {
+    problem: {
         id: number | string;
         title: string
     }
@@ -54,7 +54,7 @@ const Show = () => {
                 const response = await api.get(`submissions?filter=${JSON.stringify({
                     where: { id: params?.id }, include: [
                         {
-                            relation: 'issue',
+                            relation: 'problem',
                             scope: {
                                 fields: { id: true, title: true }
                             }
@@ -107,7 +107,7 @@ const Show = () => {
     return (
         <Background>
             <Container >
-                <h1 style={{ textAlign: 'center', marginBottom: '20px' }} className="font-1-xl white font-light">{submission && submission.issue.title}</h1>
+                <h1 style={{ textAlign: 'center', marginBottom: '20px' }} className="font-1-xl white font-light">{submission && submission.problem.title}</h1>
                 <Card padding="10px 20px 40px 20px" >
                     {!submission ?
                         <Waiting />

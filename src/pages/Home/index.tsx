@@ -13,7 +13,7 @@ interface IResponse {
     blocksXml: string;
     status: SubmissionStatus;
     
-    issue: { title: string, dificultyLevel: string, id: string | number }
+    problem: { title: string, dificultyLevel: string, id: string | number }
 }
 export const enum SubmissionStatus {
     ACCEPTED = 'ACCEPTED',
@@ -35,7 +35,7 @@ export function Home(props: any) {
         (async () => {
             try {
                 setLoading(true)
-                const response = await api.get(`/submissions?filter=${JSON.stringify({ include: ["issue"], order: 'createdAt DESC' })}`);
+                const response = await api.get(`/submissions?filter=${JSON.stringify({ include: ["problem"], order: 'createdAt DESC' })}`);
                 setSubmissions(response.data);
                 console.log(response)
             } catch (e) {
@@ -93,7 +93,7 @@ export function Home(props: any) {
                                         <Td >
                                             <Link style={{ display: 'inline-block' }} to={`/submissoes/${submission.id}`}>
                                                 <span style={{ display: 'flex', alignItems: 'center' }}>
-                                                    {submission.issue.dificultyLevel}
+                                                    {submission.problem.dificultyLevel}
                                                 </span>
                                             </Link>
                                         </Td>
@@ -120,10 +120,10 @@ export function Home(props: any) {
                                         <Td>
                                             <span style={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems:'center' }}>
                                                  <Link style={{ display:'inline-block', padding:5 }} className='test-gray' to={`/submissoes/${submission.id}`}>
-                                                    {submission.issue.title}
+                                                    {submission.problem.title}
                                                  </Link>
                                             
-                                                <a className='orange' style={{ display: 'inline-block', padding: '5px' }} onClick={e => navigate(`/editor/${submission.issue.id}`, { state: { params: { blocksXml: submission.blocksXml } } })}>Refazer</a>
+                                                <a className='orange' style={{ display: 'inline-block', padding: '5px' }} onClick={e => navigate(`/editor/${submission.problem.id}`, { state: { params: { blocksXml: submission.blocksXml } } })}>Refazer</a>
                                             </span>
                                         </Td>
                                     </Tr>

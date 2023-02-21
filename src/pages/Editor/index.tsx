@@ -9,7 +9,7 @@ import Modal from 'react-modal'
 import { Store } from "react-notifications-component"
 import colors from "../../styles/colors"
 import Button from "../../components/Button"
-import { IDemonstrations } from "../admin/IssuesList"
+import { IDemonstrations } from "../admin/ProblemsList"
 const customStyles = {
     content: {
         top: '50%',
@@ -24,7 +24,7 @@ const customStyles = {
 };
 const Editor = () => {
     const [code, setCode] = useState('');
-    const [issue, setIssue] = useState<any>(null)
+    const [problem, setProblem] = useState<any>(null)
     const navigate = useNavigate()
     const authApi = useAuthenticateApi()
     const [xml, setXml] = useState('');
@@ -48,8 +48,8 @@ const Editor = () => {
     useEffect(() => {
         (async () => {
             try {
-                let response = await authApi.get(`/issues/${params.id}`);
-                setIssue(response.data);
+                let response = await authApi.get(`/problems/${params.id}`);
+                setProblem(response.data);
                 console.log(response.data.demonstrations)
                 openModal()
             } catch (e: any) {
@@ -61,7 +61,7 @@ const Editor = () => {
     const submit = async () => {
         try {
             setLoading(true)
-            let response = await authApi.post(`/submission`, { blocksXml: xml, issueId: params.id })
+            let response = await authApi.post(`/problems/${params.id}/submissions`, { blocksXml: xml, problemId: params.id })
             Store.addNotification({
                 title: 'Enviado',
                 message: 'Seu código foi submetido com sucesso 😀',
@@ -129,18 +129,18 @@ const Editor = () => {
         <>
 
             <BoxQuestion
-                question={{ title: issue?.title ?? 'Olá mundo !' }}
+                question={{ title: problem?.title ?? 'Olá mundo !' }}
                 onButtonRunPressed={submit}
                 test={handleExec}
                 isSubmitting={isLoading}
-                onDetailsClick={ () => setIsOpen(true) }
+                onDetailsClick={() => setIsOpen(true)}
             />
             <CustomBlocklyWorkpace onXmlChange={(nxml) => setXml(nxml)} code={code} language={language}
                 initialXml={location.state?.params?.blocksXml ?? ''} onCodeChange={setCode}>
                 <GeneratedCodeArea
                     language={language}
                     code={code}
-                    style={{ background:'transparent', overflowY:'auto' }}
+                    style={{ background: 'transparent', overflowY: 'auto' }}
                     onLanguageChange={handleLanguageChange} />
             </CustomBlocklyWorkpace>
             <Modal
@@ -156,8 +156,8 @@ const Editor = () => {
                 contentLabel="Example Modal"
             >
 
-                <h2 className="font-1-xl font-light blue" style={{ textAlign: 'center' }} ref={(_subtitle) => (subtitle = _subtitle)}>{issue?.title ?? ''}</h2>
-                <div className="font-2-m" style={{ fontFamily: "'Neuton', serif", fontWeight: 300, marginBottom: 30 }} dangerouslySetInnerHTML={{ __html: issue?.description }}></div>
+                <h2 className="font-1-xl font-light blue" style={{ textAlign: 'center' }} ref={(_subtitle) => (subtitle = _subtitle)}>{problem?.title ?? ''}</h2>
+                <div className="font-2-m" style={{ fontFamily: "'Neuton', serif", fontWeight: 300, marginBottom: 30 }} dangerouslySetInnerHTML={{ __html: problem?.description }}></div>
                 <h3 className="font-1-m gray-3" style={{ textAlign: 'center', marginBottom: 10 }}>Demonstrações</h3>
                 <div style={{
                     display: 'grid',
@@ -170,7 +170,7 @@ const Editor = () => {
                     <span className="gray-3" style={{ justifySelf: 'end', }}>Entradas</span>
                     <span className="gray-3">Saídas</span>
                     {
-                        issue?.demonstrations.map((demonstration: IDemonstrations) =>(
+                        problem?.demonstrations.map((demonstration: IDemonstrations) => (
                             <>
                                 <div style={{ gridColumn: '1', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '10px' }}>
                                     {demonstration.demonstrationInputs && <span className="gray-3" style={{

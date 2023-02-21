@@ -1,15 +1,27 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import useStorage from '../utils/useStorage';
-export const enum Roles {
-    ADMIN = 'ADMIN',
-    COLLABORATOR = 'COLLABORATOR',
-    CONSUMER = 'CONSUMER'
-}
 export type User = {
-    id: number | string | null;
-    name: string | null;
-    // email: string |  null;
-    role: Roles | null;
+    id?: string,
+    email?: string,
+    name?: string
+    responsibilities?: Responsability[]
+}
+export enum Roles {
+    ADMIN = 'ADMIN',
+    ADVISOR = 'ADVISOR',
+    STUDENT = 'STUDENT'
+}
+
+export enum Services {
+    USER_SERVICE = 'USER_SERVICE',
+    PROBLEM_SERVICE = 'PROBLEM_SERVICE',
+    CHAT_SERVICE = 'CHAT_SERVICE',
+    JUDGE_SERVICE = 'JUDGE_SERVICE'
+}
+
+export type Responsability = {
+    service: Services;
+    role: Roles
 }
 export interface IUserContext extends User {
     setUser(user: User): void;
@@ -18,10 +30,10 @@ export interface IUserContext extends User {
 export const UserContext = createContext<IUserContext>({
     setUser: (user: User) => { },
     removeUser: () => { },
-    id: null,
-    //email: null,
-    name: null,
-    role: null,
+    id: undefined,
+    email: undefined,
+    name: undefined,
+    responsibilities: undefined,
 })
 export const UserProvider = (props: any) => {
     const [_user, set, remove] = useStorage("profile");
@@ -31,7 +43,12 @@ export const UserProvider = (props: any) => {
     const removeUser = () => {
         remove("profile");
     }
-    let user: User = { id: null, name: null, role: null }
+    let user: User = {
+        id: undefined,
+        email: undefined,
+        name: undefined,
+        responsibilities: undefined,
+    }
     try {
         user = JSON.parse(_user);
     } catch (e) {
