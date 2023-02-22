@@ -16,9 +16,7 @@ export interface ISubmission {
     id: number | string;
     userId: number,
     problemId: number,
-    code: string | null,
     status: string,
-    languageId: number,
     blocksXml: string,
     error: string,
     successfulRate: number
@@ -45,14 +43,23 @@ const Show = () => {
     const sleep = (ms: number) => {
         return new Promise((resolve, reject) => setTimeout(resolve, ms));
     };
-    
+    function selectPage(submission?: ISubmission) {
+        switch (submission?.status) {
+            case SubmissionStatus.ACCEPTED: return <Success />
+            case SubmissionStatus.PRESENTATION_ERROR: return <PresentationError />
+            case SubmissionStatus.RUNTIME_ERROR: return <RuntimeError errorLog={submission.error} />
+            case SubmissionStatus.PENDING: return <Waiting />
+            case SubmissionStatus.WRONG_ANSWER: return <WrongAnswer successfulRate={submission.successfulRate} />
+            default: return <Waiting />
+        }
+    }
     const getData = async () => {
         let tryAgain = true;
         while (tryAgain) {
             try {
                 clearTimeout();
-                const response = await api.get(`submissions?filter=${JSON.stringify({
-                    where: { id: params?.id }, include: [
+                const response = await api.get(`submissions/${params.id}?filter=${JSON.stringify({
+                    include: [
                         {
                             relation: 'problem',
                             scope: {
@@ -62,7 +69,7 @@ const Show = () => {
                     ]
                 })}`);
 
-                console.log(response.data[0])
+                console.log(response.data)
                 if (response.data.length == 0) {
                     Store.addNotification({
                         container: 'top-center',
@@ -78,12 +85,12 @@ const Show = () => {
                     return navigate(`/`)
                 }
 
-                if (response.data[0].status != SubmissionStatus.PENDING) {
-                    setSubmission(response.data[0]);
+                if (response.data.status != SubmissionStatus.PENDING) {
+                    setSubmission(response.data);
                     tryAgain = false;
                     break;
                 }
-                await sleep(5000);
+                await sleep(2000);
             } catch (e: any) {
                 console.log(e);
                 tryAgain = false
@@ -109,18 +116,8 @@ const Show = () => {
             <Container >
                 <h1 style={{ textAlign: 'center', marginBottom: '20px' }} className="font-1-xl white font-light">{submission && submission.problem.title}</h1>
                 <Card padding="10px 20px 40px 20px" >
-                    {!submission ?
-                        <Waiting />
-                        : submission.status == SubmissionStatus.ACCEPTED ?
-                            <Success />
-                            : submission.status == SubmissionStatus.PRESENTATION_ERROR ?
-                                <PresentationError />
-                                : submission.status == SubmissionStatus.RUNTIME_ERROR ?
-                                    <RuntimeError errorLog={submission.error} />
-                                    : submission.status == SubmissionStatus.WRONG_ANSWER ? 
-                                        <WrongAnswer successfulRate={submission.successfulRate}/> :
-                                    <></>
-
+                    {
+                        selectPage(submission)
                     }
                 </Card>
             </Container>

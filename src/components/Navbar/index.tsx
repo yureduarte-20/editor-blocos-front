@@ -29,7 +29,7 @@ const Navbar = (props: any) => {
                             {token ?
                                 <>
                                     {
-                                        user.role == Roles.ADMIN && <Link style={{ display: 'inline-block' }} to="/admin/problems"
+                                        user.responsibilities?.some(res => res.role === Roles.ADMIN) && <Link style={{ display: 'inline-block' }} to="/admin/problems"
                                          className="font-2-s white">Gerenciar problemas</Link>
                                     }
                                     <Link style={{ display: 'inline-block' }} to="/" className="font-2-s white">Submissões</Link>

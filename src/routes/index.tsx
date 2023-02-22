@@ -15,8 +15,9 @@ import { Roles, Services, useUser } from '../store/userContext';
 import ProblemsList from '../pages/admin/ProblemsList';
 import ProblemEdit from '../pages/admin/ProblemEdit';
 import ProblemCreate from '../pages/admin/ProblemCreate';
-import Chat from '../pages/advisor/Chat';
+import AdvisorChat from '../pages/advisor/Chat';
 import Doubts from '../pages/advisor/Doubts';
+import Chat from '../pages/Chat';
 
 
 
@@ -110,7 +111,7 @@ export function AppRoutes() {
                     element={
                         <RequireAuth>
                             <RequireAdvisor service={Services.CHAT_SERVICE}>
-                                <Chat />
+                                <AdvisorChat />
                             </RequireAdvisor>
                         </RequireAuth>
                     }
@@ -121,6 +122,13 @@ export function AppRoutes() {
                             <RequireAdvisor service={Services.CHAT_SERVICE}>
                                 <Doubts />
                             </RequireAdvisor>
+                        </RequireAuth>
+                    }
+                />
+                <Route path='chat'
+                    element={
+                        <RequireAuth>
+                            <Chat />
                         </RequireAuth>
                     }
                 />

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { Store } from "react-notifications-component"
+import { useNavigate } from "react-router-dom"
 import { Doubt } from "types"
+import Button from "../../../components/Button"
 import { useUser } from "../../../store/userContext"
 import { Card, Container, Th } from "../../../styles/global"
 import { useAuthenticateApi } from "../../../utils/useApi"
@@ -11,6 +13,7 @@ export default () => {
     const [doubts, setDoubts] = useState<Doubt[]>([])
     const api = useAuthenticateApi()
     const user = useUser()
+    const navigate = useNavigate()
     function statusHandler(status: string) {
         switch (status) {
             case 'ON_GOING':
@@ -18,13 +21,13 @@ export default () => {
             case 'COMPLETE':
                 return <span className="green">Completo</span>
             case 'OPEN':
-                return <span className="blue">Completo</span>
+                return <span className="blue">Aberto</span>
             default: return <span className="blue">{status}</span>
         }
     }
     const getUnsubscribeDoubts = async () => {
         try {
-            const response = await api.get(`/advisor/doubts?filter=${JSON.stringify({
+            const response = await api.get(`/advisor/doubts/?filter=${JSON.stringify({
                 where: {
                     or: [
                         { status: "OPEN" },
@@ -48,6 +51,32 @@ export default () => {
             }
         }
     }
+    const handleSubscribe = async (doubt: Doubt) => {
+        if ( doubt.status === 'OPEN'  && window.confirm('Você está aceita orientar este aluno? ')) {
+            try {
+                await api.post(`/advisor/doubts/subscribe/${doubt.id}`, {})
+                return navigate('/advisor/chat')
+            } catch (e : any) {
+                if (e.response) {
+                    Store.addNotification({
+                        title: 'Erro',
+                        message: e.response.data.error.message,
+                        type: 'danger',
+                        container: 'top-center',
+                        dismiss: {
+                            duration: 3000
+                        }
+                    })
+                }
+            }
+        }
+        if(doubt.status === 'ON_GOING'){
+            return navigate('/advisor/chat')
+        }
+        if(doubt.status === 'COMPLETE'){
+            alert('Esta ocorrência já foi finalizada, você não pode enviar mensagens')
+        }
+    }
     useEffect(() => {
         getUnsubscribeDoubts()
     }, [])
@@ -68,7 +97,8 @@ export default () => {
                     </Thead>
                     <TBody>
                         {doubts.map(item => (
-                            <Tr className='font-2-xs' key={item.id}>
+
+                            <Tr onClick={e => handleSubscribe(item)} className='font-2-xs' >
                                 <Td>
                                     {item.id}
                                 </Td>
@@ -84,10 +114,11 @@ export default () => {
                                 <Td>
                                 </Td>
                             </Tr>
+
                         ))
                         }
                     </TBody>
                 </Table>
             </TableWrap>
-        </Container>)
+        </Container >)
 }

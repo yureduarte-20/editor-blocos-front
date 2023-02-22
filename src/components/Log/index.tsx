@@ -9,7 +9,7 @@ export const Log = ({ text }: ILogProps) => {
 
     return (
         <SyntaxHighlighter customStyle={{
-            flex: 1,
+            maxWidth:'50%'
         }} language="javascript"
           height="100%" 
           style={a11yDark}

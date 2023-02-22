@@ -75,16 +75,17 @@ const Editor = () => {
             //openSuccess("Enviado 😀")
 
         } catch (e: any) {
-            Store.addNotification({
-                title: 'Enviado',
-                message: e.response.data.error.message,
-                type: 'danger',
-                container: 'top-center',
+            if (e.response)
+                Store.addNotification({
+                    title: 'Erro',
+                    message: e.response.data.error.message,
+                    type: 'danger',
+                    container: 'top-center',
 
-                dismiss: {
-                    duration: 3000
-                }
-            })
+                    dismiss: {
+                        duration: 3000
+                    }
+                })
             console.log(e.response.data.error.message)
 
         } finally {

@@ -2,16 +2,30 @@
 import { AxiosResponse } from "axios"
 import React, { useCallback, useEffect, useState } from "react"
 import { Doubt } from "types"
-import Spinner from "../../../components/Spinner"
-import { useUser } from "../../../store/userContext"
-import { Card, Container } from "../../../styles/global"
-import { API, useAuthenticateApi } from "../../../utils/useApi"
+import Spinner from "../../components/Spinner"
+import { useUser } from "../../store/userContext"
+import { Card, Container } from "../../styles/global"
+import { API, useAuthenticateApi } from "../../utils/useApi"
 
 import './styles.css'
+const convertToTimeString = (dateString: string): string => {
+    const _date = new Date(dateString)
+    return _date.toLocaleDateString() + " " + _date.toLocaleTimeString()
+}
 const sleep = async (ms: number) => new Promise((res, rej) => setTimeout(() => res('resolved in ' + ms), ms))
 export default () => {
 
-
+    function statusHandler(status:string) {
+        switch (status) {
+            case 'ON_GOING':
+                return <span className="red">Ocorrendo</span>
+            case 'COMPLETE':
+                return <span className="green">Completo</span>
+            case 'OPEN':
+                return <span className="blue">Aberto</span>
+            default: return <span className="blue">{status}</span>
+        }
+    }
     const [doubts, setDoubts] = useState<Doubt[]>([])
     const api = useAuthenticateApi()
     const user = useUser()
@@ -24,18 +38,17 @@ export default () => {
         try {
             setSending(true)
             await api.post(`/doubts/${selectDoubt}`, { message: msg })
-            const { data } = await api.get(`/advisor/doubts`)
-            setDoubts(data)
+            getDoubts()
             setMsg('')
         } catch (e: any) {
             alert('Algo deu errado')
-        } finally{
+        } finally {
             setSending(false)
         }
     }
     const getDoubts = async () => {
         try {
-            const response = await api.get(`advisor/doubts`)
+            const response = await api.get(`/doubts?filter=${JSON.stringify({ order: ['updatedAt DESC', 'createdAt DESC'] })}`)
             console.log('Data')
             setDoubts(response.data)
         } catch (e: any) {
@@ -52,7 +65,7 @@ export default () => {
             return (doubt.id == id)
         })
     }
-    const genDoubt = ({ key, name, createdAt: date, preMessage }: { key: string, name: string, preMessage: string, createdAt: string }) => {
+    const genDoubt = ({ key, name, createdAt: date, preMessage, status }: { key: string, name: string, preMessage: string, createdAt: string, status: string }) => {
         return (
             <div className="chat_list" key={key} onClick={e => {
                 setSelectDoubt(key);
@@ -63,6 +76,7 @@ export default () => {
                     <div className="chat_ib">
                         <h5>{name}<span className="chat_date">{date}</span></h5>
                         <p >{preMessage}</p>
+                        <span>{statusHandler(status)}</span>
                     </div>
                 </div>
             </div>)
@@ -73,8 +87,7 @@ export default () => {
             <div className="received_msg">
                 <div className="received_withd_msg">
                     <p>{message}</p>
-                    <span className="time_date">{new Date(date ?? Date.now()).toLocaleDateString() + ' '
-                        + new Date(date ?? Date.now()).toLocaleTimeString()}</span></div>
+                    <span className="time_date">{convertToTimeString(date ?? new Date())}</span></div>
             </div>
         </div>
     )
@@ -82,8 +95,7 @@ export default () => {
         <div key={userURI + date} className="outgoing_msg">
             <div className="sent_msg">
                 <p>{message}</p>
-                <span className="time_date">{new Date(date ?? Date.now()).toLocaleDateString() + ' '
-                    + new Date(date ?? Date.now()).toLocaleTimeString()}</span>
+                <span className="time_date">{convertToTimeString(date ?? new Date())}</span>
             </div>
         </div>
     )
@@ -119,7 +131,7 @@ export default () => {
                                     </div>
                                     <div className="srch_bar">
                                         <div className="stylish-input-group">
-                                            <input type="text" className="search-bar" placeholder="Search" />
+                                            <input type="text" className="search-bar" placeholder="Procurar" />
                                             <span className="input-group-addon">
                                                 <button type="button"> <i className="fa fa-search" aria-hidden="true" /> </button>
                                             </span> </div>
@@ -127,20 +139,19 @@ export default () => {
                                 </div>
                                 <div className="inbox_chat">
                                     {doubts.map((item: any) => genDoubt({
-                                        name: item.studentName,
-                                        createdAt: new Date(item.createdAt ?? Date.now()).toLocaleDateString() + ' '
-                                            + new Date(item.createdAt ?? Date.now()).toLocaleTimeString(),
+                                        name: item.advisorName ?? 'Aguardando atendimento...',
+                                        createdAt: convertToTimeString(item.updatedAt ?? item.createdAt ?? new Date()),
                                         key: item.id,
-                                        preMessage: item.messages && item.messages.length != 0 && item.messages[0].message
+                                        preMessage: item.messages && item.messages.length != 0 && item.messages[0].message,
+                                        status: item.status
                                     }))}
                                 </div>
                             </div>
                             <div className="mesgs">
                                 <div className="msg_history">
                                     {
-                                        getDoubt(selectDoubt) && getDoubt(selectDoubt)?.messages && 
+                                        getDoubt(selectDoubt) && getDoubt(selectDoubt)?.messages &&
                                         getDoubt(selectDoubt)?.messages?.map((message: any) => message.userURI.includes(user.id) ? outgoingMessage(message) : incomingMessage(message))
-
                                     }
                                 </div>
                                 <div className="type_msg">
@@ -149,11 +160,11 @@ export default () => {
                                             e.key === 'Enter' && sendMessage()
 
                                         }} className="write_msg" onChange={e => setMsg(e.target.value)} placeholder="Escreva uma mensagem" />
-                                        { !sending &&
+                                        {!sending &&
                                             <button disabled={!selectDoubt} onClick={e => { e.preventDefault; sendMessage() }} className="msg_send_btn" type="button"><i className="fa fa-paper-plane-o" aria-hidden="true" /></button>
                                         }
-                                        { sending &&
-                                            <Spinner className="msg_send_btn"  width="25px" height="25px" />
+                                        {sending &&
+                                            <Spinner className="msg_send_btn" width="25px" height="25px" />
                                         }
                                     </div>
                                 </div>
