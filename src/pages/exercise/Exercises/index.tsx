@@ -18,17 +18,31 @@ const Exercises = () => {
     const params = useParams();
     const navigate = useNavigate();
     const api = useAuthenticateApi();
-    const [problems, setProblems] = useState<IProblemResponse[]>([]);
+    const [problems, setProblems] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         (async () => {
             try {
                 setLoading(true);
-                const response = await api.get(`problems?filter=${JSON.stringify({ where: { dificultyLevel: params?.dificultyLevel } })}&withSubmissions=true`);
-                setProblems(response.data)
+                const response = await api.get(`problems?filter=${JSON.stringify({ where: { dificultyLevel: params?.dificultyLevel } })}`);
+                const ids = response.data.map((item: any) => item.id)
+                const { data: submissions } = await api.get(`/submissions?filter=${JSON.stringify({ where: { problemId: { inq: ids } }, fields: { problemId: true, status: true, id: true } })}`)
+                const problems = response.data
+                for (const problem of problems) {
+                    if (!problem.submissions) {
+                        problem.submissions = []
+                    }
+                    const subs = submissions.filter((item: any) => item.problemId == problem.id)
+                    if (subs.length !== 0) {
+                        problem.submissions.push(subs)
+                        problem.submissions = problem.submissions.flat()
+                    }
+                }
+                console.log(problems)
+                setProblems(problems)
             } catch (e) {
-
+                console.error(e)
             } finally {
                 setLoading(false);
             }
@@ -57,14 +71,9 @@ const Exercises = () => {
                             {problems.map(problem =>
 
                                 <Tr className='font-2-xs' key={problem.id}>
-                                    <Td style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                                        <SolvedProblem status={problem.submissions && problem.submissions.some((value, index, array) =>{
-                                            console.log(value)
-                                            if(value.status == SubmissionStatus.ACCEPTED)
-                                                return true;
-                                        }) ? SubmissionStatus.ACCEPTED : undefined
-                                    }
-                                            >
+                                    <Td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <SolvedProblem status={problem.submissions && problem.submissions.find( (item: any) => [SubmissionStatus.ACCEPTED].includes(item.status) )?.status}
+                                        >
                                             {problem.id}
                                         </SolvedProblem>
                                     </Td>

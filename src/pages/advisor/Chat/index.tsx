@@ -1,17 +1,33 @@
 
-import { AxiosResponse } from "axios"
+
 import React, { useCallback, useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 import { Doubt } from "types"
+import colors from "../../../styles/colors"
 import Spinner from "../../../components/Spinner"
 import { useUser } from "../../../store/userContext"
 import { Card, Container } from "../../../styles/global"
 import { API, useAuthenticateApi } from "../../../utils/useApi"
 
 import './styles.css'
-const sleep = async (ms: number) => new Promise((res, rej) => setTimeout(() => res('resolved in ' + ms), ms))
+import { Store } from "react-notifications-component"
+const convertToTimeString = (dateString: string): string => {
+    const _date = new Date(dateString)
+    return _date.toLocaleDateString() + " " + _date.toLocaleTimeString()
+}
 export default () => {
 
-
+    function statusHandler(status: string) {
+        switch (status) {
+            case 'ON_GOING':
+                return <span className="blue">Ocorrendo</span>
+            case 'COMPLETE':
+                return <span className="red">Encerrado</span>
+            case 'OPEN':
+                return <span className="green">Aberto</span>
+            default: return <span className="blue">{status}</span>
+        }
+    }
     const [doubts, setDoubts] = useState<Doubt[]>([])
     const api = useAuthenticateApi()
     const user = useUser()
@@ -19,23 +35,52 @@ export default () => {
     const [msg, setMsg] = useState('')
     const [loading, setLoading] = useState(true)
     const [sending, setSending] = useState(false)
+    const closeChat = async () => {
+        if (selectDoubt.id && window.confirm('Você deseja encerrar essa conversa?')) {
+            try {
+                await api.post(`/doubts/close/${selectDoubt.id}`, {})
+                await getDoubts()
+            } catch (e: any) {
+                if (e.response) {
+                    Store.addNotification({
+                        title: 'Erro',
+                        message: e.response.data.error.message,
+                        type: 'danger',
+                        container: 'top-center',
+                        dismiss: {
+                            duration: 3000
+                        }
+                    })
+                }
+            }
+        }
+    }
     const sendMessage = async () => {
         if (!selectDoubt) return
         try {
             setSending(true)
-            await api.post(`/doubts/${selectDoubt}`, { message: msg })
-            const { data } = await api.get(`/advisor/doubts`)
-            setDoubts(data)
+            await api.post(`/doubts/${selectDoubt.id}`, { message: msg })
+            getDoubts()
             setMsg('')
         } catch (e: any) {
-            alert('Algo deu errado')
-        } finally{
+            if (e.response) {
+                Store.addNotification({
+                    title: 'Erro',
+                    message: e.response.data.error.message,
+                    type: 'danger',
+                    container: 'top-center',
+                    dismiss: {
+                        duration: 3000
+                    }
+                })
+            }
+        } finally {
             setSending(false)
         }
     }
     const getDoubts = async () => {
         try {
-            const response = await api.get(`advisor/doubts`)
+            const response = await api.get(`advisor/doubts?filter=${JSON.stringify({ order: ['updatedAt DESC', 'createdAt DESC'] })}`)
             console.log('Data')
             setDoubts(response.data)
         } catch (e: any) {
@@ -46,16 +91,30 @@ export default () => {
             setLoading(false)
         }
     }
-    const getDoubt = (id: string): Doubt | undefined => {
-        if (!id) return undefined
+    const getDoubt = (data: any): Doubt | undefined => {
+
+        if (!data) return undefined
         return doubts.find(doubt => {
-            return (doubt.id == id)
+            return (doubt.id == data.id)
         })
     }
-    const genDoubt = ({ key, name, createdAt: date, preMessage }: { key: string, name: string, preMessage: string, createdAt: string }) => {
+    const genDoubt = ({ key,
+        name,
+        createdAt: date,
+        problemURI,
+        preMessage, status, problemTitle }: {
+            key: string,
+            name: string,
+            preMessage: string,
+            createdAt: string,
+            status: string,
+            problemTitle: string,
+            problemURI: string
+        }) => {
+        console.log(selectDoubt)
         return (
-            <div className="chat_list" key={key} onClick={e => {
-                setSelectDoubt(key);
+            <div className={`chat_list ${key === selectDoubt.id ? 'chat_list__selected' : ''}`} key={key} onClick={e => {
+                setSelectDoubt({ id: key, problemTitle, problemURI, status });
 
             }}>
                 <div className="chat_people">
@@ -63,6 +122,7 @@ export default () => {
                     <div className="chat_ib">
                         <h5>{name}<span className="chat_date">{date}</span></h5>
                         <p >{preMessage}</p>
+                        <span>{statusHandler(status)}</span>
                     </div>
                 </div>
             </div>)
@@ -73,8 +133,7 @@ export default () => {
             <div className="received_msg">
                 <div className="received_withd_msg">
                     <p>{message}</p>
-                    <span className="time_date">{new Date(date ?? Date.now()).toLocaleDateString() + ' '
-                        + new Date(date ?? Date.now()).toLocaleTimeString()}</span></div>
+                    <span className="time_date">{convertToTimeString(date ?? new Date())}</span></div>
             </div>
         </div>
     )
@@ -82,8 +141,7 @@ export default () => {
         <div key={userURI + date} className="outgoing_msg">
             <div className="sent_msg">
                 <p>{message}</p>
-                <span className="time_date">{new Date(date ?? Date.now()).toLocaleDateString() + ' '
-                    + new Date(date ?? Date.now()).toLocaleTimeString()}</span>
+                <span className="time_date">{convertToTimeString(date ?? new Date())}</span>
             </div>
         </div>
     )
@@ -115,11 +173,11 @@ export default () => {
                             <div className="inbox_people">
                                 <div className="headind_srch">
                                     <div className="recent_heading">
-                                        <h4>Recent</h4>
+                                        <h4>Recentes</h4>
                                     </div>
                                     <div className="srch_bar">
                                         <div className="stylish-input-group">
-                                            <input type="text" className="search-bar" placeholder="Search" />
+                                            <input type="text" className="search-bar" placeholder="Procurar" />
                                             <span className="input-group-addon">
                                                 <button type="button"> <i className="fa fa-search" aria-hidden="true" /> </button>
                                             </span> </div>
@@ -127,20 +185,28 @@ export default () => {
                                 </div>
                                 <div className="inbox_chat">
                                     {doubts.map((item: any) => genDoubt({
-                                        name: item.studentName,
-                                        createdAt: new Date(item.createdAt ?? Date.now()).toLocaleDateString() + ' '
-                                            + new Date(item.createdAt ?? Date.now()).toLocaleTimeString(),
+                                        name: item.studentName ?? 'Aguardando atendimento...',
+                                        createdAt: convertToTimeString(item.updatedAt ?? item.createdAt ?? new Date()),
                                         key: item.id,
-                                        preMessage: item.messages && item.messages.length != 0 && item.messages[0].message
+                                        preMessage: item.messages && item.messages.length != 0 && item.messages[item.messages.length - 1].message,
+                                        status: item.status,
+                                        problemTitle: item.problemTitle,
+                                        problemURI: item.problemURI
+
                                     }))}
                                 </div>
                             </div>
                             <div className="mesgs">
+                                {selectDoubt.problemTitle &&
+                                    <div className="d-flex mb-2" style={{ flexDirection:'column', justifyContent:'center', alignItems:'center' }} >
+                                        <h3 style={{ textAlign: 'center', marginBottom:0 }} className="font-1-m blue">Problema: <Link target={'_blank'} to={`/orientador/problema/${selectDoubt.problemURI.replace('/problems/', '')}`}>{selectDoubt.problemTitle}</Link></h3>
+                                        {selectDoubt.status == "ON_GOING" &&<span className="red font-1-s" onClick={e => closeChat()} style={{ textAlign: 'center', cursor:'pointer', display:'block', width:'max-content' }}>Encerar conversa</span>}
+                                    </div>
+                                }
                                 <div className="msg_history">
                                     {
-                                        getDoubt(selectDoubt) && getDoubt(selectDoubt)?.messages && 
+                                        getDoubt(selectDoubt) && getDoubt(selectDoubt)?.messages &&
                                         getDoubt(selectDoubt)?.messages?.map((message: any) => message.userURI.includes(user.id) ? outgoingMessage(message) : incomingMessage(message))
-
                                     }
                                 </div>
                                 <div className="type_msg">
@@ -149,11 +215,11 @@ export default () => {
                                             e.key === 'Enter' && sendMessage()
 
                                         }} className="write_msg" onChange={e => setMsg(e.target.value)} placeholder="Escreva uma mensagem" />
-                                        { !sending &&
+                                        {!sending &&
                                             <button disabled={!selectDoubt} onClick={e => { e.preventDefault; sendMessage() }} className="msg_send_btn" type="button"><i className="fa fa-paper-plane-o" aria-hidden="true" /></button>
                                         }
-                                        { sending &&
-                                            <Spinner className="msg_send_btn"  width="25px" height="25px" />
+                                        {sending &&
+                                            <Spinner className="msg_send_btn" width="25px" height="25px" />
                                         }
                                     </div>
                                 </div>

@@ -22,4 +22,21 @@ declare module "types" {
         userName?: string,
         createdAt: string
     }
+    export interface ITestCase {
+        inputs?: string[],
+        outputs: string,
+        validationOutputRegex?: string
+    }
+    export interface IProblem {
+        id: string;
+        title: string
+        description: string,
+        testCases: ITestCase[],
+        dificultyLevel: string,
+        demonstrations: IDemonstrations[]
+    }
+    export interface IDemonstrations {
+        demonstrationInputs?: string[];
+        demonstrationOutput: string;
+    }
 }

@@ -52,10 +52,10 @@ export default () => {
         }
     }
     const handleSubscribe = async (doubt: Doubt) => {
-        if ( doubt.status === 'OPEN'  && window.confirm('Você está aceita orientar este aluno? ')) {
+        if ( doubt.status === 'OPEN'  && window.confirm('Você aceita orientar este aluno? ')) {
             try {
-                await api.post(`/advisor/doubts/subscribe/${doubt.id}`, {})
-                return navigate('/advisor/chat')
+                await api.post(`/orientador/duvidas/subscribe/${doubt.id}`, {})
+                return navigate('/orientador/chat')
             } catch (e : any) {
                 if (e.response) {
                     Store.addNotification({
@@ -67,11 +67,12 @@ export default () => {
                             duration: 3000
                         }
                     })
+                    getUnsubscribeDoubts()
                 }
             }
         }
         if(doubt.status === 'ON_GOING'){
-            return navigate('/advisor/chat')
+            return navigate('/orientador/chat')
         }
         if(doubt.status === 'COMPLETE'){
             alert('Esta ocorrência já foi finalizada, você não pode enviar mensagens')
@@ -92,7 +93,7 @@ export default () => {
                             <Th className='font-2-m white' width='30%' textAlign='start'>Nome</Th>
                             <Th className='font-2-m white' width='20%' textAlign='start'>Problema</Th>
                             <Th className='font-2-m white' width='20%' textAlign='start'>Status</Th>
-                            <Th className='font-2-m white' width='20%' textAlign='start'>Ações</Th>
+                            
                         </Tr>
                     </Thead>
                     <TBody>
@@ -111,8 +112,7 @@ export default () => {
                                 <Td>
                                     {statusHandler(item.status)}
                                 </Td>
-                                <Td>
-                                </Td>
+                                
                             </Tr>
 
                         ))

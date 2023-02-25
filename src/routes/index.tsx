@@ -18,6 +18,7 @@ import ProblemCreate from '../pages/admin/ProblemCreate';
 import AdvisorChat from '../pages/advisor/Chat';
 import Doubts from '../pages/advisor/Doubts';
 import Chat from '../pages/Chat';
+import ProblemShow from '../pages/advisor/ProblemShow';
 
 
 
@@ -107,7 +108,7 @@ export function AppRoutes() {
                         <Exercises />
                     </RequireAuth>
                 } />
-                <Route path='/advisor/chat'
+                <Route path='/orientador/chat'
                     element={
                         <RequireAuth>
                             <RequireAdvisor service={Services.CHAT_SERVICE}>
@@ -116,7 +117,7 @@ export function AppRoutes() {
                         </RequireAuth>
                     }
                 />
-                <Route path='/advisor/doubts'
+                <Route path='/orientador/duvidas'
                     element={
                         <RequireAuth>
                             <RequireAdvisor service={Services.CHAT_SERVICE}>
@@ -125,6 +126,13 @@ export function AppRoutes() {
                         </RequireAuth>
                     }
                 />
+                <Route path="/orientador/problema/:id" element={
+                    <RequireAuth>
+                        <RequireAdvisor service={Services.PROBLEM_SERVICE}>
+                            <ProblemShow />
+                        </RequireAdvisor>
+                    </RequireAuth>
+                } />
                 <Route path='chat'
                     element={
                         <RequireAuth>

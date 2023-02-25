@@ -1,7 +1,9 @@
 
-import { AxiosResponse } from "axios"
+
 import React, { useCallback, useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 import { Doubt } from "types"
+import colors from "../../styles/colors"
 import Spinner from "../../components/Spinner"
 import { useUser } from "../../store/userContext"
 import { Card, Container } from "../../styles/global"
@@ -15,14 +17,14 @@ const convertToTimeString = (dateString: string): string => {
 const sleep = async (ms: number) => new Promise((res, rej) => setTimeout(() => res('resolved in ' + ms), ms))
 export default () => {
 
-    function statusHandler(status:string) {
+    function statusHandler(status: string) {
         switch (status) {
             case 'ON_GOING':
-                return <span className="red">Ocorrendo</span>
+                return <span className="blue">Ocorrendo</span>
             case 'COMPLETE':
-                return <span className="green">Completo</span>
+                return <span className="red">Encerrado</span>
             case 'OPEN':
-                return <span className="blue">Aberto</span>
+                return <span className="green">Aberto</span>
             default: return <span className="blue">{status}</span>
         }
     }
@@ -37,7 +39,7 @@ export default () => {
         if (!selectDoubt) return
         try {
             setSending(true)
-            await api.post(`/doubts/${selectDoubt}`, { message: msg })
+            await api.post(`/doubts/${selectDoubt.id}`, { message: msg })
             getDoubts()
             setMsg('')
         } catch (e: any) {
@@ -59,16 +61,30 @@ export default () => {
             setLoading(false)
         }
     }
-    const getDoubt = (id: string): Doubt | undefined => {
-        if (!id) return undefined
+    const getDoubt = (data: any): Doubt | undefined => {
+
+        if (!data) return undefined
         return doubts.find(doubt => {
-            return (doubt.id == id)
+            return (doubt.id == data.id)
         })
     }
-    const genDoubt = ({ key, name, createdAt: date, preMessage, status }: { key: string, name: string, preMessage: string, createdAt: string, status: string }) => {
+    const genDoubt = ({ key,
+        name,
+        createdAt: date,
+        problemURI,
+        preMessage, status, problemTitle }: {
+            key: string,
+            name: string,
+            preMessage: string,
+            createdAt: string,
+            status: string,
+            problemTitle: string,
+            problemURI: string
+        }) => {
+        console.log(selectDoubt)
         return (
-            <div className="chat_list" key={key} onClick={e => {
-                setSelectDoubt(key);
+            <div className={`chat_list ${key === selectDoubt.id ? 'chat_list__selected' : ''}`} key={key} onClick={e => {
+                setSelectDoubt({ id: key, problemTitle, problemURI });
 
             }}>
                 <div className="chat_people">
@@ -127,7 +143,7 @@ export default () => {
                             <div className="inbox_people">
                                 <div className="headind_srch">
                                     <div className="recent_heading">
-                                        <h4>Recent</h4>
+                                        <h4>Recentes</h4>
                                     </div>
                                     <div className="srch_bar">
                                         <div className="stylish-input-group">
@@ -142,12 +158,15 @@ export default () => {
                                         name: item.advisorName ?? 'Aguardando atendimento...',
                                         createdAt: convertToTimeString(item.updatedAt ?? item.createdAt ?? new Date()),
                                         key: item.id,
-                                        preMessage: item.messages && item.messages.length != 0 && item.messages[0].message,
-                                        status: item.status
+                                        preMessage: item.messages && item.messages.length != 0 && item.messages[item.messages.length - 1].message,
+                                        status: item.status,
+                                        ...item
                                     }))}
                                 </div>
                             </div>
                             <div className="mesgs">
+                                {selectDoubt.problemTitle &&
+                                    <h3 style={{ textAlign: 'center'}} className="font-1-m blue">Problema: <Link target={'_blank'} to={`/editor/${selectDoubt.problemURI.replace('/problems/', '')}`}>{selectDoubt.problemTitle}</Link></h3>}
                                 <div className="msg_history">
                                     {
                                         getDoubt(selectDoubt) && getDoubt(selectDoubt)?.messages &&

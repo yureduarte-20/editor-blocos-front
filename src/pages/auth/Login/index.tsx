@@ -8,6 +8,7 @@ import Button from '../../../components/Button';
 import { Store } from 'react-notifications-component'
 import { Typograph } from '../../../styles/Typographic.';
 import { User, useUser } from '../../../store/userContext';
+import axios from 'axios';
 const Login = () => {
     const { setToken } = useAuth();
     const { setUser } = useUser();
@@ -23,7 +24,7 @@ const Login = () => {
         let password = e.target[1].value as string
         try {
             const response = await api.post("/login", { email, password })
-            const profile: User = (await api.get('/profile', {
+            const profile: User = (await axios.get( 'http://localhost:3005/profile', {
                 headers: {
                     Authorization: `Bearer ${response.data.token}`
                 }
@@ -35,7 +36,7 @@ const Login = () => {
         } catch (e: any) {
             console.log(e)
             console.log(e.response)
-            if (e.response.status)
+            if (e.response)
                 Store.addNotification({
                     container: 'top-center',
                     insert: 'top',

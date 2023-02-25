@@ -4,27 +4,10 @@ import Title from "../../../components/Title";
 import { Card, Container, Table, TBody, Td, Th, Thead, Tr } from "../../../styles/global";
 import { useAuthenticateApi } from "../../../utils/useApi";
 import { Store } from "react-notifications-component";
-import { Link, useNavigate } from "react-router-dom";
-import Button from "../../../components/Button";
-import { ButtonSecondary } from "../../../components/BoxQuestion/styled";
+import { useNavigate } from "react-router-dom";
 import { AddButton } from "./style";
-export interface ITestCase {
-    inputs?: string[],
-    outputs: string,
-    validationOutputRegex?: string
-}
-export interface IProblem {
-    id: string;
-    title: string
-    description: string,
-    testCases: ITestCase[],
-    dificultyLevel: string,
-    demonstrations: IDemonstrations[]
-}
-export interface IDemonstrations {
-    demonstrationInputs?: string[];
-    demonstrationOutput: string;
-}
+import { IProblem } from "types";
+
 export default () => {
 
     const [loading, setLoading] = useState(false)

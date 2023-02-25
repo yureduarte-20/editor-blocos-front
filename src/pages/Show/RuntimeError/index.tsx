@@ -1,12 +1,47 @@
 import { useMemo, useState } from "react"
-import { Link } from "react-router-dom"
+import { Store } from "react-notifications-component"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import Button from "../../../components/Button"
 import colors from "../../../styles/colors"
 import { Card } from "../../../styles/global"
+import { useAuthenticateApi } from "../../../utils/useApi"
 import { StatusSVG } from './style'
 
 export default ({ errorLog }: { errorLog: string }) => {
     const [visible, setVisible] = useState(false);
+    const api = useAuthenticateApi()
+    const params = useParams()
+    const navigate = useNavigate()
+    const handleCreateNewDoubt = async () => {
+        try {
+
+            const data = await api.post(`/problems/${params.id}/doubt`, {})
+            Store.addNotification({
+                title: 'Enviado',
+                message: 'Solicitação para falar com orientador foi criada com sucesso 😀',
+                type: 'success',
+                container: 'top-center',
+                dismiss: {
+                    duration: 3000
+                }
+            })
+            navigate(`/chat`, { state: { doubtId: data.data.id } })
+        } catch (e: any) {
+            if (e.response) {
+                Store.addNotification({
+                    title: 'Erro',
+                    message: e.response.data.error.message,
+                    type: 'danger',
+                    container: 'top-center',
+
+                    dismiss: {
+                        duration: 3000
+                    }
+                })
+            }
+            console.error(e)
+        }
+    }
     const toggle = () => {
         setVisible(!visible);
     }
@@ -28,6 +63,8 @@ export default ({ errorLog }: { errorLog: string }) => {
             <StatusSVG className="red font-2-m font-light" >
                 <p>O código submetido não executou direito.</p>
             </StatusSVG>
+            <p style={{  textAlign:'center' }}>Você pode solicitar ajuda com um orientador<a className="blue" onClick={e => handleCreateNewDoubt()}
+                    style={{ cursor: 'pointer', }}> clicando aqui</a></p>
             <p className="font-2-s font-light gray-3" style={{ textAlign: 'center' }}>*Dica: verifique se os tipos que você usou (texto, número, lista etc.) coicidem com as funçoes que você usou</p>
             <p className="font-2-s font-light gray-3" style={{ textAlign: 'center', marginBottom: 20 }}>*Dica: verifique se a quantidade de vezes que você usou o bloco "pedir um texto/numero" <br />
                 coicidem com a quantidade de entradas</p>
