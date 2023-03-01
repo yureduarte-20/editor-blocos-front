@@ -3,15 +3,18 @@ import { Store } from "react-notifications-component"
 import { useNavigate } from "react-router-dom"
 import { Doubt } from "types"
 import Button from "../../../components/Button"
+import Title from "../../../components/Title"
 import { useUser } from "../../../store/userContext"
 import { Card, Container, Th } from "../../../styles/global"
 import { useAuthenticateApi } from "../../../utils/useApi"
+import { DoubtsTags } from "../../Editor"
 import { Table, TableWrap, TBody, Td, Thead, Tr } from "../../Home/style"
 
 
 export default () => {
     const [doubts, setDoubts] = useState<Doubt[]>([])
     const api = useAuthenticateApi()
+    const [tagDoubt, setTagDoubt] = useState("todos")
     const user = useUser()
     const navigate = useNavigate()
     function statusHandler(status: string) {
@@ -27,15 +30,36 @@ export default () => {
     }
     const getUnsubscribeDoubts = async () => {
         try {
-            const response = await api.get(`/advisor/doubts/?filter=${JSON.stringify({
-                where: {
-                    or: [
-                        { status: "OPEN" },
-                        { status: "ON_GOING", advisorURI: `/users/${user.id}` },
-                        { advisorURI: `/users/${user.id}` }
-                    ]
+            let filter = {}
+            if (tagDoubt == "todos") {
+                filter = {
+                    where: {
+                        or: [
+                            { status: "OPEN" },
+                            { status: "ON_GOING", advisorURI: `/users/${user.id}` },
+                            { advisorURI: `/users/${user.id}` }
+                        ]
+                    }
                 }
-            })}`)
+            }
+            else {
+                filter = {
+                    where: {
+                        and: [
+                            { tag: tagDoubt },
+                            {
+                                or: [
+                                    { status: "OPEN" },
+                                    { status: "ON_GOING", advisorURI: `/users/${user.id}` },
+                                    { advisorURI: `/users/${user.id}` }
+                                ]
+                            }
+                        ],
+                    },
+                    fields:{ messages:false }
+                }
+            }
+            const response = await api.get(`/advisor/doubts/?filter=${JSON.stringify(filter)}`)
             setDoubts(response.data)
         } catch (e: any) {
             if (e.response) {
@@ -52,11 +76,11 @@ export default () => {
         }
     }
     const handleSubscribe = async (doubt: Doubt) => {
-        if ( doubt.status === 'OPEN'  && window.confirm('Você aceita orientar este aluno? ')) {
+        if (doubt.status === 'OPEN' && window.confirm('Você aceita orientar este aluno? ')) {
             try {
-                await api.post(`/orientador/duvidas/subscribe/${doubt.id}`, {})
+                await api.post(`/advisor/doubts/subscribe/${doubt.id}`, {})
                 return navigate('/orientador/chat')
-            } catch (e : any) {
+            } catch (e: any) {
                 if (e.response) {
                     Store.addNotification({
                         title: 'Erro',
@@ -71,54 +95,70 @@ export default () => {
                 }
             }
         }
-        if(doubt.status === 'ON_GOING'){
+        if (doubt.status === 'ON_GOING') {
             return navigate('/orientador/chat')
         }
-        if(doubt.status === 'COMPLETE'){
+        if (doubt.status === 'COMPLETE') {
             alert('Esta ocorrência já foi finalizada, você não pode enviar mensagens')
         }
     }
     useEffect(() => {
         getUnsubscribeDoubts()
-    }, [])
+    }, [tagDoubt])
     return (
-        <Container>
-            <Card>
-            </Card>
-            <TableWrap>
-                <Table>
-                    <Thead>
-                        <Tr>
-                            <Th className='font-2-m white' width='10%' textAlign='start'>Código</Th>
-                            <Th className='font-2-m white' width='30%' textAlign='start'>Nome</Th>
-                            <Th className='font-2-m white' width='20%' textAlign='start'>Problema</Th>
-                            <Th className='font-2-m white' width='20%' textAlign='start'>Status</Th>
-                            
-                        </Tr>
-                    </Thead>
-                    <TBody>
-                        {doubts.map(item => (
+        <>
+            <Container>
+                <Card>
 
-                            <Tr onClick={e => handleSubscribe(item)} className='font-2-xs' >
-                                <Td>
-                                    {item.id}
-                                </Td>
-                                <Td>
-                                    {item.studentName}
-                                </Td>
-                                <Td>
-                                    {item.problemTitle}
-                                </Td>
-                                <Td>
-                                    {statusHandler(item.status)}
-                                </Td>
-                                
-                            </Tr>
+                    <Title title={"Solicitações de ajuda"} subtitle={"Abaixo estão listadas todas as solicitações dos usuários."} />
+                    <TableWrap>
+                        <div style={{ flexDirection: "row-reverse", gap: 10, marginBottom:20 }} className="d-flex a-center">
+                            <select onChange={e => setTagDoubt(e.target.value)} className="font-1-m" value={tagDoubt}>
+                                <option value={DoubtsTags.LOOPS}>Loops</option>
+                                <option value={DoubtsTags.CONDITIONAL}>Condicionais</option>
+                                <option value={DoubtsTags.VARIABLES}>Variáveis</option>
+                                <option value={DoubtsTags.INPUT_OUTPUTS}>Entradas e Saídas</option>
+                                <option value={DoubtsTags.OTHERS}>outros</option>
+                                <option value={"todos"}>Todos</option>
+                            </select>
+                            <span className="font-1-s gray-3">Filtros</span>
+                        </div>
+                        <Table>
+                            <Thead>
+                                <Tr>
+                                    <Th className='font-2-m white' width='10%' textAlign='start'>Código</Th>
+                                    <Th className='font-2-m white' width='30%' textAlign='start'>Nome</Th>
+                                    <Th className='font-2-m white' width='20%' textAlign='start'>Problema</Th>
+                                    <Th className='font-2-m white' width='20%' textAlign='start'>Status</Th>
 
-                        ))
-                        }
-                    </TBody>
-                </Table>
-            </TableWrap>
-        </Container >)
+                                </Tr>
+                            </Thead>
+                            <TBody>
+                                {doubts.map(item => (
+
+                                    <Tr onClick={e => handleSubscribe(item)} className='font-2-xs' >
+                                        <Td>
+                                            {item.id}
+                                        </Td>
+                                        <Td>
+                                            {item.studentName}
+                                        </Td>
+                                        <Td>
+                                            {item.problemTitle}
+                                        </Td>
+                                        <Td>
+                                            {statusHandler(item.status)}
+                                        </Td>
+
+                                    </Tr>
+
+                                ))
+                                }
+                            </TBody>
+                        </Table>
+                    </TableWrap>
+                </Card>
+            </Container >
+        </>
+    )
 }

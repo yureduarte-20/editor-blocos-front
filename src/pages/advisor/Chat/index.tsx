@@ -1,5 +1,4 @@
 
-
 import React, { useCallback, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { Doubt } from "types"
@@ -80,7 +79,7 @@ export default () => {
     }
     const getDoubts = async () => {
         try {
-            const response = await api.get(`advisor/doubts?filter=${JSON.stringify({ order: ['updatedAt DESC', 'createdAt DESC'] })}`)
+            const response = await api.get(`advisor/doubts?filter=${JSON.stringify({ order: ['updatedAt DESC', 'createdAt DESC'], where:{ advisorURI:`/users/${user.id}` } })}`)
             console.log('Data')
             setDoubts(response.data)
         } catch (e: any) {

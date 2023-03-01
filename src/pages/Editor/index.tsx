@@ -9,7 +9,16 @@ import Modal from 'react-modal'
 import { Store } from "react-notifications-component"
 import colors from "../../styles/colors"
 import Button from "../../components/Button"
-import { IDemonstrations } from "../admin/ProblemsList"
+export enum DoubtsTags {
+    LOOPS = 'loops',
+    CONDITIONAL = 'condicionais',
+    VARIABLES = 'variaveis',
+    INPUT_OUTPUTS = 'entrada_saida',
+    OTHERS = 'outros'
+}
+import { IDemonstrations } from 'types'
+import { Container } from "../../styles/global"
+import { ButtonPrimary, ButtonSecondary } from "../../components/BoxQuestion/styled"
 const customStyles = {
     content: {
         top: '50%',
@@ -33,18 +42,56 @@ const Editor = () => {
     const location: any = useLocation();
     const [isLoading, setLoading] = useState(false);
     const [modalIsOpen, setIsOpen] = useState(false);
-
+    const [modalDoubtOpen, setModalDoubtOpen] = useState<boolean>(false)
+    const [tagDoubt, setTagDoubt] = useState("outros")
+    Modal.setAppElement('#root')
+    let subtitle
     function openModal() {
         setIsOpen(true);
     }
     function closeModal() {
         setIsOpen(false);
     }
+    function openModalDoubt() {
+        setModalDoubtOpen(true);
+    }
+    function closeModalDoubt() {
+        setModalDoubtOpen(false);
+    }
     const handleLanguageChange = (e: ChangeEvent<HTMLSelectElement>) => {
         e.preventDefault();
         setLanguage(e.target.value)
     }
-    console.log(params)
+    const handleCreateNewDoubt = async () => {
+        try {
+
+            const data = await authApi.post(`/problems/${params.id}/doubt`, { tagDoubt })
+            Store.addNotification({
+                title: 'Enviado',
+                message: 'Solicitação para falar com orientador foi criada com sucesso 😀',
+                type: 'success',
+                container: 'top-center',
+                dismiss: {
+                    duration: 3000
+                }
+            })
+            navigate(`/chat`, { state: { doubtId: data.data.id } })
+        } catch (e: any) {
+            if (e.response) {
+                Store.addNotification({
+                    title: 'Erro',
+                    message: e.response.data.error.message,
+                    type: 'danger',
+                    container: 'top-center',
+
+                    dismiss: {
+                        duration: 3000
+                    }
+                })
+            }
+            console.error(e)
+        }
+    }
     useEffect(() => {
         (async () => {
             try {
@@ -124,8 +171,7 @@ const Editor = () => {
         }
 
     }
-    let subtitle;
-    Modal.setAppElement('#root')
+
     return (
         <>
 
@@ -135,6 +181,7 @@ const Editor = () => {
                 test={handleExec}
                 isSubmitting={isLoading}
                 onDetailsClick={() => setIsOpen(true)}
+                handleCreateNewDoubt={openModalDoubt}
             />
             <CustomBlocklyWorkpace onXmlChange={(nxml) => setXml(nxml)} code={code} language={language}
                 initialXml={location.state?.params?.blocksXml ?? ''} onCodeChange={setCode}>
@@ -154,7 +201,7 @@ const Editor = () => {
                     }
                 }}
 
-                contentLabel="Example Modal"
+                contentLabel="Questão"
             >
 
                 <h2 className="font-1-xl font-light blue" style={{ textAlign: 'center' }} ref={(_subtitle) => (subtitle = _subtitle)}>{problem?.title ?? ''}</h2>
@@ -196,7 +243,34 @@ const Editor = () => {
                     }
                 </div>
                 <Button onClick={closeModal}>Fechar</Button>
-
+            </Modal>
+            <Modal
+                isOpen={modalDoubtOpen}
+                style={{
+                    ...customStyles, overlay: {
+                        background: colors.primary_background + 'AC',
+                        zIndex: 5555
+                    }
+                }}
+                onRequestClose={closeModalDoubt}
+            >
+                <Container>
+                    <h2 className="font-1-xl font-light blue" >Solicitação de ajuda para orientador</h2>
+                    <p className="font-1-m">Aqui você pode solicitar ajudar a um orientador caso esteja com dúvidas em relação a este problema, basta dizer nos dizer em qual parte está em dúvida.</p>
+                    <div style={{ flexDirection: "row", gap:10 }} className="d-flex j-center a-center">
+                        <select onChange={e => setTagDoubt(e.target.value)} className="font-1-m" value={tagDoubt}>
+                            <option value={DoubtsTags.LOOPS}>Loops</option>
+                            <option value={DoubtsTags.CONDITIONAL}>Condicionais</option>
+                            <option value={DoubtsTags.VARIABLES}>Variáveis</option>
+                            <option value={DoubtsTags.INPUT_OUTPUTS}>Entradas e Saídas</option>
+                            <option value={DoubtsTags.OTHERS}>outros</option>
+                        </select>
+                        <div style={{ gap: '10px', display: 'flex' }}>
+                            <Button onClick={closeModalDoubt}>Fechar</Button>
+                            <ButtonSecondary onClick={handleCreateNewDoubt}>Solicitar</ButtonSecondary>
+                        </div>
+                    </div>
+                </Container>
             </Modal>
         </>
     )

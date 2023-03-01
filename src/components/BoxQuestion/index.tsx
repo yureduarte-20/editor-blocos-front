@@ -16,43 +16,12 @@ export interface IQuestionProps {
     wrapperStyle?: CSS.Properties;
     test?(): void;
     isSubmitting: boolean
-    onDetailsClick?(): void
+    onDetailsClick?(): void;
+    handleCreateNewDoubt?(): void
 }
-export const BoxQuestion = ({ question, onButtonRunPressed, onGoForward, wrapperStyle, test, isSubmitting, onDetailsClick }: IQuestionProps) => {
-    const params = useParams()
-    const [loading, setLoading] = useState(false)
-    const api = useAuthenticateApi()
-    const navigate = useNavigate()
-    const handleCreateNewDoubt = async () => {
-        try {
+export const BoxQuestion = ({ question, onButtonRunPressed, onGoForward, wrapperStyle, test, isSubmitting, onDetailsClick, handleCreateNewDoubt }: IQuestionProps) => {
 
-            const data = await api.post(`/problems/${params.id}/doubt`, {})
-            Store.addNotification({
-                title: 'Enviado',
-                message: 'Solicitação para falar com orientador foi criada com sucesso 😀',
-                type: 'success',
-                container: 'top-center',
-                dismiss: {
-                    duration: 3000
-                }
-            })
-            navigate(`/chat`, { state: { doubtId: data.data.id } })
-        } catch (e: any) {
-            if (e.response) {
-                Store.addNotification({
-                    title: 'Erro',
-                    message: e.response.data.error.message,
-                    type: 'danger',
-                    container: 'top-center',
 
-                    dismiss: {
-                        duration: 3000
-                    }
-                })
-            }
-            console.error(e)
-        }
-    }
     return (
         <QuestionWraper style={wrapperStyle || {}}>
             <ImgWrapper>
@@ -63,7 +32,7 @@ export const BoxQuestion = ({ question, onButtonRunPressed, onGoForward, wrapper
                 <a style={{ display: 'block', cursor: 'pointer' }}
                     className="font-1-md orange"
                     onClick={e => onDetailsClick && onDetailsClick()}>Detalhes</a>
-                <p>Você pode solicitar ajuda com um orientador<a className="blue" onClick={e => handleCreateNewDoubt()}
+                <p>Você pode solicitar ajuda com um orientador<a className="blue" onClick={e => handleCreateNewDoubt && handleCreateNewDoubt()}
                     style={{ cursor: 'pointer' }}> clicando aqui</a></p>
             </Question>
             <ButtonWrapper>
