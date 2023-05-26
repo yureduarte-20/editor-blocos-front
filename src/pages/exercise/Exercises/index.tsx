@@ -6,6 +6,8 @@ import { Card, Container, Table, TBody, Td, Th, Thead, Tr } from "../../../style
 import { useAuthenticateApi } from "../../../utils/useApi";
 import { SubmissionStatus } from "../../Home";
 import { SolvedProblem } from "./style";
+import { AxiosError } from "axios";
+import { Store } from "react-notifications-component";
 
 export interface IProblemResponse {
     id: string | number;
@@ -41,7 +43,19 @@ const Exercises = () => {
                 }
                 console.log(problems)
                 setProblems(problems)
-            } catch (e) {
+            } catch (e: any) {
+                if (e.response) {
+                    Store.addNotification({
+                        container: 'top-center',
+                        message: e.response.data.error.message,
+                        title: 'Erro',
+                        type: 'danger',
+                        dismiss: {
+                            duration: 3000,
+                            click: true,
+                        },
+                    })
+                }
                 console.error(e)
             } finally {
                 setLoading(false);
@@ -72,7 +86,7 @@ const Exercises = () => {
 
                                 <Tr className='font-2-xs' key={problem.id}>
                                     <Td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <SolvedProblem status={problem.submissions && problem.submissions.find( (item: any) => [SubmissionStatus.ACCEPTED].includes(item.status) )?.status}
+                                        <SolvedProblem status={problem.submissions && problem.submissions.find((item: any) => [SubmissionStatus.ACCEPTED].includes(item.status))?.status}
                                         >
                                             {problem.id}
                                         </SolvedProblem>

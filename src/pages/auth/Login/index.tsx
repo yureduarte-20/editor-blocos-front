@@ -24,7 +24,7 @@ const Login = () => {
         let password = e.target[1].value as string
         try {
             const response = await api.post("/login", { email, password })
-            const profile: User = (await axios.get( 'http://localhost:3005/profile', {
+            const profile: User = (await axios.get( 'http://localhost:3000/profile', {
                 headers: {
                     Authorization: `Bearer ${response.data.token}`
                 }

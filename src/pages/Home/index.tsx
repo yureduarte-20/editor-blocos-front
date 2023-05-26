@@ -36,6 +36,7 @@ export function Home(props: any) {
             try {
                 setLoading(true)
                 const response = await api.get(`/submissions?filter=${JSON.stringify({ include: ["problem"], order: 'createdAt DESC' })}`);
+                
                 setSubmissions(response.data);
                 console.log(response)
             } catch (e) {
@@ -84,21 +85,21 @@ export function Home(props: any) {
                                     <Tr className='font-2-xs' key={submission.id}>
 
                                         <Td>
-                                            <Link style={{ display: 'inline-block' }} to={`/submissoes/${submission.id}`}>
+                                            <Link state={{ problemId:submission.problem.id  }} style={{ display: 'inline-block' }} to={`/submissoes/${submission.id}`}>
                                                 <span style={{ display: 'flex', alignItems: 'center' }}>
                                                     {submission.id}
                                                 </span>
                                             </Link>
                                         </Td>
                                         <Td >
-                                            <Link style={{ display: 'inline-block' }} to={`/submissoes/${submission.id}`}>
+                                            <Link state={{ problemId:submission.problem.id  }} style={{ display: 'inline-block' }} to={`/submissoes/${submission.id}`}>
                                                 <span style={{ display: 'flex', alignItems: 'center' }}>
                                                     {submission.problem.dificultyLevel}
                                                 </span>
                                             </Link>
                                         </Td>
                                         <Td  >
-                                            <Link style={{ display: 'inline-block' }} to={`/submissoes/${submission.id}`}>
+                                            <Link state={{ problemId:submission.problem.id  }} style={{ display: 'inline-block' }} to={`/submissoes/${submission.id}`}>
                                                 <span className={`${submission.status == SubmissionStatus.ACCEPTED ? 'green' : 'red'}`}
                                                     style={{ display: 'flex', alignItems: 'center', }}>
                                                     {((status: SubmissionStatus) => {
@@ -119,7 +120,7 @@ export function Home(props: any) {
                                         </Td>
                                         <Td>
                                             <span style={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems:'center' }}>
-                                                 <Link style={{ display:'inline-block', padding:5 }} className='test-gray' to={`/submissoes/${submission.id}`}>
+                                                 <Link style={{ display:'inline-block', padding:5 }} state={{ problemId:submission.problem.id  }} className='test-gray' to={`/submissoes/${submission.id}`}>
                                                     {submission.problem.title}
                                                  </Link>
                                             

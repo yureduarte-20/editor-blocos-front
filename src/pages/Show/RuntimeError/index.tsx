@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react"
 import { Store } from "react-notifications-component"
-import { Link, useNavigate, useParams } from "react-router-dom"
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
 import Button from "../../../components/Button"
 import colors from "../../../styles/colors"
 import { Card } from "../../../styles/global"
@@ -11,11 +11,13 @@ export default ({ errorLog }: { errorLog: string }) => {
     const [visible, setVisible] = useState(false);
     const api = useAuthenticateApi()
     const params = useParams()
+    const location = useLocation()
+    const { problemId } :any = location.state;
     const navigate = useNavigate()
     const handleCreateNewDoubt = async () => {
         try {
 
-            const data = await api.post(`/problems/${params.id}/doubt`, {})
+            const data = await api.post(`/doubt/problem/${problemId}`, {  })
             Store.addNotification({
                 title: 'Enviado',
                 message: 'Solicitação para falar com orientador foi criada com sucesso 😀',

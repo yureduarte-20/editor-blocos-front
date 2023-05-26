@@ -65,7 +65,7 @@ const Editor = () => {
     const handleCreateNewDoubt = async () => {
         try {
 
-            const data = await authApi.post(`/problems/${params.id}/doubt`, { tagDoubt })
+            const data = await authApi.post(`/doubt/problem/${params.id}`, { tagDoubt })
             Store.addNotification({
                 title: 'Enviado',
                 message: 'Solicitação para falar com orientador foi criada com sucesso 😀',
@@ -118,7 +118,7 @@ const Editor = () => {
                     duration: 3000
                 }
             })
-            navigate(`/submissoes/${response.data.id}`)
+            navigate(`/submissoes/${response.data.id}`, { state: { problemId: params.id } })
             //openSuccess("Enviado 😀")
 
         } catch (e: any) {
@@ -257,7 +257,7 @@ const Editor = () => {
                 <Container>
                     <h2 className="font-1-xl font-light blue" >Solicitação de ajuda para orientador</h2>
                     <p className="font-1-m">Aqui você pode solicitar ajudar a um orientador caso esteja com dúvidas em relação a este problema, basta dizer nos dizer em qual parte está em dúvida.</p>
-                    <div style={{ flexDirection: "row", gap:10 }} className="d-flex j-center a-center">
+                    <div style={{ flexDirection: "row", gap: 10 }} className="d-flex j-center a-center">
                         <select onChange={e => setTagDoubt(e.target.value)} className="font-1-m" value={tagDoubt}>
                             <option value={DoubtsTags.LOOPS}>Loops</option>
                             <option value={DoubtsTags.CONDITIONAL}>Condicionais</option>
