@@ -37,6 +37,7 @@ export default () => {
     const closeChat = async () => {
         if (selectDoubt.id && window.confirm('Você deseja encerrar essa conversa?')) {
             try {
+                console.log('dowubId', selectDoubt.id)
                 await api.post(`/doubts/close/${selectDoubt.id}`, {})
                 await getDoubts()
             } catch (e: any) {
@@ -79,7 +80,7 @@ export default () => {
     }
     const getDoubts = async () => {
         try {
-            const response = await api.get(`advisor/doubts?filter=${JSON.stringify({ order: ['updatedAt DESC', 'createdAt DESC'], where:{ advisorURI:`/users/${user.id}` } })}`)
+            const response = await api.get(`advisor/doubts?filter=${JSON.stringify({ order: ['updatedAt DESC', 'createdAt DESC'], where: { advisorId: user.id } })}`)
             console.log('Data')
             setDoubts(response.data)
         } catch (e: any) {
@@ -100,7 +101,7 @@ export default () => {
     const genDoubt = ({ key,
         name,
         createdAt: date,
-        problemURI,
+        problemId,
         preMessage, status, problemTitle }: {
             key: string,
             name: string,
@@ -108,12 +109,12 @@ export default () => {
             createdAt: string,
             status: string,
             problemTitle: string,
-            problemURI: string
+            problemId: string
         }) => {
         console.log(selectDoubt)
         return (
             <div className={`chat_list ${key === selectDoubt.id ? 'chat_list__selected' : ''}`} key={key} onClick={e => {
-                setSelectDoubt({ id: key, problemTitle, problemURI, status });
+                setSelectDoubt({ id: key, problemTitle, problemId, status });
 
             }}>
                 <div className="chat_people">
@@ -190,22 +191,22 @@ export default () => {
                                         preMessage: item.messages && item.messages.length != 0 && item.messages[item.messages.length - 1].message,
                                         status: item.status,
                                         problemTitle: item.problemTitle,
-                                        problemURI: item.problemURI
+                                        problemId: item.problemId
 
                                     }))}
                                 </div>
                             </div>
                             <div className="mesgs">
                                 {selectDoubt.problemTitle &&
-                                    <div className="d-flex mb-2" style={{ flexDirection:'column', justifyContent:'center', alignItems:'center' }} >
-                                        <h3 style={{ textAlign: 'center', marginBottom:0 }} className="font-1-m blue">Problema: <Link target={'_blank'} to={`/orientador/problema/${selectDoubt.problemURI.replace('/problems/', '')}`}>{selectDoubt.problemTitle}</Link></h3>
-                                        {selectDoubt.status == "ON_GOING" &&<span className="red font-1-s" onClick={e => closeChat()} style={{ textAlign: 'center', cursor:'pointer', display:'block', width:'max-content' }}>Encerar conversa</span>}
+                                    <div className="d-flex mb-2" style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }} >
+                                        <h3 style={{ textAlign: 'center', marginBottom: 0 }} className="font-1-m blue">Problema: <Link target={'_blank'} to={`/orientador/problema/${selectDoubt.problemId}`}>{selectDoubt.problemTitle}</Link></h3>
+                                        {selectDoubt.status == "ON_GOING" && <span className="red font-1-s" onClick={e => closeChat()} style={{ textAlign: 'center', cursor: 'pointer', display: 'block', width: 'max-content' }}>Encerar conversa</span>}
                                     </div>
                                 }
                                 <div className="msg_history">
                                     {
                                         getDoubt(selectDoubt) && getDoubt(selectDoubt)?.messages &&
-                                        getDoubt(selectDoubt)?.messages?.map((message: any) => message.userURI.includes(user.id) ? outgoingMessage(message) : incomingMessage(message))
+                                        getDoubt(selectDoubt)?.messages?.map((message: any) => message.userId == user.id ? outgoingMessage(message) : incomingMessage(message))
                                     }
                                 </div>
                                 <div className="type_msg">

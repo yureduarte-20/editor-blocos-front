@@ -36,10 +36,10 @@ function RequireAuth({ children }: { children: JSX.Element }) {
 
     return children;
 }
-function RequireAdvisor({ children, service }: { children: JSX.Element, service: Services }) {
+function RequireAdvisor({ children, service }: { children: JSX.Element, service?: Services }) {
     let user = useUser()
     let location = useLocation();
-    if (user.responsibilities?.some(el => el.role == Roles.ADVISOR && el.service == service)) {
+    if (user.role == Roles.ADVISOR) {
         return children
     }
     return <Navigate to="/" state={{ from: location }} replace />;
@@ -48,7 +48,7 @@ function RequireAdvisor({ children, service }: { children: JSX.Element, service:
 function RequireAdmin({ children }: { children: JSX.Element }) {
     const user = useUser();
     let location = useLocation();
-    if (user.responsibilities?.some(resp => resp.role != Roles.ADMIN)) {
+    if (user.role != Roles.ADMIN) {
         return <Navigate to="/" state={{ from: location }} replace />;
     }
     return children

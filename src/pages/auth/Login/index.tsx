@@ -30,6 +30,7 @@ const Login = () => {
                 }
             })).data;
             setToken(response.data.token);
+            console.log(profile)
             setUser(profile);
             setIsloading(false);
             navigate('/', { });

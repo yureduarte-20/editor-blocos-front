@@ -4,7 +4,7 @@ export type User = {
     id?: string,
     email?: string,
     name?: string
-    responsibilities?: Responsability[]
+    role?: Roles
 }
 export enum Roles {
     ADMIN = 'ADMIN',
@@ -19,10 +19,6 @@ export enum Services {
     JUDGE_SERVICE = 'JUDGE_SERVICE'
 }
 
-export type Responsability = {
-    service: Services;
-    role: Roles
-}
 export interface IUserContext extends User {
     setUser(user: User): void;
     removeUser(): void;
@@ -33,7 +29,7 @@ export const UserContext = createContext<IUserContext>({
     id: undefined,
     email: undefined,
     name: undefined,
-    responsibilities: undefined,
+    role: undefined
 })
 export const UserProvider = (props: any) => {
     const [_user, set, remove] = useStorage("profile");
@@ -47,7 +43,7 @@ export const UserProvider = (props: any) => {
         id: undefined,
         email: undefined,
         name: undefined,
-        responsibilities: undefined,
+
     }
     try {
         user = JSON.parse(_user);

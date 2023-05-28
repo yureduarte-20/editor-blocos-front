@@ -29,13 +29,13 @@ const Navbar = (props: any) => {
                             {token ?
                                 <>
                                     {
-                                        user.responsibilities?.some(res => res.role === Roles.ADMIN) &&
+                                        user.role === Roles.ADMIN &&
                                         <DropdownWrapper>
                                             <span className="font-2-s white">Administrador</span>
                                             <DropdownContent className="dropdown-content">
                                                 <ul>
                                                     <li>
-                                                        <Link style={{ display: 'inline-block',  }} to="/admin/problems" className="font-2-s">Gerenciar problemas</Link>
+                                                        <Link style={{ display: 'inline-block', }} to="/admin/problems" className="font-2-s">Gerenciar problemas</Link>
                                                     </li>
                                                 </ul>
                                             </DropdownContent>
@@ -43,16 +43,16 @@ const Navbar = (props: any) => {
                                     }
 
                                     {
-                                        user.responsibilities?.some(res => res.role === Roles.ADVISOR && res.service == Services.CHAT_SERVICE) &&
+                                        user.role == Roles.ADVISOR &&
                                         <DropdownWrapper>
                                             <span className="font-2-s white">Orientador</span>
                                             <DropdownContent className="dropdown-content">
                                                 <ul>
                                                     <li>
-                                                        <Link style={{ display: 'block',  }} to="/orientador/duvidas" className="font-2-s">Listar dúvidas</Link>
+                                                        <Link style={{ display: 'block', }} to="/orientador/duvidas" className="font-2-s">Listar dúvidas</Link>
                                                     </li>
                                                     <li>
-                                                        <Link style={{ display: 'block',  }} to="/orientador/chat" className="font-2-s">Chat</Link>
+                                                        <Link style={{ display: 'block', }} to="/orientador/chat" className="font-2-s">Chat</Link>
                                                     </li>
                                                 </ul>
                                             </DropdownContent>
@@ -63,13 +63,13 @@ const Navbar = (props: any) => {
                                         <DropdownContent className="dropdown-content">
                                             <ul>
                                                 <li>
-                                                    <Link style={{ display: 'block' }}to="/" className="font-2-s ">Submissões</Link>
+                                                    <Link style={{ display: 'block' }} to="/" className="font-2-s ">Submissões</Link>
                                                 </li>
                                                 <li>
-                                                    <Link style={{ display: 'block' }}to="/exercicios" className="font-2-s">Lista de Exercícios</Link>
+                                                    <Link style={{ display: 'block' }} to="/exercicios" className="font-2-s">Lista de Exercícios</Link>
                                                 </li>
                                                 <li>
-                                                    <Link style={{ display: 'block' }}to="/chat" className="font-2-s">Chat de Dúvidas</Link>
+                                                    <Link style={{ display: 'block' }} to="/chat" className="font-2-s">Chat de Dúvidas</Link>
                                                 </li>
                                             </ul>
                                         </DropdownContent>

@@ -71,7 +71,7 @@ export default () => {
     const genDoubt = ({ key,
         name,
         createdAt: date,
-        problemURI,
+        problemId,
         preMessage, status, problemTitle }: {
             key: string,
             name: string,
@@ -79,12 +79,12 @@ export default () => {
             createdAt: string,
             status: string,
             problemTitle: string,
-            problemURI: string
+            problemId: string
         }) => {
         console.log(selectDoubt)
         return (
             <div className={`chat_list ${key === selectDoubt.id ? 'chat_list__selected' : ''}`} key={key} onClick={e => {
-                setSelectDoubt({ id: key, problemTitle, problemURI });
+                setSelectDoubt({ id: key, problemTitle, problemId });
 
             }}>
                 <div className="chat_people">
@@ -166,11 +166,11 @@ export default () => {
                             </div>
                             <div className="mesgs">
                                 {selectDoubt.problemTitle &&
-                                    <h3 style={{ textAlign: 'center'}} className="font-1-m blue">Problema: <Link target={'_blank'} to={`/editor/${selectDoubt.problemURI.replace('/problems/', '')}`}>{selectDoubt.problemTitle}</Link></h3>}
+                                    <h3 style={{ textAlign: 'center' }} className="font-1-m blue">Problema: <Link target={'_blank'} to={`/editor/${selectDoubt.problemId}`}>{selectDoubt.problemTitle}</Link></h3>}
                                 <div className="msg_history">
                                     {
                                         getDoubt(selectDoubt) && getDoubt(selectDoubt)?.messages &&
-                                        getDoubt(selectDoubt)?.messages?.map((message: any) => message.userURI.includes(user.id) ? outgoingMessage(message) : incomingMessage(message))
+                                        getDoubt(selectDoubt)?.messages?.map((message: any) => message.userId == user.id ? outgoingMessage(message) : incomingMessage(message))
                                     }
                                 </div>
                                 <div className="type_msg">
