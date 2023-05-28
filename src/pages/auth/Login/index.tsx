@@ -3,7 +3,7 @@ import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../../store/authContext'
 import { Container, Form, Input, Wrapper } from './styled';
 import Spinner from '../../../components/Spinner';
-import { useApi, useAuthenticateApi } from '../../../utils/useApi';
+import { BASE_URL, useApi, useAuthenticateApi } from '../../../utils/useApi';
 import Button from '../../../components/Button';
 import { Store } from 'react-notifications-component'
 import { Typograph } from '../../../styles/Typographic.';
@@ -24,7 +24,8 @@ const Login = () => {
         let password = e.target[1].value as string
         try {
             const response = await api.post("/login", { email, password })
-            const profile: User = (await axios.get( 'http://localhost:3000/profile', {
+            const profile: User = (await axios.get( '/profile', {
+                baseURL: BASE_URL,
                 headers: {
                     Authorization: `Bearer ${response.data.token}`
                 }

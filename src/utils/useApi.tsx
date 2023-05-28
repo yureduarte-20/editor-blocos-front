@@ -1,7 +1,7 @@
 import { useAuth } from "../store/authContext";
 import axios, { AxiosResponse } from "axios";
 import { Store } from "react-notifications-component";
-const BASE_URL = 'http://localhost:3000/'
+export const BASE_URL = 'https://joao-blocos.onrender.com/'
 import { useUser } from '../store/userContext'
 
 export class API{

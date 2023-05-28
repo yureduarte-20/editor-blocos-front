@@ -1,7 +1,7 @@
 import { Card, Container } from "../../../styles/global"
 import { Input } from "../../auth/Login/styled"
 import { Form, InputGroup, Select } from './style'
-import { IDemonstrations, IProblem } from "../ProblemsList"
+import { IDemonstrations, IProblem } from "types"
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useRef, useState } from "react"
 import Spinner from "../../../components/Spinner"
