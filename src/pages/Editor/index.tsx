@@ -4,7 +4,7 @@ import { CustomBlocklyWorkpace } from "../../components/CustomBlocklyWorpace"
 import { GeneratedCodeArea } from "../../components/GeneratedCode"
 import { BoxQuestion } from "../../components/BoxQuestion"
 import { useAuthenticateApi } from "../../utils/useApi";
-import { Navigate, useLocation, useMatch, useNavigate, useParams } from "react-router-dom";
+import { Navigate, useLocation, useMatch, useNavigate, useParams,  } from "react-router-dom";
 import Modal from 'react-modal'
 import { Store } from "react-notifications-component"
 import colors from "../../styles/colors"
@@ -19,6 +19,8 @@ export enum DoubtsTags {
 import { IDemonstrations } from 'types'
 import { Container } from "../../styles/global"
 import { ButtonPrimary, ButtonSecondary } from "../../components/BoxQuestion/styled"
+import { SelectLanguage } from "../../components/GeneratedCode/styles"
+import SyntaxHighlighter from "react-syntax-highlighter"
 const customStyles = {
     content: {
         top: '50%',
@@ -28,7 +30,6 @@ const customStyles = {
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
         maxWidth: '1200px',
-
     },
 };
 const Editor = () => {
@@ -44,6 +45,7 @@ const Editor = () => {
     const [modalIsOpen, setIsOpen] = useState(false);
     const [modalDoubtOpen, setModalDoubtOpen] = useState<boolean>(false)
     const [tagDoubt, setTagDoubt] = useState("outros")
+    const [codeModel, setCodeModal] = useState<boolean>(false);
     Modal.setAppElement('#root')
     let subtitle
     function openModal() {
@@ -75,7 +77,7 @@ const Editor = () => {
                     duration: 3000
                 }
             })
-            navigate(`/chat`, { state: { doubtId: data.data.id } })
+            window.open( '/#/chat',  '_blank');
         } catch (e: any) {
             if (e.response) {
                 Store.addNotification({
@@ -106,38 +108,39 @@ const Editor = () => {
     }, [])
 
     const submit = async () => {
-        try {
-            setLoading(true)
-            let response = await authApi.post(`/problems/${params.id}/submissions`, { blocksXml: xml, problemId: params.id })
-            Store.addNotification({
-                title: 'Enviado',
-                message: 'Seu código foi submetido com sucesso 😀',
-                type: 'success',
-                container: 'top-center',
-                dismiss: {
-                    duration: 3000
-                }
-            })
-            navigate(`/submissoes/${response.data.id}`, { state: { problemId: params.id } })
-            //openSuccess("Enviado 😀")
-
-        } catch (e: any) {
-            if (e.response)
+        if (window.confirm('Tem certeza que deseja enviar sua resolução?'))
+            try {
+                setLoading(true)
+                let response = await authApi.post(`/problems/${params.id}/submissions`, { blocksXml: xml, problemId: params.id })
                 Store.addNotification({
-                    title: 'Erro',
-                    message: e.response.data.error.message,
-                    type: 'danger',
+                    title: 'Enviado',
+                    message: 'Seu código foi submetido com sucesso 😀',
+                    type: 'success',
                     container: 'top-center',
-
                     dismiss: {
                         duration: 3000
                     }
                 })
-            console.log(e.response.data.error.message)
+                navigate(`/submissoes/${response.data.id}`, { state: { problemId: params.id } })
+                //openSuccess("Enviado 😀")
 
-        } finally {
-            setLoading(false)
-        }
+            } catch (e: any) {
+                if (e.response)
+                    Store.addNotification({
+                        title: 'Erro',
+                        message: e.response.data.error.message,
+                        type: 'danger',
+                        container: 'top-center',
+
+                        dismiss: {
+                            duration: 3000
+                        }
+                    })
+                console.log(e.response.data.error.message)
+
+            } finally {
+                setLoading(false)
+            }
     }
 
     const handleExec = () => {
@@ -182,14 +185,10 @@ const Editor = () => {
                 isSubmitting={isLoading}
                 onDetailsClick={() => setIsOpen(true)}
                 handleCreateNewDoubt={openModalDoubt}
+                showCode={() => setCodeModal(true)}
             />
             <CustomBlocklyWorkpace onXmlChange={(nxml) => setXml(nxml)} code={code} language={language}
                 initialXml={location.state?.params?.blocksXml ?? ''} onCodeChange={setCode}>
-                <GeneratedCodeArea
-                    language={language}
-                    code={code}
-                    style={{ background: 'transparent', overflowY: 'auto' }}
-                    onLanguageChange={handleLanguageChange} />
             </CustomBlocklyWorkpace>
             <Modal
                 isOpen={modalIsOpen}
@@ -271,6 +270,45 @@ const Editor = () => {
                         </div>
                     </div>
                 </Container>
+            </Modal>
+            <Modal isOpen={codeModel}
+                shouldCloseOnOverlayClick={true}
+                onAfterClose={() => { setCodeModal(false) }}
+                shouldCloseOnEsc={true}
+                style={{
+                    content: {
+                        ...customStyles.content,
+                        minWidth: '50vw',
+                        minHeight: '60vh'
+                    },
+                    overlay: {
+                        background: colors.primary_background + 'AC',
+                        zIndex: 5555
+                    },
+                }}>
+                <div style={{ display: 'flex', flexDirection: 'column', height: '60vh' }}>
+                    <div style={{ display: 'flex', justifyContent: 'center', flex: 0.5 }}>
+                        <SelectLanguage open={codeModel} value={language} onChange={handleLanguageChange}>
+                            <option value="javascript">Javascript</option>
+                            <option value="python">Python</option>
+                            <option value="dart">Dart</option>
+                            <option value="php">PHP</option>
+                            <option value="lua">Lua</option>
+                        </SelectLanguage>
+                    </div>
+                    <div style={{ display: 'flex', width: '100%', padding: '15px 10px', flex: 4, overflow: "auto" }}>
+                        <SyntaxHighlighter 
+
+                            customStyle={{ width: '100%', fontSize: '12px' }}
+                            language={language}
+                        >
+                            {code}
+                        </SyntaxHighlighter>
+                    </div>
+                    <div style={{ gap: '10px', display: 'flex', justifyContent: 'center', flex: 0.5 }}>
+                        <Button onClick={() => setCodeModal(false)}>Fechar</Button>
+                    </div>
+                </div>
             </Modal>
         </>
     )

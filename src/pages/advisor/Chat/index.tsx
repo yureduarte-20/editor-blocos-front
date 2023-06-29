@@ -6,7 +6,7 @@ import colors from "../../../styles/colors"
 import Spinner from "../../../components/Spinner"
 import { useUser } from "../../../store/userContext"
 import { Card, Container } from "../../../styles/global"
-import { API, useAuthenticateApi } from "../../../utils/useApi"
+import {  useAuthenticateApi } from "../../../utils/useApi"
 
 import './styles.css'
 import { Store } from "react-notifications-component"

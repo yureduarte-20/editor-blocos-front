@@ -1,4 +1,4 @@
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import "./App.css";
 import { AppRoutes } from "./routes";
 import { AuthProvider } from "./store/authContext";
@@ -11,11 +11,11 @@ export default function App() {
   return (
     <AuthProvider>
       <UserProvider>
-        <BrowserRouter>
+        <HashRouter window={window}>
           <GlobalStylesSet />
           <ReactNotifications />
           <AppRoutes />
-        </BrowserRouter>
+        </HashRouter>
       </UserProvider>
     </AuthProvider>
   )

@@ -2,10 +2,6 @@ import { ImgWrapper, QuestionWraper, ButtonWrapper, ButtonPrimary, ButtonSeconda
 import CSS from 'csstype'
 import judge from '../../assets/judge.svg'
 import Spinner from "../Spinner";
-import { useNavigate, useParams } from "react-router-dom";
-import { useState } from "react";
-import { useAuthenticateApi } from "../../utils/useApi";
-import { Store } from "react-notifications-component";
 export interface IQuestionProps {
     question: {
         title: string;
@@ -17,9 +13,11 @@ export interface IQuestionProps {
     test?(): void;
     isSubmitting: boolean
     onDetailsClick?(): void;
-    handleCreateNewDoubt?(): void
+    handleCreateNewDoubt?(): void,
+    showCode?(): void
 }
-export const BoxQuestion = ({ question, onButtonRunPressed, onGoForward, wrapperStyle, test, isSubmitting, onDetailsClick, handleCreateNewDoubt }: IQuestionProps) => {
+export const BoxQuestion = ({ showCode, question, onButtonRunPressed, onGoForward,
+    wrapperStyle, test, isSubmitting, onDetailsClick, handleCreateNewDoubt }: IQuestionProps) => {
 
 
     return (
@@ -57,6 +55,7 @@ export const BoxQuestion = ({ question, onButtonRunPressed, onGoForward, wrapper
 
                 {test && <ButtonSecondary onClick={test}>Testar</ButtonSecondary>}
             </ButtonWrapper>
+            {showCode && <ButtonSecondary onClick={showCode}>Mostrar código</ButtonSecondary>}
         </QuestionWraper>
     )
 }

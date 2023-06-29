@@ -3,70 +3,71 @@ import axios, { AxiosResponse } from "axios";
 import { Store } from "react-notifications-component";
 export const BASE_URL = 'https://joao-blocos.onrender.com/'
 import { useUser } from '../store/userContext'
+import { useMemo } from "react";
 
-export class API{
-    private static api? : API
-    private BASE_URL_API : string = BASE_URL;
-    private token? : string;
-    public static getInstance() : API{
-        if(!this.api){
+/* export class API {
+    private static api?: API
+    private BASE_URL_API: string = BASE_URL;
+    private token?: string;
+    public static getInstance(): API {
+        if (!this.api) {
             this.api = new API();
             return this.api;
         }
         return this.api;
     }
 
-    public setToken(token : string){
+    public setToken(token: string) {
         this.token = token;
     }
 
-    public async getAutenticated(subPath: string) : Promise<AxiosResponse<any, any>>{
-        return axios.get(this.BASE_URL_API + subPath, { 
-            headers:{
-                Authorization : `Bearer ${this.token}`
+    public async getAutenticated(subPath: string): Promise<AxiosResponse<any, any>> {
+        return axios.get(this.BASE_URL_API + subPath, {
+            headers: {
+                Authorization: `Bearer ${this.token}`
             }
-         });
+        });
     }
-    public async postAutenticated(subPath : string, data : any) : Promise<AxiosResponse<any, any>>{
+    public async postAutenticated(subPath: string, data: any): Promise<AxiosResponse<any, any>> {
         return axios.post(this.BASE_URL_API + subPath, data, {
-            headers:{
-                Authorization : `Bearer ${this.token}`
+            headers: {
+                Authorization: `Bearer ${this.token}`
             }
         });
     }
-    
-    public async putAutenticated(subPath : string, data : any){
+
+    public async putAutenticated(subPath: string, data: any) {
         return axios.put(this.BASE_URL_API + subPath, data, {
-            headers:{
-                Authorization : `Bearer ${this.token}`
+            headers: {
+                Authorization: `Bearer ${this.token}`
             }
         });
     }
-    
-    public async patchAutenticated(subPath : string, data : any){
+
+    public async patchAutenticated(subPath: string, data: any) {
         return axios.patch(this.BASE_URL_API + subPath, data, {
-            headers:{
-                Authorization : `Bearer ${this.token}`
+            headers: {
+                Authorization: `Bearer ${this.token}`
             }
         });
     }
 
-    public async delAutenticated(subPath: string) : Promise<AxiosResponse<any, any>>{
-        return axios.delete(this.BASE_URL_API + subPath, { 
-            headers:{
-                Authorization : `Bearer ${this.token}`
+    public async delAutenticated(subPath: string): Promise<AxiosResponse<any, any>> {
+        return axios.delete(this.BASE_URL_API + subPath, {
+            headers: {
+                Authorization: `Bearer ${this.token}`
             }
-         });
+        });
     }
 
-}
+} */
 
 export const useAuthenticateApi = () => {
     const { token, removeToken } = useAuth();
     const { removeUser } = useUser()
-    const api = axios.create({
+    const api = useMemo(() => axios.create({
         baseURL: BASE_URL,
-    })
+    }), [])
     // colocar o cabeçalho padrão autenticação JWT
     api.interceptors.request.use((config: any) => {
         config.headers.Authorization = `Bearer ${token}`;
@@ -84,7 +85,7 @@ export const useAuthenticateApi = () => {
                     Store.addNotification({
                         container: 'top-center',
                         title: 'Sua sessão expirou',
-                        type:'danger',
+                        type: 'danger',
                         message: 'Logue-se novamente para acessar a aplicação.',
                         insert: 'top',
                         animationIn: ["animate__animated", "animate__fadeIn"],
@@ -125,7 +126,7 @@ export const useAuthenticateApi = () => {
                     Store.addNotification({
                         container: 'top-center',
                         title: 'Sua sessão expirou',
-                        type:'danger',
+                        type: 'danger',
                         message: 'Logue-se novamente para acessar a aplicação.',
                         insert: 'top',
                         animationIn: ["animate__animated", "animate__fadeIn"],
@@ -141,8 +142,8 @@ export const useAuthenticateApi = () => {
                 Store.addNotification({
                     container: 'top-center',
                     title: 'Sem conexão com a internet.',
-                    message:'',
-                    
+                    message: '',
+
                     insert: 'top',
                     type: 'danger',
                     animationIn: ["animate__animated", "animate__fadeIn"],
@@ -167,7 +168,7 @@ export const useAuthenticateApi = () => {
                     Store.addNotification({
                         container: 'top-center',
                         title: 'Sua sessão expirou',
-                        type:'danger',
+                        type: 'danger',
                         message: 'Logue-se novamente para acessar a aplicação.',
                         insert: 'top',
                         animationIn: ["animate__animated", "animate__fadeIn"],
@@ -183,7 +184,7 @@ export const useAuthenticateApi = () => {
                 Store.addNotification({
                     container: 'top-center',
                     title: 'Sem conexão com a internet.',
-                    message:'',
+                    message: '',
                     insert: 'top',
                     type: 'danger',
                     animationIn: ["animate__animated", "animate__fadeIn"],
@@ -208,7 +209,7 @@ export const useAuthenticateApi = () => {
                     Store.addNotification({
                         container: 'top-center',
                         title: 'Sua sessão expirou',
-                        type:'danger',
+                        type: 'danger',
                         message: 'Logue-se novamente para acessar a aplicação.',
                         insert: 'top',
                         animationIn: ["animate__animated", "animate__fadeIn"],
@@ -224,8 +225,8 @@ export const useAuthenticateApi = () => {
                 Store.addNotification({
                     container: 'top-center',
                     title: 'Sem conexão com a internet.',
-                    message:'',
-                    
+                    message: '',
+
                     insert: 'top',
                     type: 'danger',
                     animationIn: ["animate__animated", "animate__fadeIn"],
@@ -250,7 +251,7 @@ export const useAuthenticateApi = () => {
                     Store.addNotification({
                         container: 'top-center',
                         title: 'Sua sessão expirou',
-                        type:'danger',
+                        type: 'danger',
                         message: 'Logue-se novamente para acessar a aplicação.',
                         insert: 'top',
                         animationIn: ["animate__animated", "animate__fadeIn"],
@@ -266,8 +267,8 @@ export const useAuthenticateApi = () => {
                 Store.addNotification({
                     container: 'top-center',
                     title: 'Sem conexão com a internet.',
-                    message:'',
-                    
+                    message: '',
+
                     insert: 'top',
                     type: 'danger',
                     animationIn: ["animate__animated", "animate__fadeIn"],
@@ -284,16 +285,9 @@ export const useAuthenticateApi = () => {
 }
 
 export function useApi() {
-    /*     const [//open, close] = useSnackbar({
-            position: "top-center",
-            style: {
-                backgroundColor: '#d32f2f',
-                color: 'white'
-            }
-        }, 3000) */
-        const api = axios.create({
-            baseURL: BASE_URL,
-        })
+    const api = useMemo(() => axios.create({
+        baseURL: BASE_URL,
+    }), [])
     const post = async (url: string, data: any) => {
         try {
             let response = await api.post(url, data);
@@ -303,8 +297,8 @@ export function useApi() {
                 Store.addNotification({
                     container: 'top-center',
                     title: 'Sem conexão com a internet.',
-                    message:'',
-                    
+                    message: '',
+
                     insert: 'top',
                     type: 'danger',
                     animationIn: ["animate__animated", "animate__fadeIn"],
@@ -317,18 +311,18 @@ export function useApi() {
             throw e
         }
     }
-    const get = async (url: string, config? : any ) => {
+    const get = async (url: string, config?: any) => {
         try {
             console.log(config)
-            let response = await api.get(url, config );
+            let response = await api.get(url, config);
             return response
         } catch (e: any) {
             if (e.code == 'ERR_NETWORK')
                 Store.addNotification({
                     container: 'top-center',
                     title: 'Sem conexão com a internet.',
-                    message:'',
-                    
+                    message: '',
+
                     insert: 'top',
                     type: 'danger',
                     animationIn: ["animate__animated", "animate__fadeIn"],
@@ -350,8 +344,8 @@ export function useApi() {
                 Store.addNotification({
                     container: 'top-center',
                     title: 'Sem conexão com a internet.',
-                    message:'',
-                    
+                    message: '',
+
                     insert: 'top',
                     type: 'danger',
                     animationIn: ["animate__animated", "animate__fadeIn"],
@@ -373,8 +367,8 @@ export function useApi() {
                 Store.addNotification({
                     container: 'top-center',
                     title: 'Sem conexão com a internet.',
-                    message:'',
-                    
+                    message: '',
+
                     insert: 'top',
                     type: 'danger',
                     animationIn: ["animate__animated", "animate__fadeIn"],
@@ -396,8 +390,8 @@ export function useApi() {
                 Store.addNotification({
                     container: 'top-center',
                     title: 'Sem conexão com a internet.',
-                    message:'',
-                    
+                    message: '',
+
                     insert: 'top',
                     type: 'danger',
                     animationIn: ["animate__animated", "animate__fadeIn"],
@@ -411,9 +405,5 @@ export function useApi() {
         }
     }
     return { get, post, del, put, patch }
-}
-
-function AxiosRequestConfig<T>(arg0: number): any {
-    throw new Error("Function not implemented.");
 }
 

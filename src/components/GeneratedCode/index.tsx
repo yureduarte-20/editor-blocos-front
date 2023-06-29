@@ -13,8 +13,8 @@ export const GeneratedCodeArea = ({ code, style, onLanguageChange, language }: I
     const [open, setOpen] = useState(false);
     return (
         <>
-            <WrapCode open={open} >
-                <Arrow open={open} onClick={() => setOpen(!open)}/>
+            <WrapCode open={true} >
+               {/*  <Arrow open={open} onClick={() => setOpen(!open)}/> */}
                 <SelectLanguage open={open} value={language} onChange={onLanguageChange}>
                     <option value="javascript">Javascript</option>
                     <option value="python">Python</option>
@@ -23,10 +23,10 @@ export const GeneratedCodeArea = ({ code, style, onLanguageChange, language }: I
                     <option value="lua">Lua</option>
                 </SelectLanguage>
 
-                <Content open={open} >
+                <Content open={true} >
 
                     <SyntaxHighlighter customStyle={style}
-                        language='javascript'
+                        language={language}
                     >
                         {code}
                     </SyntaxHighlighter>
