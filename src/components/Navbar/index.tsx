@@ -82,6 +82,9 @@ const Navbar = (props: any) => {
                                                     <Link style={{ display: 'block' }} to="/perfil" className="font-2-s">Perfil</Link>
                                                 </li>
                                                 <li>
+                                                    <Link style={{ display: 'block' }} to="/rascunhos" className="font-2-s" >Rascunhos</Link>
+                                                </li>
+                                                <li>
                                                     <Link style={{ display: 'block' }} to="/login" className="font-2-s" onClick={logout}>Sair</Link>
                                                 </li>
                                             </ul>
