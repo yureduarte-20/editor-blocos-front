@@ -39,4 +39,12 @@ declare module "types" {
         demonstrationInputs?: string[];
         demonstrationOutput: string;
     }
+    export type Draft = {
+        id?: string;
+        title: string;
+        blocksXml: string;
+        userId: string;
+        createdAt?: string;
+        updatedAt?: string
+    }
 }

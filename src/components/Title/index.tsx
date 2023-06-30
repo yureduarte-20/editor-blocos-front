@@ -3,6 +3,7 @@ export interface ITitleProps {
     title: string;
     subtitle: string;
     margin?: string;
+    css?: CSSStyleSheet
 }
 export default ({ subtitle, title, margin } : ITitleProps ) => {
     return (

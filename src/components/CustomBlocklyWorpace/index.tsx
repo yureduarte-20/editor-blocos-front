@@ -10,21 +10,20 @@ import * as BlocklyCore from 'blockly/core';
 import { uniqueId } from 'lodash';
 import Blockly from "blockly";
 import { toolboxCategories } from '../toolBox';
-import { DivWorkspace } from './style'
-import colors from "../../styles/colors";
 import * as PtBr from "blockly/msg/pt-br";
 
 
 export interface BlocklyWorkpaceProps {
-  code: string;
-  onCodeChange(newState: string): void;
-  children: any;
+  code?: string;
+  onCodeChange?(newState: string): void;
+  children?: any;
   language: string;
   onXmlChange?(xml: (string)): void
   initialXml?: string;
+  className?: string
 }
 
-export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange, children, language, initialXml }: BlocklyWorkpaceProps) => {
+export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange, children, language, initialXml, className }: BlocklyWorkpaceProps) => {
   Blockly.setLocale(PtBr)
   const [variables, setVariables] = useState<BlocklyCore.VariableModel[]>([])
   const [functions, setFunctions] = useState<any>([])
@@ -43,8 +42,8 @@ export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange, childre
 
         let newVariable = workspace.createVariable(window.prompt() || uniqueId('var-'));
         workspace.
-        //adiciona todas as variáveis em um state
-        setVariables([...variables, newVariable]);
+          //adiciona todas as variáveis em um state
+          setVariables([...variables, newVariable]);
       })
     }
     //Registar o callback de atualização de categorias
@@ -67,7 +66,7 @@ export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange, childre
         return _variables;
       });
     }
-    
+
     if (!workspace.getToolboxCategoryCallback('PROCEDURE')) {
       workspace.registerToolboxCategoryCallback('PROCEDURE', (_wo: BlocklyCore.WorkspaceSvg) => {
         let _functions = [];
@@ -76,8 +75,8 @@ export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange, childre
             {
               kind: "block",
               "type": "procedures_ifreturn",
-             
-           
+
+
               "extraState": "<mutation value=\"1\"></mutation>"
             }
           )
@@ -86,7 +85,7 @@ export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange, childre
             {
               kind: "block",
               "type": "procedures_callnoreturn",
-             
+
               "extraState": {
                 "name": "faça algo"
               }
@@ -96,7 +95,7 @@ export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange, childre
             {
               kind: "block",
               "type": "procedures_callreturn",
-              
+
               "extraState": {
                 "name": "faça algo"
               }
@@ -107,7 +106,7 @@ export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange, childre
     }
     const _code = generateCode(language, workspace as Workspace);
     if (code !== _code)
-      onCodeChange(_code);
+      onCodeChange && onCodeChange(_code);
   }
 
   function generateCode(lang: string, workspace: Workspace) {
@@ -130,7 +129,7 @@ export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange, childre
     <>
       <BlocklyWorkspace
         toolboxConfiguration={toolboxCategories}
-        className="full"
+        className={className ?? "full"}
         workspaceConfiguration={{
           grid: {
             spacing: 20,
@@ -139,13 +138,13 @@ export const CustomBlocklyWorkpace = ({ code, onCodeChange, onXmlChange, childre
             snap: true,
           },
           zoom: {
-            controls: true,
+            controls: false,
             wheel: true,
             startScale: 1.0,
             maxScale: 3,
             minScale: 0.3,
             scaleSpeed: 1.2,
-            pinch: true
+            pinch: false
           },
 
         }}

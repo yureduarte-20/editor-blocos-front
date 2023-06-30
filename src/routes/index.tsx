@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate, useLocation,  } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation, } from 'react-router-dom';
 import { Home } from '../pages/Home';
 import Navbar from '../components/Navbar';
 import { GeneratedCodeArea } from '../components/GeneratedCode';
@@ -19,6 +19,9 @@ import AdvisorChat from '../pages/advisor/Chat';
 import Doubts from '../pages/advisor/Doubts';
 import Chat from '../pages/Chat';
 import ProblemShow from '../pages/advisor/ProblemShow';
+import DraftEditor from '../pages/DraftEditor';
+import Drafts from '../pages/Drafts';
+import DraftEditorEdit from '../pages/DraftEditorEdit';
 
 
 
@@ -114,6 +117,28 @@ export function AppRoutes() {
                             <RequireAdvisor service={Services.CHAT_SERVICE}>
                                 <AdvisorChat />
                             </RequireAdvisor>
+                        </RequireAuth>
+                    }
+                />
+                <Route path='/novo-rascunho'
+                    element={
+                        <RequireAuth>
+                            <DraftEditor />
+                        </RequireAuth>
+                    }
+                />
+                <Route path='/editor-rascunhos/:draftId'
+                    element={
+                        <RequireAuth>
+                            <DraftEditorEdit />
+                        </RequireAuth>
+                    }
+                />
+                <Route
+                    path='/rascunhos'
+                    element={
+                        <RequireAuth>
+                            <Drafts />
                         </RequireAuth>
                     }
                 />

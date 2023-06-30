@@ -1,7 +1,7 @@
 import { useAuth } from "../store/authContext";
 import axios, { AxiosResponse } from "axios";
 import { Store } from "react-notifications-component";
-export const BASE_URL = 'https://joao-blocos.onrender.com/'
+export const BASE_URL = 'https://joao-blocos.onrender.com'
 import { useUser } from '../store/userContext'
 import { useMemo } from "react";
 
@@ -65,9 +65,9 @@ import { useMemo } from "react";
 export const useAuthenticateApi = () => {
     const { token, removeToken } = useAuth();
     const { removeUser } = useUser()
-    const api = useMemo(() => axios.create({
+    const api =  axios.create({
         baseURL: BASE_URL,
-    }), [])
+    })
     // colocar o cabeçalho padrão autenticação JWT
     api.interceptors.request.use((config: any) => {
         config.headers.Authorization = `Bearer ${token}`;
@@ -285,9 +285,9 @@ export const useAuthenticateApi = () => {
 }
 
 export function useApi() {
-    const api = useMemo(() => axios.create({
+    const api = axios.create({
         baseURL: BASE_URL,
-    }), [])
+    })
     const post = async (url: string, data: any) => {
         try {
             let response = await api.post(url, data);
