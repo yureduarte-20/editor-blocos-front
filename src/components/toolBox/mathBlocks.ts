@@ -8,6 +8,10 @@ export const mathBlocks: any = {
         type: "math_number",
     },
     {
+      kind: "block",
+      type: "round_with_digits",
+    },
+    {
         kind: "block",
         type: "math_arithmetic",
         inputs: {

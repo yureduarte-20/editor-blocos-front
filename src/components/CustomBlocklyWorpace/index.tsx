@@ -11,7 +11,7 @@ import { uniqueId } from 'lodash';
 import Blockly from "blockly";
 import { toolboxCategories } from '../toolBox';
 import * as PtBr from "blockly/msg/pt-br";
-
+import '../../customBlocks/index'
 
 export interface BlocklyWorkpaceProps {
   code?: string;
