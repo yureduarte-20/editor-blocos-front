@@ -21,6 +21,7 @@ import { Container } from "../../styles/global"
 import { ButtonPrimary, ButtonSecondary } from "../../components/BoxQuestion/styled"
 import { SelectLanguage } from "../../components/GeneratedCode/styles"
 import SyntaxHighlighter from "react-syntax-highlighter"
+import { TextArea } from "../auth/Login/styled"
 const customStyles = {
     content: {
         top: '50%',
@@ -220,22 +221,25 @@ const Editor = () => {
                         problem?.demonstrations.map((demonstration: IDemonstrations) => (
                             <>
                                 <div style={{ gridColumn: '1', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '10px' }}>
-                                    {demonstration.demonstrationInputs && <span className="gray-3" style={{
-                                        minWidth: '200px',
-                                        textAlign: 'end',
+                                   {demonstration.demonstrationInputs && <TextArea disabled style={{
+                                        minWidth: '250px',
+                                        textAlign: 'start',
+                                        maxWidth: '300px',
+                                       
                                         backgroundColor: colors.primary_input_background,
                                         padding: '10px',
-                                    }}>{demonstration.demonstrationInputs.join(' ')}</span>
+                                    }} defaultValue={demonstration.demonstrationInputs.join('\n')} />
                                     }
                                 </div>
 
                                 <div style={{ gridColumn: '2', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '10px' }}>
-                                    {<span className="gray-3" style={{
-                                        minWidth: '200px',
+                                    {<TextArea className="gray-3" style={{
+                                        minWidth: '250px',
+                                        maxWidth: '300px',
                                         textAlign: 'start',
                                         backgroundColor: colors.primary_input_background,
                                         padding: '10px',
-                                    }}> {demonstration.demonstrationOutput} </span>
+                                    }} defaultValue={demonstration.demonstrationOutput} disabled />
                                     }
                                 </div>
                             </>))

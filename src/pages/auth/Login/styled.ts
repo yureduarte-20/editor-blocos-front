@@ -33,7 +33,12 @@ export const Form = styled.form `
     min-width: 600px;
     margin-bottom: 20px;
 `
-
+export const TextArea = styled.textarea`
+    border: 1px solid #c4c4c4;
+    padding: 10px 20px;
+    border-radius: 4px;
+    background-color: #ffff;
+`
 export const Input = styled.input`
     border: 1px solid #c4c4c4;
     padding: 10px 20px;

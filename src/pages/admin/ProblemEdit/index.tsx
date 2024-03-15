@@ -1,5 +1,5 @@
 import { Card, Container } from "../../../styles/global"
-import { Input } from "../../auth/Login/styled"
+import { Input, TextArea } from "../../auth/Login/styled"
 import { Form, InputGroup, Select } from './style'
 import { IDemonstrations, IProblem } from "types"
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
@@ -58,7 +58,7 @@ export default (props: any) => {
             await api.patch(`/admin/problems/${problemId}`, { ..._problem })
             Store.addNotification({
                 container: 'top-center',
-                title: 'Altração realizada com sucesso!',
+                title: 'Alteração realizada com sucesso!',
                 type: 'success',
                 //message: 'Logue-se novamente para acessar a aplicação.',
                 insert: 'top',
@@ -189,7 +189,7 @@ export default (props: any) => {
                         <h3>Casos de Teste</h3>
                         <div style={{ display: 'flex', flexDirection: 'row', gap: '5px' }}>
                             <Input ref={tempInputTestCase} style={{ flex: 1 }} placeholder={`Entradas (separadas por ponto vírgula ;)`} />
-                            <Input ref={tempOutputTestCase} style={{ flex: 1 }} placeholder={`Saída`} />
+                            <TextArea ref={tempOutputTestCase} style={{ flex: 1 }} placeholder={`Saída`} />
                             <Input ref={tempOutputRegex} style={{ flex: 1 }} placeholder={`Expressão regular (Regex) de validação de saída`} />
                             <Button onClick={e => { e.preventDefault(); addTestCase() }}>Adicionar</Button>
                         </div>
@@ -209,7 +209,7 @@ export default (props: any) => {
                                         </div>
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                                             <p>Saída</p>
-                                            <Input style={{ flex: 1 }} value={item.outputs} disabled={true} />
+                                            <TextArea style={{ flex: 1 }} value={item.outputs} disabled={true} />
                                         </div>
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                                             <p>Espressão regular</p>
@@ -229,7 +229,7 @@ export default (props: any) => {
                         <h3>Casos de Demonstração</h3>
                         <div style={{ display: 'flex', flexDirection: 'row', gap: '5px' }}>
                             <Input ref={demonstrationInputRef} style={{ flex: 1 }} placeholder={`Entradas (separadas por vírgula)`} />
-                            <Input ref={demonstrationOutputRef} style={{ flex: 1 }} placeholder={`Saída`} />
+                            <TextArea ref={demonstrationOutputRef} style={{ flex: 1 }} placeholder={`Saída`} />
                             <Button onClick={e => { e.preventDefault(); addDemonstration() }}>Adicionar</Button>
                         </div>
                         <ul style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
@@ -248,7 +248,7 @@ export default (props: any) => {
                                         </div>
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                                             <p>Saída</p>
-                                            <Input style={{ flex: 1 }} value={item.demonstrationOutput} disabled={true} />
+                                            <TextArea style={{ flex: 1 }} value={item.demonstrationOutput} disabled={true} />
                                         </div>
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', justifyContent: 'end' }}>
                                             <Button style={{ display: 'block' }} onClick={e => {

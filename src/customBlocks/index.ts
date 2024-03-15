@@ -1,5 +1,5 @@
 import Blockly from 'blockly';
-import * as Php from 'blockly/php';
+
 Blockly.Blocks['round_with_digits'] = {
     init: function () {
         this.appendValueInput("target")
@@ -34,13 +34,13 @@ Blockly.Python['round_with_digits'] = function (block: any, generator: any = Blo
     return [code, Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
-Php['round_with_digits'] = function (block: any, generator: any = Php) {
-    var value_target = Php.valueToCode(block, 'target', Php.ORDER_ATOMIC);
+Blockly.PHP['round_with_digits'] = function (block: any, generator: any = Blockly.PHP) {
+    var value_target = Blockly.PHP.valueToCode(block, 'target', Blockly.PHP.ORDER_ATOMIC);
     var number_float_point = block.getFieldValue('float_point');
     value_target = value_target === '' ?  '0' : value_target;
     var code = 'round(' + value_target + ', ' + number_float_point + ')';
     
-    return [code, Php.ORDER_FUNCTION_CALL];
+    return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Lua['round_with_digits'] = function (block: any, generator: any = Blockly.Lua) {
