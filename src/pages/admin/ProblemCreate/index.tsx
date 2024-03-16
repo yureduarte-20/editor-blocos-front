@@ -15,8 +15,10 @@ export default (props: any) => {
     const { problemId } = useParams();
     
     const [loading, setLoading] = useState(false);
+    const [subminting, setSubminting] = useState(false)
    // const [problem, setProblem] = useState<IProblem>()
     const api = useAuthenticateApi();
+    
     const [testCase, setTestCase] = useState<{ inputs?: string[], outputs: string, validationOutputRegex?: string }[]>([]);
     const [demonstration, setDemonstration] = useState<IDemonstrations[]>([])
     const tempInputTestCase = useRef<any>();
@@ -49,6 +51,7 @@ export default (props: any) => {
     } */
     const create = async () => {
         try {
+            setSubminting(true)
             const _problem: IProblem = {
                 id: problemId as string,
                 demonstrations: demonstration,
@@ -86,6 +89,8 @@ export default (props: any) => {
                     onScreen: true
                 }
             })
+        } finally {
+            setSubminting(false)
         }
     }
     const addTestCase = () => {
@@ -248,7 +253,7 @@ export default (props: any) => {
                         </ul>
                     </InputGroup>
                     <InputGroup gridColumn="span 4">
-                        <Button type="submit">Salvar</Button>
+                        <Button disabled={subminting} type="submit">Salvar</Button>
                         <ButtonSecondary onClick={e => { e.preventDefault(); navigate('/admin/problems', { replace:true }) }}>Cancelar</ButtonSecondary>
                     </InputGroup>
                 </Form>

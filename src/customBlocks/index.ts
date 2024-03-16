@@ -20,7 +20,7 @@ Blockly.JavaScript['round_with_digits'] = function (block: any, generator: any =
     let number_float_point = block.getFieldValue('float_point');
     value_target = value_target === '' ?  '0' : value_target;
     // Montar o código para realizar o arredondamento com os dígitos especificados
-    let code =  + 'Number(' + value_target  + ').toFixed(' + number_float_point + ')';
+    let code = `Number(${value_target}).toFixed(${number_float_point})`
 
     return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
